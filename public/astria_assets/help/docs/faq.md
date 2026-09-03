@@ -20,7 +20,7 @@
             <li>Ensure you have the package selected in {APPNAME} that the product lives in.</li>
             <li>Check the file extension. {APPNAME} only supports .IMG for EDR/RDR and Mosaic types so if you’re looking for a .VIC, try the corresponding .IMG.</li>
             <li>If the product you're looking for is an RDR (XYZ, Range, etc) you’ll have to select a corresponding base image first (FDR, EDR, TDR, etc) and then activate the desired RDR from the RDRs subtab in the Overlays tab.</li>
-            <li>You can try passing the S3 URL of the product into the {APPNAME} EDR URL parameter. For example, if you’re looking for product X, you could go to the following URL: https://marsviewer-sops.m20.jpl.nasa.gov/?EDR=X. {APPNAME} will attempt to display the product as the primary image however this feature is not guaranteed to work as {APPNAME} is primarily designed to load base images as the primary image.
+            <li>You can try passing the S3 URL of the product into the {APPNAME} EDR URL parameter. For example, if you’re looking for product X, you could use the following query in your URL: `?EDR=X`. {APPNAME} will attempt to display the product as the primary image however this feature is not guaranteed to work as {APPNAME} is primarily designed to load base images as the primary image.
             </li>
         </ul>
 </details>

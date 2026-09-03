@@ -34,8 +34,8 @@ Astria is built as a modern, scalable web application:
 
 - **Frontend**: React 18 + Redux for state management, built with Vite
 - **Backend**: Node.js Express server with Docker-native deployment
-- **Image Serving**: [Astria Image Tile Service](https://github.jpl.nasa.gov/MIPL/tile_service) provides efficient tiling of large images
-- **DN Sampling**: [Astria Image Sampler Service](https://github.jpl.nasa.gov/MIPL/mis_rest_service) provides pixel value access
+- **Image Serving**: [Astria Image Tile Service](https://github.com/NASA-AMMOS/tile_service) provides efficient tiling of large images
+- **DN Sampling**: [Astria Image Sampler Service](https://github.com/NASA-AMMOS/mis_rest_service) provides pixel value access
 - **Authentication**: CSSO (JPL's Central Single Sign-On) integration for secure access
 - **Visualization**: OpenSeadragon for high-performance image viewing, Leaflet for map context
 
@@ -47,8 +47,8 @@ Astria is built as a modern, scalable web application:
 
 **Quick start:**
 ```bash
-git clone https://github.jpl.nasa.gov/MIPL/astria.git
-cd astria
+git clone https://github.com/NASA-AMMOS/astria_ui.git
+cd astria_ui
 npm install
 ./.dev/start.sh
 ```
@@ -87,13 +87,12 @@ We welcome contributions from the community! To get started:
 
 1. Read our [Code of Conduct](CODE_OF_CONDUCT.md)
 2. Review the [Contributing Guide](docs/CONTRIBUTING.md)
-3. Check out [good first issues](https://github.jpl.nasa.gov/MIPL/astria/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
-4. Join the conversation on [Slack (#mipl)](https://jpl.slack.com/archives/C05U1RMD0AJ)
+3. Check out [good first issues](https://github.com/NASA-AMMOS/astria_ui/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
 ### Development Contributions
 
-- Report bugs via [GitHub Issues](https://github.jpl.nasa.gov/MIPL/astria/issues)
-- Propose features via [GitHub Discussions](https://github.jpl.nasa.gov/MIPL/astria/discussions)
+- Report bugs via [GitHub Issues](https://github.com/NASA-AMMOS/astria_ui/issues)
+- Propose features via [GitHub Discussions](https://github.com/NASA-AMMOS/astria_ui/discussions)
 - Submit pull requests following our [PR guidelines](docs/CONTRIBUTING.md#submitting-a-pull-request)
 - Improve documentation
 
@@ -101,8 +100,8 @@ All contributors must sign off on commits per the [Developer Certificate of Orig
 
 ## Related Projects
 
-- **[Astria Tile Service](https://github.jpl.nasa.gov/MIPL/tile_service)** - High-performance image tiling service
-- **[Astria Sampler Service](https://github.jpl.nasa.gov/MIPL/mis_rest_service)** - Image DN value sampling service
+- **[Astria Tile Service](https://github.com/NASA-AMMOS/tile_service)** - High-performance image tiling service
+- **[Astria Sampler Service](https://github.com/NASA-AMMOS/mis_rest_service)** - Image DN value sampling service
 
 ## License
 
@@ -112,9 +111,8 @@ See [LICENSE](LICENSE) file for full license details.
 
 ## Contact & Support
 
-- **Project Lead**: Contact via [GitHub Issues](https://github.jpl.nasa.gov/MIPL/astria/issues)
-- **JPL MIPL Team**: [#mipl Slack channel](https://jpl.slack.com/archives/C05U1RMD0AJ)
-- **Bug Reports**: [GitHub Issues](https://github.jpl.nasa.gov/MIPL/astria/issues)
+- **Project Lead**: Contact via [GitHub Issues](https://github.com/NASA-AMMOS/astria_ui/issues)
+- **Bug Reports**: [GitHub Issues](https://github.com/NASA-AMMOS/astria_ui/issues)
 
 ---
 

@@ -17,8 +17,8 @@ Before you begin, ensure you have:
 
 ```bash
 # Clone the repository
-git clone https://github.jpl.nasa.gov/MIPL/astria.git
-cd astria
+git clone https://github.com/NASA-AMMOS/astria_ui.git
+cd astria_ui
 
 # Use correct Node version (if using nvm)
 nvm use
@@ -462,7 +462,5 @@ Custom OpenSeadragon builds are in `src/externals/`. Modifications should be rar
 
 ## Getting Help
 
-- **Issues**: Report bugs at [GitHub Issues](https://github.jpl.nasa.gov/MIPL/astria/issues)
-- **Questions**: Ask in [Discussions](https://github.jpl.nasa.gov/MIPL/astria/discussions)
-- **Slack**: Join [#mipl](https://jpl.slack.com/archives/C05U1RMD0AJ) for real-time help
-- **Documentation**: Check [Wiki](https://github.jpl.nasa.gov/MIPL/astria/wiki) for additional guides
+- **Issues**: Report bugs at [GitHub Issues](https://github.com/NASA-AMMOS/astria_ui/issues)
+- **Questions**: Ask in [Discussions](https://github.com/NASA-AMMOS/astria_ui/discussions)
