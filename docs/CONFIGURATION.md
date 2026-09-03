@@ -96,7 +96,7 @@ Mission configs are stored in **external repositories** for security and mission
     "landingSite": "Jezero Crater"
   },
   "api": {
-    "tileServiceUrl": "https://m2020-tiles.jpl.nasa.gov"
+    "tileServiceUrl": "https://m2020-tiles.astria.gov"
   },
   "instruments": [
     {
@@ -119,8 +119,8 @@ Environment variables control the build process and runtime behavior. They are t
 | Variable | Description | Default | Example |
 |----------|-------------|---------|---------|
 | `ASTRIA_CONFIG_BUILD_SRC_PATHS` | Comma-separated list of config files to merge | None | `${ASTRIA_ENV_DIR}/config.base.json,${ASTRIA_ENV_DIR}/config.ops.json` |
-| `ASTRIA_ENV_DIR` | Directory containing the .env file (auto-set) | N/A | `/path/to/configs/missions/m2020` |
-| `ASTRIA_APP_VERSION` | Version string shown in UI | `package.json` version | `v2.1.0-m2020` |
+| `ASTRIA_ENV_DIR` | Directory containing the .env file (auto-set) | N/A | `/path/to/configs/missions/sample_mission` |
+| `ASTRIA_APP_VERSION` | Version string shown in UI | `package.json` version | `v2.1.0-beta` |
 | `ASTRIA_CONFIG_BUILD_OUTPUT_PATH` | Output location for merged config | `src/constants/config.json` | Custom path |
 
 ### Server Environment Variables
@@ -161,7 +161,7 @@ Contact your mission lead to get access to the mission configuration repository.
 
 ```bash
 # Clone mission config repo (example)
-git clone https://github.jpl.nasa.gov/MIPL/m2020-astria-config.git ~/mission-configs/m2020
+[INSERT SAMPLE ONCE REPO IS AVAILABLE]
 ```
 
 ### Step 2: Symlink Config into Astria
@@ -169,16 +169,16 @@ git clone https://github.jpl.nasa.gov/MIPL/m2020-astria-config.git ~/mission-con
 ```bash
 # From Astria root directory
 mkdir -p configs/missions
-ln -s ~/mission-configs/m2020 configs/missions/m2020
+ln -s ~/mission-configs/sample_mission configs/missions/sample_mission
 ```
 
 ### Step 3: Verify Symlink
 
 ```bash
 ls -la configs/missions/
-# Should show: m2020 -> /path/to/mission-configs/m2020
+# Should show: sample_mission -> /path/to/mission-configs/sample_mission
 
-ls configs/missions/m2020/
+ls configs/missions/sample_mission/
 # Should show mission config files
 ```
 
@@ -186,10 +186,10 @@ ls configs/missions/m2020/
 
 ```bash
 # Start with mission dev config
-./.dev/start.sh -e ./configs/missions/m2020/dev.env
+./.dev/start.sh -e ./configs/missions/sample_mission/dev.env
 
 # Or build config only
-./.dev/start.sh --config-only -e ./configs/missions/m2020/dev.env
+./.dev/start.sh --config-only -e ./configs/missions/sample_mission/dev.env
 ```
 
 ## Creating a New Mission Configuration
@@ -201,7 +201,7 @@ If you need to create a new mission configuration repository:
 **1. Create repository structure:**
 
 ```
-m2020-astria-config/
+sample-astria-config/
 ├── README.md
 ├── .gitignore
 ├── dev.env                 # Development environment
@@ -225,9 +225,9 @@ m2020-astria-config/
     "landingDate": "2021-02-18"
   },
   "api": {
-    "tileServiceUrl": "https://m2020-tiles-dev.jpl.nasa.gov",
-    "samplerServiceUrl": "https://m2020-sampler-dev.jpl.nasa.gov",
-    "dataLakeUrl": "https://m2020-datalake-dev.jpl.nasa.gov"
+    "tileServiceUrl": "https://sample_url",
+    "samplerServiceUrl": "https://sample_url",
+    "dataLakeUrl": "https://sample_url"
   },
   "instruments": [
     {
@@ -378,7 +378,7 @@ The final merged configuration is at `src/constants/config.json`:
 
 ```bash
 # Build config
-./.dev/start.sh --config-only -e ./configs/missions/m2020/dev.env
+./.dev/start.sh --config-only -e ./configs/missions/sample_mission/dev.env
 
 # View result
 cat src/constants/config.json | jq '.'
@@ -401,10 +401,10 @@ Store sensitive configs in separate, access-controlled repositories:
 
 ```bash
 # Good: External repo with restricted access
-configs/missions/m2020/ -> ~/mission-configs/m2020 (gitignored)
+configs/missions/sample_mission/ -> ~/mission-configs/sample_mission (gitignored)
 
 # Bad: Committed directly to Astria repo
-configs/m2020/config.json (committed)
+configs/sample_mission/config.json (committed)
 ```
 
 ### Environment Variables for Secrets
@@ -477,21 +477,21 @@ function validateConfig(config) {
 ### Example: Multi-Venue Mission Config
 
 ```bash
-# configs/missions/m2020/dev.env
+# configs/missions/sample_misison/dev.env
 ASTRIA_CONFIG_BUILD_SRC_PATHS="${ASTRIA_ENV_DIR}/config.base.json,${ASTRIA_ENV_DIR}/config.dev.json"
 
-# configs/missions/m2020/test.env
+# configs/missions/sample_misison/test.env
 ASTRIA_CONFIG_BUILD_SRC_PATHS="${ASTRIA_ENV_DIR}/config.base.json,${ASTRIA_ENV_DIR}/config.test.json"
 
-# configs/missions/m2020/prod.env
+# configs/missions/sample_misison/prod.env
 ASTRIA_CONFIG_BUILD_SRC_PATHS="${ASTRIA_ENV_DIR}/config.base.json,${ASTRIA_ENV_DIR}/config.prod.json"
 ```
 
 ### Example: Multi-Mission Support
 
 ```bash
-# Start M2020 instance
-./.dev/start.sh -e ./configs/missions/m2020/dev.env
+# Start sample_misison instance
+./.dev/start.sh -e ./configs/missions/sample_misison/dev.env
 
 # Start MSL instance  
 ./.dev/start.sh -e ./configs/missions/msl/dev.env
