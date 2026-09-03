@@ -1,0 +1,214 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value blueSecondary, yellow, gray10, gray20, gray40, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value helpBodyFontSize: 16px;
+@value helpBodyLineHeight: 26px;
+@value helpBodyColor: rgb(255 255 255 / 75%);
+@value helpBodyLetterSpacing: 0.2px;
+@value linkColor: #85c6ff; /* TBD */
+
+.root {
+  /* background: #272822; */
+  background: gray90;
+  /* background: gray100; */
+  height: 100%;
+  width: 100%;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.root *:focus {
+  outline: none;
+}
+
+.root a,
+.root a:visited {
+  color: linkColor;
+  font-size: helpBodyFontSize;
+  letter-spacing: helpBodyLetterSpacing;
+}
+
+.padding {
+  padding: calc(gridUnit * 5);
+  overflow: auto;
+}
+
+.header {
+  composes: displayH3 from './common/typography.module.css';
+  display: flex;
+  align-items: center;
+}
+
+.header button {
+  margin-right: calc(gridUnit * 2);
+}
+
+.homeText {
+  composes: body from './common/typography.module.css';
+  line-height: helpBodyLineHeight;
+  font-size: helpBodyFontSize;
+  letter-spacing: helpBodyLetterSpacing;
+  opacity: 0.9;
+  margin: calc(gridUnit * 3) 0;
+}
+
+/* .topicsContainer { */
+/* display: inline-block; */
+/* grid-column-gap: 8px;
+  grid-row-gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); */
+/* } */
+
+.topicContainer {
+  display: inline-flex;
+  align-items: flex-start;
+  flex-direction: column;
+  margin-right: calc(gridUnit * 5);
+  margin-bottom: calc(gridUnit * 3);
+  width: 30%;
+}
+
+.topicContainer:nth-of-type(3n) {
+  margin-right: 0;
+}
+
+.topicLabel,
+.articleButton {
+  line-height: calc(gridUnit * 3);
+}
+
+.topicLabel {
+  composes: bold from './common/typography.module.css';
+  opacity: 1;
+  font-size: helpBodyFontSize;
+  margin-bottom: gridUnit;
+  letter-spacing: helpBodyLetterSpacing;
+}
+
+.articleButton {
+  composes: body from './common/typography.module.css';
+  letter-spacing: helpBodyLetterSpacing;
+  text-align: inherit;
+  opacity: 1;
+  font-size: helpBodyFontSize;
+  color: linkColor;
+  border-radius: 0;
+  background: none;
+  outline: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  margin-bottom: gridUnit;
+}
+
+.articleButton:hover {
+  text-decoration: underline;
+}
+
+.articleContainer {
+  display: flex;
+}
+
+.articleMD {
+  composes: fontFamily from './common/typography.module.css';
+  flex: 1;
+  padding-right: calc(gridUnit * 3);
+  border-right: 1px solid #040505;
+}
+
+/*
+  mapping h4 to displayBody, copied because
+  composition is not allowed for native elements but can't otherwise
+  target the MD. Could potentially use a custom rendering solution from react MD library
+  to add classes or something?
+*/
+.articleMD h4 {
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 24px;
+  color: gray20;
+  letter-spacing: 0.01em;
+}
+
+.articleMD b {
+  font-weight: 600;
+  font-size: helpBodyFontSize;
+  line-height: helpBodyLineHeight;
+  letter-spacing: helpBodyLetterSpacing;
+  color: gray10;
+}
+
+.articleMD summary {
+  font-weight: 500;
+  font-size: helpBodyFontSize;
+  line-height: 20px;
+  letter-spacing: 0.01em;
+  margin-top: gridUnit;
+  cursor: pointer;
+  color: rgb(248, 248, 248, 0.9);
+}
+
+.articleMD summary:hover {
+  text-decoration: underline;
+}
+
+.articleMD details p {
+  margin-top: calc(gridUnit / 2);
+}
+
+.articleMD p,
+.articleMD li {
+  font-weight: 400;
+  font-size: helpBodyFontSize;
+  line-height: helpBodyLineHeight;
+  letter-spacing: helpBodyLetterSpacing;
+  color: helpBodyColor;
+}
+
+.articleMD p b {
+  margin-bottom: calc(gridUnit / 2);
+  display: inline-block;
+}
+
+.articleMD code {
+  font-weight: 600;
+  font-family: 'IBM Plex Mono';
+  word-spacing: -5px;
+}
+
+.articleContainer .articleButton:not(.articleButtonActive) {
+  color: helpBodyColor;
+}
+
+.articleContainer .topicContainer {
+  margin: 0;
+  margin-top: calc(gridUnit * 2);
+  padding-left: calc(gridUnit * 3);
+}
+
+@media (max-width: 890px) {
+  .helpTopics {
+    display: flex;
+    flex-direction: column;
+  }
+  .topicContainer {
+    width: 100%;
+    margin-right: 0;
+  }
+  .articleContainer {
+    flex-direction: column-reverse;
+  }
+  .articleContainer .topicContainer {
+    margin-top: calc(gridUnit * 3);
+    padding-left: 0;
+  }
+  .articleMD {
+    padding: 0;
+    border: none;
+  }
+}

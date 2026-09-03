@@ -1,0 +1,5 @@
+#### View image metadata
+
+Select the `Image` tab on the right side panel. You should see a header called `Image Metadata`. Under this section, a curated set of metadata fields are displayed. To see more of these curated fields, click `Show More` on the bottom of the list. If the field you are looking for is not there, switch the dropdown at the top of the section from `Default` to `All`. The `All` option displays all available OCS fields for the product as well as a curated subset of VICAR label fields.
+
+To explore the full VICAR label for a product, scroll past the image metadata header to the `VICAR Label Explorer`. Click to expand this panel. Here you can browse through the label or use the search bar to find the field or value you are looking for. This search and your scroll position inside the label tree will persist across the images you view.

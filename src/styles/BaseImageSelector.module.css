@@ -1,0 +1,22 @@
+@value color: "./common/color.module.css";
+@value yellow, red, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.root {
+  padding: gridUnit;
+}
+
+.image {
+  height: calc(gridUnit * 14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: gridUnit gridUnit;
+  overflow: hidden;
+}
+
+.productTypeSelect :global(.select-drop-down__menu-list) {
+  max-height: 50vh !important;
+}

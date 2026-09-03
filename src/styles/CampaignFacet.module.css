@@ -1,0 +1,23 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, red, green, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray100 from color;
+
+.container {
+  padding: gridUnit gridUnit 0;
+}
+
+.container > div:first-child {
+  margin-bottom: gridUnit;
+  z-index: 1;
+}
+
+.autosuggestInputContainer {
+  composes: autosuggestInputContainer from './Forms.module.css';
+  padding-left: gridUnit;
+}
+.options {
+  display: flex;
+  flex-direction: column;
+}

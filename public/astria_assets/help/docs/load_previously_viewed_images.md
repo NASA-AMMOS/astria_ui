@@ -1,0 +1,3 @@
+#### Load previously viewed images
+
+{APPNAME} will remember the last 100 images you've viewed in a given web browser. Your image history can be viewed by clicking on the history menu button in the application navbar. Images can be loaded directly in the application or opened in a new tab by clicking on the "open in new tab" button near each product. {APPNAME} will only remember images you've viewed in your current browser on your current machine. For example, image history will be preserved across Chrome browser sessions on a single machine but will not be preserved from machine to machine or from Chrome to Firefox.

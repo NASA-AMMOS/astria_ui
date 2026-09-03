@@ -1,0 +1,19 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+.root .description:last-of-type {
+  border-bottom: none;
+}
+
+.description {
+  border-bottom: 1px solid gray70;
+  padding: calc(gridUnit * 2);
+}
+
+.label {
+  composes: smallCaps from './common/typography.module.css';
+  margin-bottom: gridUnit;
+}

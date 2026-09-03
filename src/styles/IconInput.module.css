@@ -1,0 +1,48 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, blue, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+.root {
+  height: auto;
+  width: 100%;
+  position: relative;
+  z-index: 0;
+}
+
+.icon {
+  position: absolute;
+  height: 100%;
+  align-items: center;
+  z-index: 1;
+  display: flex;
+  color: gray40;
+  width: calc(gridUnit * 3);
+  justify-content: center;
+  border-right: 1px solid gray70;
+}
+
+.input {
+  composes: textInput from './Forms.module.css';
+  width: 100%;
+  padding-left: calc(gridUnit * 4);
+  padding-right: calc(gridUnit * 4);
+}
+
+.units {
+  font-weight: normal;
+  font-size: 11px;
+  line-height: 15px;
+  display: flex;
+  align-items: center;
+  text-align: right;
+  letter-spacing: 0.1px;
+  color: gray50;
+  position: absolute;
+  height: 100%;
+  width: calc(gridUnit * 3);
+  right: 0;
+  justify-content: center;
+  user-select: none;
+}

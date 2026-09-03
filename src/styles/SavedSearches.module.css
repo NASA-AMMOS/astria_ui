@@ -1,0 +1,94 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.saveMenu {
+  flex: 1;
+  padding: calc(gridUnit * 2) calc(gridUnit * 2) gridUnit;
+  width: calc(gridUnit * 36);
+}
+
+.editMenu {
+  width: calc(gridUnit * 40);
+  height: calc(gridUnit * 25);
+}
+
+.editTitle {
+  composes: displayBody from './common/typography.module.css';
+  user-select: none;
+  padding-left: gridUnit;
+}
+
+.input {
+  composes: body from './common/typography.module.css';
+  border: none;
+  display: flex;
+  background: transparent;
+  width: 100%;
+  padding: 0px calc(gridUnit * 3) 0px gridUnit;
+}
+
+.title {
+  composes: body from './common/typography.module.css';
+  padding-bottom: calc(gridUnit / 2);
+}
+
+.editTitle {
+  padding: gridUnit;
+}
+
+.overwriteButtons {
+  padding: gridUnit gridUnit 0 gridUnit;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.buttonPadding {
+  padding: calc(gridUnit / 2) 0;
+}
+
+.menuItems {
+  min-height: calc(gridUnit * 15);
+  max-height: 50vh;
+  overflow: auto;
+}
+
+.menuItems button {
+  visibility: hidden;
+}
+
+.menuItems > div:hover button {
+  visibility: initial;
+}
+
+.menuItems button:hover {
+  background: gray60;
+}
+
+.menuItemContent {
+  composes: medium from './common/typography.module.css';
+  user-select: none;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  max-width: 232px;
+}
+
+.backButton {
+  display: flex;
+  padding-left: gridUnit;
+  align-items: center;
+}
+
+.saveButtonDisabledWrapper {
+  display: block;
+  pointer-events: auto;
+  cursor: not-allowed;
+}
+
+.saveButtonDisabledWrapper button {
+  pointer-events: none;
+}

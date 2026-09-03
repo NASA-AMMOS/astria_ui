@@ -1,0 +1,43 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray40, gray60, gray70, gray80, gray100 from color;
+
+.controlsOverlayButton {
+  display: inline-flex;
+}
+
+.controlsOverlayButtonOpen,
+.controlsOverlayButtonOpenCustom button {
+  background: gray70;
+}
+
+.overlay {
+  padding: calc(gridUnit * 2);
+  background: gray100;
+  box-shadow: 0px 4px 32px #000000;
+  border-radius: 4px;
+  border: 1px solid gray80;
+  z-index: 4;
+  grid-row: 1;
+  grid-row-gap: calc(gridUnit * 2);
+  display: grid;
+}
+
+.overlayFull {
+  min-width: calc(100% - 2 * gridUnit);
+}
+
+.controlsOverlayButtonNoPadding {
+  padding: 0px;
+  position: relative;
+}
+
+.overlay[hidden] {
+  display: none;
+}
+
+.Popover {
+  z-index: 999999;
+}

@@ -1,0 +1,384 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, green, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@media only screen and (max-width: 750px), screen and (max-height: 450px) {
+  /* For mobile phones: */
+  .mobileImageMetadata {
+    display: block !important;
+  }
+  .controlButtonsContainer {
+    display: none !important;
+  }
+  .mobileNoImageWarning {
+    display: flex !important;
+  }
+}
+
+.osdContainer {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  left: 0px;
+  top: 0px;
+  background: black;
+  display: flex;
+  flex-direction: column;
+}
+
+.osdNavigatorHidden :global(.navigator) {
+  display: none !important;
+}
+
+.controlButtonsContainer {
+  display: flex;
+  z-index: 2;
+  width: 100%;
+  background: gray90;
+  min-height: calc(gridUnit * 4);
+  align-items: center;
+  padding: 0 calc(gridUnit / 2);
+}
+
+.mobileNoImageWarning {
+  display: none;
+  composes: body from './common/typography.module.css';
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: calc(gridUnit * 5);
+  text-align: center;
+  max-width: 550px;
+  margin: auto;
+}
+
+.controlButtonSegment {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.controlButtonSegment > span {
+  display: flex;
+  align-items: center;
+}
+
+.overflowMenu {
+  display: flex;
+  height: calc(gridUnit * 4);
+  padding: 0px gridUnit;
+}
+.overflowMenu > span {
+  display: flex;
+  align-items: center;
+}
+
+.divider {
+  width: 1px;
+  height: 20px;
+  margin: 0px gridUnit;
+  background: gray70;
+}
+
+.spacer {
+  width: calc(gridUnit / 2);
+}
+
+.rightButtonSegment {
+  justify-content: right;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.mousePositionLabel {
+  composes: bold from './common/typography.module.css';
+  color: gray30;
+  opacity: 0.9;
+  padding-right: gridUnit;
+  display: flex;
+  user-select: none;
+}
+
+.mousePositionLabelValue {
+  font-variant: tabular-nums;
+  letter-spacing: 0px;
+}
+
+.controlButton {
+  line-height: 0;
+  display: flex !important;
+}
+
+.controlButtonDisabledWrapper {
+  pointer-events: auto;
+  cursor: not-allowed;
+}
+
+.controlButtonDisabledWrapper .controlButton {
+  pointer-events: none;
+}
+
+.rotate180 {
+  transform: rotate(180deg);
+}
+
+.mobileImageMetadata {
+  white-space: normal;
+  word-break: break-all;
+  display: none;
+  background: gray100;
+  padding: gridUnit;
+}
+
+.mobileImageMetadataTitle {
+  composes: bold from './common/typography.module.css';
+  font-size: 13px;
+  line-height: 18px;
+}
+.mobileImageMetadataRow {
+  display: flex;
+}
+.mobileImageMetadataFilename {
+  composes: label from './common/typography.module.css';
+  font-size: 11px;
+  margin-top: calc(gridUnit / 2);
+}
+
+.metadataItem {
+  composes: label from './common/typography.module.css';
+  display: flex;
+  margin-right: gridUnit;
+  color: gray40;
+  font-weight: 600;
+  opacity: 1;
+  font-size: 11px;
+}
+
+.mobileImageMetadataItemValue {
+  composes: body from './common/typography.module.css';
+  margin-left: calc(gridUnit / 2);
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.zoomMenu {
+  position: relative;
+  width: calc(gridUnit * 28);
+  padding: gridUnit 0px;
+}
+
+.zoomDefault {
+  border-top: 1px solid gray70;
+  padding: 8px 24px 0px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.zoomButtonLabel {
+  min-width: calc(gridUnit * 6);
+  display: inline-block;
+}
+
+.zoomInputForm {
+  position: relative;
+  margin-bottom: gridUnit;
+  padding: 0px calc(gridUnit * 2);
+}
+
+.zoomInputLabel {
+  composes: smallCaps from './common/typography.module.css';
+  margin-bottom: gridUnit;
+  display: flex;
+  align-items: center;
+  height: calc(gridUnit * 3);
+  user-select: none;
+}
+
+.zoomInputContainer {
+  background: gray80;
+  border: 1px solid gray70;
+  border-radius: borderRadius;
+  display: flex;
+  height: calc(gridUnit * 4);
+  flex: 1;
+  align-items: center;
+  position: relative;
+}
+
+.zoomInput {
+  composes: medium from './common/typography.module.css' !important;
+  border: none;
+  display: flex;
+  background: transparent;
+  width: 100%;
+  padding: 0px calc(gridUnit * 3) 0px gridUnit;
+}
+
+.rotationValue {
+  composes: bold from './common/typography.module.css';
+  color: gray30;
+  opacity: 0.9;
+  display: flex;
+  user-select: none;
+  justify-content: center;
+  width: 28px;
+}
+
+.inputIconRight {
+  position: absolute;
+  right: gridUnit;
+  top: 50%;
+  transform: translate(0px, -50%);
+  color: gray50;
+}
+
+.mousePositionSelect {
+  padding: 0px calc(gridUnit * 2);
+  min-width: calc(gridUnit * 25);
+}
+
+.settingsMenu {
+  position: relative;
+  width: calc(gridUnit * 30);
+  padding: calc(gridUnit * 1) calc(gridUnit * 2) calc(gridUnit * 2);
+}
+
+.settingsMenuContent {
+  grid-row: 1;
+  grid-row-gap: calc(gridUnit * 2);
+  display: grid;
+}
+
+.gifContainer {
+  height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.prismaZoom {
+  width: 100%;
+  height: 100%;
+}
+
+.gifContainer img {
+  height: inherit;
+  width: 100%;
+  object-fit: contain;
+}
+
+.loadingWrapper {
+  display: flex;
+  flex-flow: row nowrap;
+  width: calc(gridUnit * 16.5);
+  overflow: hidden;
+  align-items: center;
+}
+
+.loadingIndicator {
+  width: 16px;
+  height: 16px;
+  flex-basis: 16px;
+  pointer-events: none;
+  animation: rotation 1s infinite linear;
+  cursor: default;
+  color: gray30;
+  opacity: 0.9;
+}
+
+.loadingText {
+  composes: bold from './common/typography.module.css';
+  color: gray30;
+  opacity: 0.9;
+  user-select: none;
+  flex: 1 1;
+  padding-left: gridUnit;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.loadingTooltip {
+  max-width: none !important;
+  /* pointer-events: none; */
+}
+
+.loadingTooltip :global(.rc-tooltip-inner) {
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.loadingTooltipInner {
+  display: flex;
+  flex-flow: column nowrap;
+  text-align: left;
+}
+
+.loadingTooltipTitle {
+  composes: smallCaps from './common/typography.module.css';
+  padding: gridUnit gridUnit calc(gridUnit / 2) gridUnit;
+}
+
+.loadingTooltipContent {
+  flex: 1 1;
+  overflow: hidden;
+  overflow-y: auto;
+  padding: gridUnit;
+  max-height: 300px;
+}
+
+.loadingTooltipItem {
+  display: block;
+  position: relative;
+  margin-bottom: gridUnit;
+}
+
+.loadingTooltipItem:last-of-type {
+  margin-bottom: 0px;
+}
+
+.loadingTooltipItemIcon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+  margin-right: calc(gridUnit);
+}
+
+.loadingTooltipItemIconDone {
+  color: green;
+}
+
+.loadingTooltipItemPrefix,
+.loadingTooltipItemSeparator,
+.loadingTooltipItemLabel {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.loadingTooltipItemPrefix,
+.loadingTooltipItemSeparator {
+  composes: label from './common/typography.module.css';
+}
+
+.loadingTooltipItemSeparator {
+  margin-right: calc(gridUnit / 2);
+  margin-left: calc(gridUnit / 2);
+}
+
+.loadingTooltipItemLabel {
+  composes: medium from './common/typography.module.css' !important;
+}

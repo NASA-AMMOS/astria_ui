@@ -1,0 +1,32 @@
+@value layout: "./common/layout.module.css";
+@value yellow, blueSecondary, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from "./common/color.module.css";
+@value gridUnit from layout;
+
+.metadataItems .showMoreButton:nth-of-type(2) {
+  margin-left: gridUnit;
+}
+
+.showMoreButton {
+  padding: gridUnit 0px;
+  box-sizing: content-box;
+}
+
+.starButton,
+.starButton:hover {
+  color: yellow !important;
+}
+
+.starButton,
+.unStarButton {
+  height: calc(gridUnit * 2) !important;
+  width: calc(gridUnit * 2) !important;
+  margin-right: calc(gridUnit / 2) !important;
+}
+
+.unStarButton {
+  visibility: hidden;
+}
+
+.inlineLabeledValue:hover .unStarButton {
+  visibility: visible;
+}

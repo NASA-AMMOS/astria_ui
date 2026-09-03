@@ -1,0 +1,162 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+.root {
+  background: gray100;
+  display: flex;
+  flex-direction: column;
+}
+
+.tip {
+  padding: calc(gridUnit * 1.5) gridUnit gridUnit !important;
+  margin-bottom: gridUnit;
+}
+
+.toggle {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: gridUnit;
+}
+
+.imageResults {
+  padding-top: gridUnit;
+}
+
+.sourceImageResult {
+  width: 100%;
+}
+
+.filenameText {
+  display: flex;
+  flex-direction: column;
+}
+
+.filenameResultError,
+.filenameTextError {
+  cursor: default;
+}
+
+.filenameResultError:hover {
+  background: initial;
+}
+
+.imageResultContainer {
+  position: relative;
+}
+
+.imageResultContainer .productNotFoundBadge {
+  position: absolute;
+  bottom: gridUnit;
+  left: gridUnit;
+  z-index: 1;
+}
+
+.productNotFoundBadge {
+  composes: smallCaps from './common/typography.module.css';
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 1;
+  background: #9d3131;
+  display: inline-block;
+  padding: 1px 4px;
+  margin-top: 4px;
+  border-radius: 4px;
+  font-weight: 600;
+  width: max-content;
+}
+
+.controls {
+  display: block;
+  position: relative;
+  width: 100%;
+  padding: 0px gridUnit gridUnit gridUnit;
+  border-bottom: 1px solid black;
+}
+
+.controlRow {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+}
+
+.inputWrapper {
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  min-width: calc(gridUnit * 2);
+}
+
+.radiusWrapper {
+  composes: inputWrapper;
+  min-width: calc(gridUnit * 10);
+  flex-basis: calc(gridUnit * 10);
+  margin-right: gridUnit;
+}
+
+.inlineSearchButton {
+  flex-basis: calc(gridUnit * 3);
+  height: calc(gridUnit * 3);
+  width: calc(gridUnit * 3);
+}
+
+.controlRowBtn {
+  margin-top: calc(gridUnit * 2);
+}
+
+.undernoteWrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.latLonWrapper {
+  composes: undernoteWrapper;
+  padding-top: calc(gridUnit * 0.5);
+}
+
+.resultsLabelContainer {
+  display: flex;
+  gap: 8px;
+}
+
+.latLonLabel,
+.resultsLabel {
+  composes: label from './Forms.module.css';
+  height: auto;
+}
+
+.controlBtn {
+  margin-right: gridUnit;
+}
+
+.externalLink {
+  margin-left: gridUnit;
+}
+
+.filterHeader {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+}
+
+.resultsControls {
+  composes: undernoteWrapper;
+  margin-bottom: gridUnit;
+  justify-content: space-between;
+  align-items: center;
+  padding: gridUnit;
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background: gray100;
+  border-bottom: 1px solid black;
+}
+
+.resultsControlGroup {
+  display: flex;
+}
+
+.showMoreWrapper {
+  padding: gridUnit;
+}

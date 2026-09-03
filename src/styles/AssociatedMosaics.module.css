@@ -1,0 +1,71 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+.root {
+  background: gray100;
+}
+
+.tip {
+  padding: calc(gridUnit * 1.5) gridUnit gridUnit;
+  border-bottom: 1px solid black;
+}
+
+.toggle {
+  display: flex;
+  padding: gridUnit;
+  justify-content: space-between;
+}
+
+
+.imageResults {
+  padding-top: 0px;
+}
+
+.associatedMosaicsResult {
+  width: 100%;
+}
+
+.filenameText {
+  display: flex;
+  flex-direction: column;
+}
+
+.filenameResultError,
+.filenameTextError {
+  cursor: default;
+}
+
+.filenameResultError:hover {
+  background: initial;
+}
+
+.imageResultContainer {
+  position: relative;
+}
+
+.imageResultContainer .productNotFoundBadge {
+  position: absolute;
+  bottom: gridUnit;
+  left: gridUnit;
+  z-index: 1;
+}
+
+.productNotFoundBadge {
+  composes: smallCaps from './common/typography.module.css';
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 1;
+  background: #9d3131;
+  display: inline-block;
+  padding: 1px 4px;
+  margin-top: 4px;
+  border-radius: 4px;
+  font-weight: 600;
+  width: max-content;
+}
+
+.rowWrapper {
+  padding: gridUnit;
+}

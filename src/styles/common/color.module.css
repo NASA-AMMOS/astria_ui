@@ -1,0 +1,51 @@
+/*
+  Design Reference: M20 GDS Figma
+  Design System / Color - Greyscale
+  https://www.figma.com/file/IBgiKY0tQWycA8EwyKuMl0/Color-Grayscale?node-id=1%3A4038
+*/
+
+/*
+  When used as text, these color are accessible on
+  white and the lightest gray (#F8F8F8).
+*/
+@value gray100: #1B1D1E; /* Background */
+@value gray90: #222829; /* Background Header */
+@value gray900: #1F2223; /* Background Header */
+
+/* WHICH ONE */
+@value gray80: #394044; /* Foreground */
+@value gray80: #293137; /* Foreground */
+
+@value gray70: #444C50; /* Element Background */
+@value gray60: #545F64; /* Element Outline */
+
+/*
+  When used as text, these are accessible on
+  black and the darkest gray (#1B1D1E).
+*/
+@value gray50: #969696; /* Text Minimized */
+@value gray40: #BCBCBC; /* Label Disabled */
+@value gray30: #BEC0C2; /* Text Secondary */
+@value gray20: #EBECEC; /* Text Primary */
+@value gray10: #F8F8F8; /* Lightest */
+
+/*
+  Design Reference: M20 GDS Figma
+  Design System / Color - ASTTRO (TODO, determine Marsviewer palette)
+  https://www.figma.com/file/e9f3Lt0SGfnklyWRyZQuVn/Color-ASTTRO?node-id=1%3A4038
+*/
+
+/*
+  Color palette does not include green and is accessible to most colorblind users.
+  It should be used sparingly (just for data and actions)
+*/
+@value yellow: #FFDD5C; /* Primary Actions */
+@value orange: #FFDD5C; /* Highlights */
+@value red: #FF7760; /* Error / Failure */
+@value blue: #4FA1FF; /* Confirmation */
+@value green: #5cff8e; /* Success? */
+@value purple: #614355; /* Secondary Color */
+@value purpleHover: #7C6472; /* Secondary Color, Hover */
+
+/* Special ASTRIA Colors */
+@value blueSecondary: #85c6ff; /* For use in trees */

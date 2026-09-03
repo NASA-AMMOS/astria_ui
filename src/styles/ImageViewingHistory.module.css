@@ -1,0 +1,58 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.menu {
+  flex: 1;
+  padding-top: gridUnit;
+  width: calc(gridUnit * 75);
+}
+
+.multiselect {
+  padding: gridUnit gridUnit 0;
+}
+
+.emptyStateMessage {
+  composes: medium from './common/typography.module.css';
+  padding: gridUnit calc(gridUnit * 2) calc(gridUnit * 2);
+}
+
+.productButtonContainer {
+  position: relative;
+  display: flex;
+}
+
+.productButton {
+  width: 100%;
+  background: inherit !important;
+}
+
+.filenameText {
+  padding-right: calc(gridUnit * 5) !important;
+}
+
+.productButtonContainer:hover button.openInNewTabButton {
+  visibility: visible;
+}
+
+button.openInNewTabButton {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+  top: gridUnit;
+  right: gridUnit;
+}
+
+button.openInNewTabButtonBackground {
+  background: gray100;
+}
+
+.filenameResults .productButtonContainer:nth-of-type(odd) {
+  background: #242627;
+}
+
+.imageResults {
+  display: grid;
+}

@@ -1,0 +1,9 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.facetList {
+  padding-bottom: calc(gridUnit * 20);
+}

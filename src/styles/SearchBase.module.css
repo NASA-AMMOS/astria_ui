@@ -1,0 +1,106 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+.baseWrapper {
+  display: flex;
+  flex-flow: column nowrap;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.headerWrapper {
+  padding: calc(gridUnit * 2);
+  border-bottom: 1px solid black;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+.contentHeader {
+  width: 100%;
+  position: sticky;
+  top: 0px;
+  left: 0px;
+  z-index: 3;
+}
+
+.contentWrapper {
+  flex: 1 1;
+}
+
+.scrollParent {
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+.contentWrapper.dark {
+  background: gray100;
+}
+
+.targetHeaderWrapper {
+  display: flex;
+  flex-flow: column nowrap;
+  flex: 1 1;
+}
+
+.primaryFacets {
+  display: grid;
+  grid-row-gap: 8px;
+  flex: 1 1;
+  z-index: 5;
+}
+
+.instrumentHeaderContainerTop {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header {
+  composes: header from './common/typography.module.css';
+  min-height: calc(gridUnit * 4);
+  display: flex;
+  align-items: center;
+}
+
+.headerSubtext {
+  color: gray40;
+  margin-right: gridUnit;
+}
+
+.subheader {
+  composes: label from './common/typography.module.css';
+  opacity: 0.65;
+}
+
+.buttonContainer {
+  display: flex;
+  height: calc(gridUnit * 4);
+  align-items: center;
+  gap: gridUnit;
+}
+
+.fixedContentButton {
+  width: calc(gridUnit * 4);
+  height: calc(gridUnit * 4);
+}
+
+.loadMoreButtonContainer {
+  padding: calc(gridUnit * 2);
+}
+
+.autoHeight {
+  height: auto;
+}
+
+.hidden {
+  display: none;
+}
+
+.panelContentHeader {
+  display: flex;
+  justify-content: flex-end;
+  padding: calc(gridUnit * 0.5) gridUnit;
+}

@@ -1,0 +1,3 @@
+#### Overlay RDR data
+
+Select the `RDRs` tab on the right side panel. If there are available RDR overlays compatible with your base image, they will appear here. To view an RDR overlay, click on the `+` button or click anywhere on the overlay result. To remove the overlay, click the overlay result or click on the checkmark. To see the metadata or get data values for an RDR overlay, click on the info button. To see all of the overlays you have active, switch to the `Layers` tab.

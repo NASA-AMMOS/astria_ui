@@ -1,0 +1,97 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.root {
+}
+
+.rootLabel {
+  composes: displayBody from './common/typography.module.css';
+  margin-bottom: gridUnit;
+}
+
+.doneButtonWrapper {
+  text-align: right;
+}
+
+.doneButtonWrapper button {
+  margin-left: gridUnit;
+}
+
+.editorLabel {
+  composes: smallCaps from './common/typography.module.css';
+  margin-bottom: calc(gridUnit * 2);
+  user-select: none;
+}
+
+.input {
+  display: flex;
+  width: 100%;
+}
+
+.inputContainerText {
+  background: gray80;
+  border: 1px solid gray70;
+  border-radius: borderRadius;
+  height: calc(gridUnit * 10);
+}
+
+.inputText {
+  composes: medium from './common/typography.module.css' !important;
+  border: none;
+  display: flex;
+  background: transparent;
+  resize: none;
+  overflow: hidden;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+  padding: calc(gridUnit / 2) gridUnit;
+}
+
+.inputIconRight {
+  position: absolute;
+  right: gridUnit;
+  top: 50%;
+  transform: translate(0px, -50%);
+  color: gray50;
+}
+
+.propertySection {
+  margin-bottom: calc(gridUnit * 1.5);
+}
+
+.editor {
+  padding: calc(gridUnit * 2.5) calc(gridUnit * 1.5);
+}
+
+.editorContent2x2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: calc(gridUnit * 2);
+}
+
+.editorContent3x3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr min-content;
+  grid-gap: calc(gridUnit * 2);
+}
+
+.orderBtn {
+  margin-right: gridUnit;
+}
+
+.orderBtn:last-of-type {
+  margin-right: 0px;
+}
+
+.hidden {
+  opacity: 0.6;
+}
+
+.editorContent2x2 form,
+.editorContent3x3 form {
+  height: calc(gridUnit * 3);
+}

@@ -1,0 +1,190 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray60, gray70, gray80, gray100 from color;
+
+@media only screen and (max-width: 750px), screen and (max-height: 450px) {
+  /* For mobile phones: */
+  .header {
+    padding: 0px calc(gridUnit) !important;
+  }
+  .headerButton {
+    display: none !important;
+  }
+
+  .brandLink {
+    font-size: 12px !important;
+    letter-spacing: 2px !important;
+    pointer-events: none !important;
+  }
+
+  .logo {
+    margin-right: 0 !important;
+    height: calc(gridUnit * 2) !important;
+    width: calc(gridUnit * 2) !important;
+  }
+  .version {
+    font-size: 10px !important;
+  }
+  .signOut {
+    font-size: 10px;
+  }
+  .headerActions {
+    margin: 0 !important;
+  }
+}
+
+.header {
+  display: flex;
+  background: #394044;
+  z-index: 100;
+  padding: gridUnit calc(gridUnit * 2);
+  box-shadow: 0px 4px 16px rgba(0, 0, 0, 0.25);
+}
+.logo {
+  margin-right: gridUnit;
+  height: calc(gridUnit * 3);
+  width: calc(gridUnit * 3);
+}
+.headerContentLeft,
+.headerContentRight {
+  align-items: center;
+  display: flex;
+}
+
+.headerActions {
+  position: relative;
+  margin-left: calc(gridUnit * 4);
+  flex: 1;
+}
+.headerButton {
+  margin-right: gridUnit;
+}
+
+.brandLink {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.menuItems {
+  max-height: 60vh;
+  overflow: auto;
+}
+
+.menuItem {
+  display: flex;
+  flex-direction: row;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: gridUnit calc(gridUnit * 2);
+  cursor: pointer;
+}
+
+.menuItem:hover {
+  background: gray70;
+}
+
+.menuItemContent {
+  flex: 1;
+}
+
+.menuItemCheck {
+  color: yellow;
+  width: calc(gridUnit * 3);
+  height: calc(gridUnit * 3);
+}
+
+.menuItemTitle {
+  composes: medium from './common/typography.module.css';
+  margin-bottom: calc(gridUnit / 2);
+}
+
+.menuItemDefaultLabel {
+  composes: smallCaps from './common/typography.module.css';
+  margin-left: gridUnit;
+}
+
+.menuItemSubtitle {
+  composes: label from './common/typography.module.css';
+}
+
+.chevron {
+  display: flex;
+}
+
+.chevron svg {
+  transform: scale(0.8);
+}
+
+.emptyMenuItem {
+  composes: menuItem;
+}
+
+.emptyMenuItem:hover {
+  background: none;
+}
+
+.emptyMenuItem .menuItemTitle {
+  cursor: default;
+}
+
+button.userMenu {
+  padding: calc(gridUnit * 2) gridUnit;
+}
+
+.userMenuAvatar {
+  composes: medium from './common/typography.module.css';
+  color: gray100;
+  background: gray20;
+  width: calc(gridUnit * 3);
+  height: calc(gridUnit * 3);
+  border-radius: 50%;
+  margin-right: calc(gridUnit / 2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.userMenuButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.genericMenu {
+  padding-top: gridUnit;
+}
+
+.genericMenuTitle {
+  composes: smallCaps from './common/typography.module.css';
+  margin-bottom: gridUnit;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: calc(gridUnit * 3);
+  user-select: none;
+  padding: 0 calc(gridUnit * 2);
+}
+
+.genericMenu a {
+  display: flex;
+  padding: 0;
+  text-decoration: none;
+  color: gray30;
+  opacity: 1;
+}
+
+.toolMenu {
+  position: relative;
+  width: calc(gridUnit * 20);
+  padding: calc(gridUnit * 1) 0px;
+}
+
+.imageViewingHistoryList {
+  display: flex;
+  flex-direction: column;
+}

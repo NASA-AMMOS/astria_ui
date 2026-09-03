@@ -1,0 +1,19 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray40, gray50, gray60, gray70, gray80, gray100 from color;
+
+.tip {
+  padding: calc(gridUnit / 2) 0px;
+  display: flex;
+}
+
+.tip svg {
+  color: gray50;
+}
+
+.tipText {
+  composes: label from './common/typography.module.css';
+  padding: 0px calc(gridUnit / 2);
+}

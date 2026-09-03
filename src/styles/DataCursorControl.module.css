@@ -1,0 +1,30 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+.root {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-end;
+}
+
+.inputWrapper {
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  margin-right: gridUnit;
+  min-width: calc(gridUnit * 2);
+}
+
+.inputWrapper input {
+  min-width: calc(gridUnit * 5);
+  width: 100%;
+}
+
+.inlineSearchButton {
+  flex-basis: calc(gridUnit * 3);
+  height: calc(gridUnit * 3);
+  width: calc(gridUnit * 3);
+}

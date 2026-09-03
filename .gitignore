@@ -1,0 +1,31 @@
+# See https://help.github.com/ignore-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# production
+/dist
+
+# misc
+.DS_Store
+.vscode/
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cert
+/.cert/
+
+# Static assets
+/public/*
+!/public/astria_assets
+
+# External configs
+/src/constants/config.json
+/configs/*
+!/configs/config.common.json
+!/configs/default.env

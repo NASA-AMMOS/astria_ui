@@ -1,0 +1,105 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+.container {
+  border-radius: borderRadius;
+  padding: gridUnit;
+  overflow: auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  composes: header from './common/typography.module.css';
+  align-items: center;
+  display: flex;
+  flex: 1;
+  margin-bottom: gridUnit;
+  height: calc(gridUnit * 2);
+}
+
+.stretchControlsRow {
+  display: flex;
+  padding: gridUnit 0;
+}
+
+.stretchControlsRow > *:not(:last-child) {
+  margin-right: gridUnit;
+}
+
+.select {
+  flex: 1;
+}
+
+.input {
+  width: 100%;
+}
+
+.slider {
+  margin-left: 6px; /* account for slider handle width */
+  width: calc(100% - 12px) !important;
+}
+
+.histogram {
+  margin: gridUnit 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.saveStretch {
+  display: flex;
+  justify-content: space-between;
+  padding: gridUnit 0 gridUnit;
+}
+
+.labelText {
+  composes: medium from './common/typography.module.css';
+  padding: calc(gridUnit / 2) 0;
+}
+
+.bodyText {
+  composes: label from './common/typography.module.css';
+  padding: calc(gridUnit / 2) 0 calc(gridUnit * 2);
+}
+
+.warning {
+  composes: bold from './common/typography.module.css';
+}
+
+.warningBody {
+  font-style: italic;
+}
+
+.processButton {
+  margin-bottom: 8px;
+}
+
+.bottomRow {
+  margin-top: gridUnit;
+}
+
+.modeSwitchMultiSelect {
+  margin-bottom: calc(gridUnit * 2);
+}
+
+.inputControlContainer {
+  position: relative;
+  display: flex;
+  padding: calc(8px / 2) 0;
+}
+
+.inputControlContainer > label {
+  min-width: 160px;
+  margin-right: 8px;
+  word-break: break-word;
+}

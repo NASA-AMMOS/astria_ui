@@ -1,0 +1,125 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.root {
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.body {
+  overflow: auto;
+  flex: 1;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: calc(gridUnit / 2);
+  padding: 14px 16px;
+  border-bottom: 1px solid black;
+  user-select: none;
+}
+
+.title {
+  composes: header from './common/typography.module.css';
+}
+
+.subtitle {
+  composes: label from './common/typography.module.css';
+}
+
+.confidenceLevelMultiSelect button:nth-child(1) > div {
+  color: #ff7b7b;
+}
+.confidenceLevelMultiSelect button:nth-child(2) > div {
+  color: yellow;
+}
+.confidenceLevelMultiSelect button:nth-child(3) > div {
+  color: #5eff50;
+}
+
+.mainContent {
+  display: flex;
+  gap: calc(gridUnit * 2);
+  flex-direction: column;
+  padding: calc(gridUnit * 2);
+}
+
+.featureShapes {
+  display: flex;
+  flex-direction: column;
+  gap: gridUnit;
+}
+
+.featureShape {
+  composes: bold from './common/typography.module.css';
+  display: flex;
+  flex: 1;
+  padding: calc(gridUnit / 2) gridUnit;
+  border: 1px solid gray70;
+  border-radius: borderRadius;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.featureShape:not(.featureShapeSelected):hover {
+  border: 1px solid gray50;
+}
+
+.featureShapeSelected {
+  border: 1px solid yellow;
+}
+
+.featureShapeButtons {
+  display: flex;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: gridUnit;
+}
+
+.inputGroupLabel {
+  composes: label from './common/typography.module.css';
+}
+
+.featureSelectLabel {
+  display: flex;
+  justify-content: space-between;
+}
+
+.featureSelectLabel span {
+  display: flex;
+  align-items: center;
+}
+
+.drawingHint {
+  display: flex;
+}
+
+.drawingHint svg {
+  color: gray50;
+}
+
+.buttonShortcut {
+  text-transform: none;
+  opacity: 0.5;
+}
+
+.footer {
+  flex-basis: calc(gridUnit * 10);
+  height: calc(gridUnit * 10);
+  padding: 0px calc(gridUnit * 1.5);
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

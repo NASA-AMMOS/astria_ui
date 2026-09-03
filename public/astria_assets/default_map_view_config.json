@@ -1,0 +1,93 @@
+{
+  "enabled": true,
+  "center": [18.445741249840815, 77.32864379882814],
+  "zoom": 12,
+  "minZoom": 7,
+  "layers": [
+    {
+      "name": "Jezero Region Basemap",
+      "url": "/Missions/basemap/Layers/M20_JEZNLFSYR_HRSC_mosaic_20m_8bit/{z}/{x}/{y}.png",
+      "bounds": [
+        [16.26209613565886, 74.3009475635034],
+        [22.29632480101484, 79.42626384956509]
+      ],
+      "id": "jezero_region_basemap",
+      "tms": true,
+      "type": "tile",
+      "maxNativeZoom": 12,
+      "maxZoom": 23,
+      "minZoom": 0
+    },
+    {
+      "name": "Mission Basemap",
+      "url": "/Missions/basemap/Layers/Jezero_Balanced_Visible_HiRISE_EqcJCP_2024-11-11_LERC/{z}/{x}/{y}.png",
+      "bounds": [
+        [17.60639481669163, 76.8435577991],
+        [18.79677242658, 77.58403139829068]
+      ],
+      "id": "mission_basemap",
+      "tms": true,
+      "type": "tile",
+      "maxNativeZoom": 19,
+      "maxZoom": 27,
+      "minZoom": 8
+    },
+    {
+      "name": "HiRISE Color Basemap",
+      "url": "/Missions/basemap/Layers/M20_HiRISE_RGB_mosaic_25cm_v6_Merge_LERC/{z}/{x}/{y}.png",
+      "bounds": [
+        [18.04311210788831, 77.22866059618],
+        [18.8107244168, 77.56660158872532]
+      ],
+      "id": "hirise_color_basemap",
+      "tms": true,
+      "type": "tile",
+      "maxNativeZoom": 19,
+      "maxZoom": 27,
+      "minZoom": 8
+    },
+    {
+      "name": "Strategic Annotation",
+      "url": "/API/files/getfile",
+      "layer_name": "all",
+      "type": "vector",
+      "id": "strategic_annotation",
+      "toggleable": true,
+      "defaultHidden": true
+    },
+    {
+      "name": "Strategic Traverse",
+      "url": "/API/files/getfile",
+      "layer_name": "trail",
+      "type": "vector",
+      "id": "strategic_traverse",
+      "defaultHidden": true,
+      "toggleable": true
+    },
+    {
+      "name": "Rover Waypoints",
+      "url": "/Missions/basemap/Layers/M20_waypoints.json",
+      "layer_name": "M20_waypoints",
+      "type": "vector",
+      "id": "rover_waypoints",
+      "toggleable": true
+    },
+    {
+      "name": "Rover Traverse",
+      "url": "/Missions/basemap/Layers/M20_traverse.json",
+      "layer_name": "M20_traverse",
+      "type": "vector",
+      "id": "rover_traverse",
+      "toggleable": true
+    },
+    {
+      "name": "Planned Targets",
+      "url": "/Missions/basemap/Layers/M20_Planned_Targets.json",
+      "layer_name": "M20_Planned_Targets",
+      "type": "vector",
+      "id": "planned_targets",
+      "toggleable": true,
+      "defaultHidden": true
+    }
+  ]
+}

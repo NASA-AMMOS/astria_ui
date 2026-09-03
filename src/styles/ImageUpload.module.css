@@ -1,0 +1,10 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray60, gray70, gray80, gray90, gray100 from color;
+
+.uploading {
+  opacity: 0.65;
+  pointer-events: none;
+}

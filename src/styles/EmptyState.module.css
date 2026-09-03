@@ -1,0 +1,31 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value red, yellow, blue, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+.root {
+  opacity: 0.5;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex: 1 1;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: calc(gridUnit * 3);
+  color: gray10;
+}
+
+.icon,
+.icon svg {
+  width: calc(gridUnit * 6);
+  height: calc(gridUnit * 6);
+}
+
+.text {
+  composes: medium from './common/typography.module.css';
+  color: inherit;
+  text-align: center;
+  margin-bottom: calc(gridUnit * 10);
+}

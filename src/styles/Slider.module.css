@@ -1,0 +1,94 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray40, gray50, gray60, gray70, gray80, gray100 from color;
+
+.sliderWrapper {
+  width: 100%;
+  position: relative;
+  height: calc(gridUnit * 3);
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+}
+
+.sliderAbsoluteWrapper {
+  position: absolute;
+  width: 100%;
+}
+.slider {
+  width: 100%;
+  height: calc(gridUnit / 2);
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+:global(.rc-slider-rail) {
+  background: gray70 !important;
+}
+
+:global(.rc-slider-track) {
+  background: gray50 !important;
+}
+
+:global(.rc-slider-disabled) {
+  background-color: transparent !important;
+}
+
+:global(.rc-slider-handle) {
+  width: 12px !important;
+  height: 12px !important;
+  border: none !important;
+  background-color: gray10 !important;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.65) !important;
+  margin-top: -4px !important;
+}
+
+.slider:not(.disabled):global(.rc-slider-handle) {
+  cursor: pointer !important;
+}
+
+.slider:not(.disabled):global(.rc-slider-handle):active {
+  width: 12px !important;
+  height: 12px !important;
+  cursor: pointer !important;
+  border-radius: 50%;
+  border: none;
+  background-color: gray10;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.65);
+  touch-action: pan-x;
+}
+.slider:not(.disabled).isChangingValue :global(.rc-slider-handle):before,
+.slider:not(.disabled):global(.rc-slider-handle):active:before {
+  content: ' ';
+  width: 6px;
+  height: 6px;
+  background: radial-gradient(75% 75% at 66.67% 75%, rgba(255, 255, 255, 0) 0%, #0000007d 100%), #bec0c259;
+  z-index: 1;
+  position: absolute;
+  border-radius: 150%;
+  top: 3px;
+  left: 3px;
+}
+
+.sliderWrapper:hover :global(.rc-slider-track),
+.isChangingValue :global(.rc-slider-track),
+:global(.rc-slider):not(.minimal) :global(.rc-slider-track) {
+  background-color: yellow !important;
+}
+
+.sliderWrapper:hover :global(.rc-slider-handle) {
+  visibility: visible !important;
+}
+
+.minimal :global(.rc-slider-handle) {
+  visibility: visible;
+}
+
+.minimal:not(.isChangingValue) :global(.rc-slider-handle) {
+  visibility: hidden;
+}

@@ -1,0 +1,358 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value red, yellow, blue, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+.button {
+  border: none;
+  border-radius: borderRadius;
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  text-decoration: none;
+  text-transform: capitalize;
+  padding: 0 gridUnit;
+  height: calc(gridUnit * 3);
+  line-height: calc(gridUnit * 3);
+  user-select: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.text {
+  composes: bold from './common/typography.module.css';
+  color: inherit;
+  opacity: 0.9;
+}
+
+.button.disabled,
+.button[disabled],
+.button.disabled:hover,
+.button[disabled]:hover {
+  background-color: gray80;
+  color: gray40;
+  cursor: not-allowed;
+}
+
+.button.disabled .text,
+.button[disabled] .text,
+.button.disabled:hover .text,
+.button[disabled]:hover .text {
+  opacity: 0.9;
+}
+
+.iconButton.disabled,
+.iconButton[disabled],
+.iconButton.disabled:hover,
+.iconButton[disabled]:hover {
+  background-color: inherit;
+  color: gray60;
+}
+
+.buttonPrimary,
+.buttonSecondary,
+.progressButton {
+  padding: 0 calc(gridUnit * 3);
+}
+
+.progressButton {
+  color: gray10;
+  background: rgba(79, 161, 255, 0.2); /* Blue 20% */
+  pointer-events: none;
+  cursor: default;
+  overflow: hidden;
+}
+
+.progressBar {
+  background: rgba(79, 161, 255, 0.5); /* Blue 20% */
+  position: absolute;
+  z-index: 0;
+  left: 0;
+  top: 0;
+  height: 100%;
+}
+
+.buttonPrimary {
+  background: yellow;
+  color: gray100;
+}
+
+.buttonPrimary .text {
+  opacity: 0.9;
+}
+
+.buttonPrimary:hover {
+  background: #ffe88f;
+}
+
+.buttonSecondary {
+  background: gray60;
+  color: gray10;
+}
+
+.buttonSecondary:hover {
+  background: #5e696e;
+}
+
+.buttonTertiary {
+  background: transparent;
+  height: calc(gridUnit * 3);
+  color: gray30;
+}
+
+.buttonTertiary:hover {
+  background: gray70;
+  color: gray10;
+}
+
+/* Target icon if one exists */
+.buttonSecondary .icon {
+  margin-right: gridUnit;
+}
+
+.buttonTertiary .icon {
+  margin-right: gridUnit;
+  color: gray30;
+}
+
+.buttonTertiary:hover .icon {
+  color: gray10;
+}
+
+.buttonTertiary.active {
+  color: yellow;
+}
+
+.buttonTertiary[disabled] {
+  opacity: 50%;
+  background: transparent;
+}
+
+.buttonTertiary[disabled]:hover {
+  background: transparent;
+}
+
+.buttonDelete {
+  background: red;
+}
+
+.buttonDelete:hover {
+  opacity: 0.8;
+}
+
+.rightIcon {
+  display: flex;
+  padding-left: gridUnit;
+  flex: 1 1;
+  justify-content: flex-end;
+  text-transform: none;
+}
+
+.buttonText .rightIcon {
+  padding-left: calc(gridUnit / 2);
+}
+
+.menuItemButton {
+  background: transparent;
+  height: calc(gridUnit * 4);
+  color: gray30;
+  justify-content: flex-start;
+  position: relative;
+  border-radius: 0px;
+  padding: 0px calc(gridUnit * 3);
+  text-align: left;
+}
+
+.menuItemButton.includesIcon {
+  padding: 0px gridUnit;
+  height: calc(gridUnit * 5);
+}
+
+.menuItemButton:hover {
+  background: gray70;
+  color: gray10;
+}
+
+/* Target icon if one exists */
+.menuItemButton .icon {
+  color: gray30;
+}
+
+.includesText.menuItemButton .icon {
+  margin-right: gridUnit;
+}
+
+.menuItemButton:hover .icon {
+  color: gray10;
+}
+
+.menuItemButton.active {
+  color: yellow;
+}
+
+.icon {
+  display: flex;
+}
+
+.toggleButton {
+  composes: label from './common/typography.module.css';
+  opacity: 1;
+  background: gray70;
+}
+
+.toggleButton.active {
+  background: rgba(26, 255, 102, 0.4);
+}
+
+.toggleButton:hover {
+  background: gray60;
+}
+
+.toggleButton.active:hover {
+  background: rgba(26, 255, 102, 0.55);
+}
+
+.buttonText {
+  composes: label from './common/typography.module.css';
+  background: none;
+  padding: 0;
+  color: yellow;
+  opacity: 0.8;
+}
+
+.buttonText:hover {
+  opacity: 1;
+}
+
+.buttonText[disabled] {
+  background: none;
+}
+
+.menuItemButton {
+  display: flex;
+}
+
+.iconButton {
+  height: calc(gridUnit * 3);
+  width: calc(gridUnit * 3);
+  flex-shrink: 0;
+  display: flex;
+  /* padding: 0; */
+  align-items: center;
+  justify-content: center;
+  color: gray40;
+  background: none;
+}
+
+.iconButton:hover {
+  color: gray20;
+  background: gray70;
+}
+
+.iconButton.active {
+  color: yellow;
+}
+
+.floating {
+  color: gray10;
+  background: gray100;
+  border-radius: 2px;
+  padding: 0;
+  width: calc(3 * gridUnit);
+  height: calc(3 * gridUnit);
+}
+
+.floating:hover {
+  background: gray80;
+}
+
+.badge {
+  composes: badge from './common/typography.module.css';
+  font-weight: 700;
+  opacity: 1;
+  height: calc(gridUnit * 2);
+  width: calc(gridUnit * 2);
+  display: inline-block;
+  margin-left: calc(gridUnit / 2);
+  border-radius: calc(gridUnit * 4);
+  background: yellow;
+  color: black;
+  line-height: calc(gridUnit * 2);
+  text-align: center;
+  justify-content: center;
+}
+
+.full {
+  width: 100%;
+}
+
+.lineButton {
+  height: calc(gridUnit * 4);
+  background: transparent;
+  border: 1px solid #4a5357;
+  color: gray10;
+  opacity: 1;
+}
+
+.lineButton.active {
+  background: black;
+}
+
+.lineButton.active:hover {
+  background: gray90;
+}
+
+.lineButton:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Target icon if one exists */
+.lineButton .icon {
+  color: gray10;
+}
+
+.includesText.lineButton .icon {
+  margin-right: gridUnit;
+}
+
+.lineButton[disabled] {
+  background: transparent;
+  opacity: 0.65;
+}
+
+.actionButton {
+  composes: smallCaps from './common/typography.module.css';
+  opacity: 1;
+  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  background: none;
+  min-height: calc(gridUnit * 5);
+  border-radius: 0px;
+  padding: calc(gridUnit / 2) 0px;
+  box-sizing: content-box;
+  color: gray30;
+}
+
+.actionButton .text {
+  font-size: 10px;
+  margin-top: 2px;
+  display: block;
+  white-space: nowrap;
+}
+
+.actionButton:hover {
+  background: gray70;
+  color: gray10;
+}
+
+.actionButton.disabled,
+.actionButton[disabled] {
+  background: none !important;
+  color: gray50 !important;
+}
+
+.textContainer {
+  display: flex;
+}

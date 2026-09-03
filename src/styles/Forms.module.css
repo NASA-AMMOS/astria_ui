@@ -1,0 +1,339 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, red, green, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+.textInputs {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.textInput {
+  composes: body from './common/typography.module.css';
+  height: calc(gridUnit * 3);
+  background: gray80;
+  border: 1px solid gray70;
+  border-radius: borderRadius;
+  color: gray10;
+  min-width: calc(gridUnit * 2);
+  padding: 0px gridUnit;
+  opacity: 1 !important;
+}
+
+.textInput:disabled {
+  opacity: 0.5 !important;
+  cursor: not-allowed;
+}
+
+.textInputContainer {
+  background: gray80;
+  border: 1px solid gray70;
+  border-radius: borderRadius;
+  display: flex;
+  height: calc(gridUnit * 4);
+  flex: 1;
+  align-items: center;
+  position: relative;
+  margin-bottom: gridUnit;
+}
+
+.textInputEndDec {
+  composes: textInput;
+  padding-right: calc(gridUnit * 2);
+  min-width: calc(gridUnit * 5);
+}
+
+.label {
+  composes: label from './common/typography.module.css';
+  display: flex;
+  align-items: center;
+  height: calc(gridUnit * 3);
+}
+
+.labelWide {
+  composes: label;
+  flex: 1 1;
+}
+
+.inlineLabel {
+  composes: bold from './common/typography.module.css';
+  color: gray10;
+  display: flex;
+  align-items: center;
+  height: calc(gridUnit * 3);
+  padding: 0 8px;
+  user-select: none;
+}
+
+.labelRequired {
+  color: gray30;
+}
+
+.inputWithLabel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: gridUnit 0px;
+}
+
+.inputWithLabel:first-child {
+  margin-right: calc(gridUnit * 2);
+}
+
+.inlineLabelChildren {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.inlineSelectLabel {
+  opacity: 1;
+  display: flex;
+}
+
+.textarea {
+  composes: textInput;
+  height: calc(gridUnit * 14);
+  padding: gridUnit;
+  display: block;
+  resize: none;
+}
+
+.labelWithLengthCounter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lengthCounter {
+  composes: smallCaps from './common/typography.module.css';
+}
+
+.errorMessage,
+.successMessage {
+  composes: medium from './common/typography.module.css';
+  align-items: center;
+  display: flex;
+  flex: 1;
+}
+
+.errorMessage {
+  color: red;
+}
+
+.successMessage {
+  composes: medium from './common/typography.module.css';
+  color: green;
+}
+
+.errorMessage span,
+.successMessage span {
+  margin-right: gridUnit;
+}
+
+.dropzone {
+  composes: body from './common/typography.module.css';
+  color: gray30;
+  text-align: center;
+  position: relative;
+  width: 100%;
+  border-width: 2px;
+  border-color: gray50;
+  border-style: dashed;
+  border-radius: 5px;
+  word-break: break-word;
+  display: block;
+  margin: calc(gridUnit * 3) 0px calc(gridUnit * 2);
+  cursor: pointer;
+}
+
+.dropzoneElement {
+  padding: calc(gridUnit * 4) calc(gridUnit * 5);
+}
+
+.dropzone button {
+  margin-top: gridUnit;
+}
+.autosuggestWrapper {
+  flex: 1 1;
+}
+
+.inputIconRight {
+  position: absolute;
+  right: gridUnit;
+  top: 50%;
+  transform: translate(0px, -50%);
+  color: gray50;
+}
+
+.textInputContainer {
+  position: relative;
+}
+.autosuggestContainer {
+  position: relative;
+  z-index: 3;
+  flex: 1 1;
+}
+.autosuggestSuggestionsContainerOpen {
+  box-shadow: 0 12px 12px 2px rgba(0, 0, 0, 0.25);
+  background-clip: padding-box;
+}
+
+.autosuggestContainerOpen {
+  box-shadow: 0 0px 12px rgba(0, 0, 0, 0.25);
+  background-clip: padding-box;
+  z-index: 4;
+}
+
+.autosuggestInputContainer {
+  border: 1px solid gray70;
+  border-radius: inherit;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-radius: 4px;
+  background: gray80;
+  overflow: hidden;
+}
+.autosuggestSearchIcon {
+  color: gray30;
+  padding-right: gridUnit;
+  display: flex;
+}
+.autosuggestClearIcon {
+  color: gray30;
+  display: flex;
+  /* margin-right: calc(-1 * gridUnit * 3.5); */
+}
+
+.autosuggestInput {
+  composes: label from './common/typography.module.css';
+  background: gray80;
+  opacity: 1;
+  text-overflow: ellipsis;
+  border: none;
+  width: 100%;
+}
+
+.autosuggestInput::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: gray50;
+  opacity: 1; /* Firefox */
+}
+
+.autosuggestContainerOpen .inputContainer {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.autosuggestSuggestion {
+  padding: gridUnit;
+  word-wrap: break-word;
+  cursor: pointer;
+}
+
+.autosuggestSuggestionHighlighted {
+  background: red;
+}
+
+.autosuggestSuggestionsContainer {
+  display: none;
+  overflow: hidden;
+}
+
+.autosuggestSuggestionsContainerOpen {
+  display: block;
+  position: absolute;
+  composes: label from './common/typography.module.css';
+  background: gray80;
+  color: gray10;
+  opacity: 1;
+  text-overflow: ellipsis;
+  width: 100%;
+  z-index: 2;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.autosuggestSuggestionsList {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.autosuggestSuggestionHighlighted {
+  background: gray60;
+  color: gray10;
+  border-radius: inherit;
+}
+
+.inputCompact {
+  height: calc(gridUnit * 3);
+  padding-left: gridUnit;
+}
+
+.inputCompact .autosuggestInput {
+  height: calc((gridUnit * 3) - 2px);
+}
+
+.inputNormal {
+  height: calc(gridUnit * 4);
+  padding-left: gridUnit;
+}
+
+.inputNormal .autosuggestInput {
+  height: calc((gridUnit * 4) - 2px);
+}
+
+.inputNormal .autosuggestClearIcon {
+  width: calc(gridUnit * 4);
+  height: inherit;
+  border-radius: 0px;
+}
+
+.inputCompact .autosuggestClearIcon {
+  width: calc(gridUnit * 3);
+  height: inherit;
+  border-radius: 0px;
+}
+
+.inputNormal .autosuggestSearchIcon {
+  width: calc(gridUnit * 4);
+}
+
+.inputNormal.iconRight .autosuggestSearchIcon {
+  border-left: 1px gray70 solid;
+  height: inherit;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.inputCompact .autosuggestSearchIcon {
+  width: calc(gridUnit * 3);
+  height: inherit;
+  border-left: 1px gray70 solid;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+
+.inlinedButtonWrapper {
+  display: block;
+  width: 100%;
+  margin-top: calc(gridUnit * 0.5);
+}
+
+.inlineButton {
+  display: inline-block;
+  margin-right: calc(gridUnit * 2);
+}
+
+.inlineButton:last-of-type {
+  margin-right: 0px;
+}

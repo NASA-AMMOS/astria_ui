@@ -1,0 +1,76 @@
+@value color: "./color.module.css";
+@value gray60, gray70, gray80, gray90, gray100 from color;
+
+@value gridUnit: 8px;
+@value borderRadius: 4px;
+
+.paddingHorizontal {
+  padding-left: gridUnit;
+  padding-right: gridUnit;
+}
+
+.paddingVertical {
+  padding-top: gridUnit;
+  padding-bottom: gridUnit;
+}
+
+.padding {
+  padding: gridUnit;
+}
+
+.marginHorizontal {
+  margin-left: gridUnit;
+  margin-right: gridUnit;
+}
+
+.margin {
+  margin: gridUnit;
+}
+
+.marginDouble {
+  margin: calc(gridUnit * 2);
+}
+
+.rotate90CW {
+  transform: rotate(90deg);
+}
+
+.rotate90CCW {
+  transform: rotate(-90deg);
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: black;
+}
+
+.dividerLight {
+  composes: divider;
+  background: gray60;
+}
+
+.marginVertical {
+  margin-top: gridUnit;
+  margin-bottom: gridUnit;
+}
+
+.marginVerticalDouble {
+  margin-top: calc(gridUnit * 2);
+  margin-bottom: calc(gridUnit * 2);
+}
+
+.dividerOR {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dividerORText {
+  composes: smallCaps from './typography.module.css';
+  background: gray90;
+  color: gray60;
+  opacity: 1;
+  padding: 0 gridUnit;
+  user-select: none;
+}

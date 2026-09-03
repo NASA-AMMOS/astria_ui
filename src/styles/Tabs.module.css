@@ -1,0 +1,211 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10,gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+.tabsContainer {
+  height: 100%;
+}
+
+.tabs {
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  position: absolute;
+  width: 100%;
+}
+.tabPanel {
+  overflow: auto;
+  display: none;
+  height: 100%;
+  background: gray90;
+}
+.selectedTab {
+  composes: bold from './common/typography.module.css';
+  background: gray90;
+  border-radius: 0px;
+}
+.tab {
+  composes: medium from './common/typography.module.css';
+  height: calc(8px * 4);
+  min-width: calc(8px * 9);
+  bottom: 0;
+  padding: 0px 16px;
+  display: flex;
+  user-select: none;
+  text-transform: uppercase;
+  align-items: center;
+  overflow: hidden;
+}
+.tab:not(.selectedTab) {
+  color: gray40;
+  /* background: gray100; */
+  background: #070808;
+}
+.tab:hover {
+  color: gray10;
+}
+
+.tab:focus:after,
+.secondaryTab:focus:after {
+  content: '';
+  display: none;
+}
+.tab:last-child {
+  flex: 1;
+}
+.tabLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tabPanelSelected {
+  display: block;
+}
+.tabList {
+  border: none;
+  margin: 0;
+  flex-direction: row;
+  display: flex;
+  background: gray90;
+}
+.tabListSecondary {
+  border: none;
+  margin: 0;
+  padding: 0px calc(gridUnit * 2);
+  flex-direction: row;
+  display: flex;
+  gap: calc(gridUnit * 2);
+  background: #2d3437;
+  border-bottom: 1px solid black;
+}
+.badge {
+  composes: badge from './common/typography.module.css';
+  margin-left: gridUnit;
+}
+
+/* Secondary Tab */
+.secondaryTabs {
+  bottom: 0;
+  position: relative;
+  overflow: auto;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  width: 100%;
+  padding: 0;
+  border: none;
+}
+
+.secondaryTab.secondarySelectedTab {
+  opacity: 1;
+  color: yellow;
+  border-bottom-color: yellow;
+}
+
+.secondaryTab {
+  composes: bold from './common/typography.module.css';
+  color: gray40;
+  bottom: 0;
+  display: flex;
+  text-align: center;
+  user-select: none;
+  font-size: 11px;
+  text-overflow: ellipsis;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 7px 0px 6px;
+}
+
+.secondaryTab:not(.secondarySelectedTab):hover {
+  color: gray20;
+}
+
+.verticalTabs {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.verticalTabsRight {
+  composes: verticalTabs;
+  flex-direction: row-reverse;
+}
+
+.verticalTabs .tabPanel {
+  width: 100%;
+  height: 100%;
+}
+
+.verticalTabList {
+  /* display: flex; */
+  border: none;
+  margin: 0;
+  min-width: 56px;
+  overflow: auto;
+  flex-shrink: 0;
+  border-left: 1px solid black;
+}
+
+.verticalTabListLeft {
+  composes: verticalTabList;
+  border-left: none;
+  border-right: 1px solid black;
+}
+
+.verticalTab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 56px;
+  height: 56px;
+  justify-content: center;
+  color: gray40;
+  cursor: pointer;
+  position: relative;
+  border-bottom: 1px solid black;
+}
+
+.verticalTab:not(.selectedVerticalTab):hover {
+  color: gray20;
+  background: gray90;
+}
+
+.verticalTabLabel {
+  composes: medium from './common/typography.module.css';
+  color: inherit;
+  user-select: none;
+  font-size: 11px;
+}
+
+.selectedVerticalTab {
+  color: yellow;
+  background: rgba(255, 221, 92, 0.1);
+}
+
+.verticalTabBadge {
+  composes: badge from './common/typography.module.css';
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: gray70;
+  color: gray30;
+  padding: 2px 3px;
+  border-bottom-left-radius: 5px;
+  font-size: 11px;
+  user-select: none;
+}
+
+.selectedVerticalTab .verticalTabBadge {
+  background: yellow;
+  color: gray100;
+  box-shadow: -1px 1px 0px 0px rgb(49 49 38);
+}
+
+:global(.react-tabs__tab:focus) {
+  box-shadow: 0 0 0px 1px hsl(208deg 99% 50%);
+}

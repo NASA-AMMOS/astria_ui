@@ -1,0 +1,39 @@
+@value color: "./common/color.module.css";
+@value yellow, red, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+.container {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 2.5% 5%;
+  margin: 0 gridUnit;
+  height: 100%;
+  background: #070808;
+}
+
+.fullHeightDocument {
+  height: 100%;
+}
+
+:global(.react-pdf__Document) {
+  background: #070808;
+}
+
+:global(.react-pdf__message) {
+  height: 100%;
+}
+
+.loadingMessage,
+.errorMessage {
+  composes: smallCaps from './common/typography.module.css';
+  height: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.errorMessage {
+  color: red;
+}

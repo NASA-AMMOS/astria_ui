@@ -1,0 +1,124 @@
+@value color: "./common/color.module.css";
+@value yellow, red, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.overlaysContainer {
+  padding: calc(gridUnit * 2);
+}
+
+.container {
+  display: flex;
+  border-radius: borderRadius;
+  padding: gridUnit;
+  background: gray80;
+  border: 1px solid gray80;
+  opacity: 0.6;
+}
+.containerSelectable:hover {
+  cursor: pointer;
+  border: 1px solid gray50;
+}
+.visible {
+  opacity: 1;
+}
+.active,
+.active:hover {
+  border: 1px solid yellow;
+}
+.mainContent {
+  display: flex;
+  flex: 1;
+  flex-flow: column nowrap;
+}
+.firstRow {
+  display: flex;
+  align-items: center;
+  /* height: calc(gridUnit * 2); */
+}
+
+.topContent {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.bottomContent {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  width: 100%;
+}
+
+.cardActions {
+  display: flex;
+}
+.textContainer {
+  justify-content: space-evenly;
+  display: flex;
+  flex: 1 1;
+  flex-direction: column;
+  text-align: left;
+}
+.title {
+  composes: medium from './common/typography.module.css';
+  flex: 1;
+  word-break: break-word;
+}
+.description {
+  composes: label from './common/typography.module.css';
+  opacity: 1;
+  color: #afb2b4; /* 65% of label color */
+  white-space: normal;
+  word-break: break-word;
+}
+.image {
+  width: calc(gridUnit * 5);
+  height: calc(gridUnit * 5);
+  flex-basis: calc(gridUnit * 5);
+  flex-shrink: 0;
+  margin-right: gridUnit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.controlsContainer {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  flex: 1 1;
+  margin-left: calc(gridUnit * 6);
+}
+.colorDotBtn {
+  margin-right: calc(gridUnit * 0.5);
+}
+.opacityIcon {
+  margin-right: gridUnit;
+  flex-shrink: 0;
+}
+.showMoreButton {
+  composes: learnMore from './common/typography.module.css';
+  margin-left: calc(gridUnit / 2);
+}
+.productFamilyMetadata {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  gap: 8px;
+  margin: 8px -8px -8px;
+  background: #394047;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.productFamilyMetadataText {
+  composes: body from './common/typography.module.css';
+}
+
+.productFamilyMetadataText > * {
+  display: inline;
+}

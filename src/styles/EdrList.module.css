@@ -1,0 +1,425 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, red, gray10, gray40, gray60, gray70, gray80, gray90, gray100 from color;
+
+.filteredProductList {
+  overflow-y: auto;
+  height: 250px;
+}
+.sidebarFilteredProductList {
+  overflow: auto;
+  background: gray100;
+}
+.reactiveBaseWrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.searchControls {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.resultsControls {
+  background: gray90 !important;
+}
+.facetList {
+  overflow: auto;
+  max-height: calc(gridUnit * 50);
+  grid-row-gap: calc(gridUnit * 2);
+  display: grid;
+  padding-right: gridUnit;
+  position: relative;
+}
+.reactiveBaseWrapper > div:not(.searchControls) {
+  height: 100%;
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  flex-direction: column;
+}
+.result {
+  width: 100%;
+}
+.reactiveList {
+  overflow: hidden;
+  display: flex;
+  height: 100%;
+  background: gray100;
+}
+
+.searchResult {
+  background: none;
+  border: none;
+  padding: 0;
+  width: 100%;
+}
+
+.searchResult:focus {
+  z-index: 1;
+}
+
+.imageResults .imageResult {
+  user-select: none;
+  line-height: 0;
+  min-height: calc(8 * gridUnit);
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  height: 100%;
+}
+
+.reactiveListContainer {
+  margin: 0;
+  justify-content: flex-start;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  background: gray100;
+}
+
+.reactiveListScrollContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: auto;
+  background: gray100;
+}
+
+.filenameResults {
+  padding: 0;
+}
+
+.imageResults {
+  grid-column-gap: 8px;
+  grid-row-gap: 8px;
+  /* grid-auto-rows: 1fr; */
+  display: grid;
+  padding: 0 8px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.resultsSmall {
+  grid-template-columns: repeat(auto-fill, minmax(75px, 1fr));
+}
+.resultsMedium {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.resultsLarge {
+  grid-template-columns: repeat(auto-fill, minmax(200px, 100%));
+}
+
+.filenameResult {
+  cursor: pointer;
+  display: flex;
+  width: 100%;
+  background: inherit;
+  align-items: center;
+  padding-left: calc(gridUnit * 2);
+}
+
+.filenameImage {
+  width: calc(gridUnit * 6);
+  min-width: calc(gridUnit * 6);
+  height: calc(gridUnit * 6);
+  min-height: calc(gridUnit * 6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none !important;
+}
+
+.filenameText {
+  composes: body from './common/typography.module.css';
+  /* padding: gridUnit calc(gridUnit * 2); */
+  padding: 8px calc(8px * 5) 8px calc(8px * 2);
+  white-space: normal;
+  word-break: break-all;
+  cursor: pointer;
+  border: inherit;
+  text-align: left;
+  user-select: text !important;
+  font-family: 'IBM Plex Mono', monospace;
+  color: rgb(248 248 248 / 65%);
+  width: 100%;
+  border: none;
+}
+
+.filenameResult:hover {
+  background: gray80;
+}
+
+.filenameHighlightingEnabled {
+  color: rgb(255, 255, 255, 55%);
+}
+
+.activeResult .filenameResult {
+  box-shadow: 0px 0px 0px 1px inset #d3b95421;
+  background: rgb(255, 255, 255, 9%) !important;
+}
+
+.activeResult .filenameText {
+  color: yellow;
+}
+
+.highlightedFilenameComponent {
+  color: #ff5050;
+  font-weight: 500;
+  background: #ff505017;
+}
+
+.filenameTooltipLabel {
+  composes: smallCaps from './common/typography.module.css';
+  color: rgb(255, 255, 255, 65%);
+  opacity: 1;
+  text-align: left;
+  padding: calc(gridUnit / 2) gridUnit;
+  background: gray70;
+}
+
+.filenameTooltip {
+  max-width: none;
+  pointer-events: none;
+}
+
+.filenameTooltip :global(.rc-tooltip-inner) {
+  padding: 0 !important;
+  overflow: hidden;
+  max-height: 500px;
+}
+
+.filenameTooltipItems {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.filenameTooltip .filenameResult {
+  padding: 0 gridUnit;
+}
+
+.filenameTooltip .filenameResult:last-child {
+  border-bottom: none;
+}
+
+.resultsSmall .filenameResult .filenameText {
+  /* padding: 2px 0px; */
+  padding: 2px 32px 2px 0px;
+  min-height: 12px;
+}
+
+.filenameResults .searchResultContainer:nth-of-type(odd) {
+  background: #242627;
+}
+
+.resultsSmall .filenameResult .filenameImage {
+  width: calc(gridUnit * 4);
+  min-width: calc(gridUnit * 4);
+  height: calc(gridUnit * 4);
+  min-height: calc(gridUnit * 4);
+}
+
+.resultsLarge .filenameResult .filenameImage {
+  width: calc(gridUnit * 8);
+  min-width: calc(gridUnit * 8);
+  height: calc(gridUnit * 8);
+  min-height: calc(gridUnit * 8);
+}
+
+.resultsLarge .filenameResult .filenameText {
+  padding: 0 calc(gridUnit * 5) 0 calc(gridUnit * 2);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.01em;
+}
+
+.refreshButton {
+  margin-left: gridUnit;
+  height: calc(gridUnit * 4);
+  width: calc(gridUnit * 4);
+}
+
+.loadMoreMessage {
+  composes: smallCaps from './common/typography.module.css';
+  padding: calc(gridUnit * 2) gridUnit calc(gridUnit * 2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: calc(gridUnit * 4);
+  grid-column: 1 / -1;
+  height: 100%;
+  background: none;
+  flex-direction: column;
+}
+
+.loadMoreFailedMessage {
+  composes: loadMoreMessage;
+  color: red;
+}
+
+.initialLoadMoreMessage {
+  composes: smallCaps from './common/typography.module.css';
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+/* TODO split into generic set of input component bits */
+.solInputForm {
+  display: flex;
+  flex: 1;
+}
+.solInputContainer {
+  composes: bold from './common/typography.module.css';
+  box-sizing: content-box !important;
+
+  /*
+    Subtract out border radius b/c box-sizing: content-box
+    This allows us to more easily set backgrounds of the child elements.
+   */
+  /* overflow: hidden; */
+  height: calc(gridUnit * 4 - 2px);
+  display: flex;
+  align-items: center;
+  background: gray80;
+  border: 1px solid gray70;
+  border-radius: borderRadius;
+  color: gray10;
+  flex: 1;
+}
+.solInputLabelContainer {
+  display: flex;
+  padding: 0 gridUnit;
+  user-select: none;
+}
+.solInputLabel {
+  padding-left: gridUnit;
+}
+.solInput {
+  composes: medium from './common/typography.module.css' !important;
+  border: none;
+  display: flex;
+  height: inherit;
+  background: transparent;
+  border-left: 1px solid gray70;
+  width: 100%;
+  padding: 0 gridUnit;
+}
+.solInputRightActions {
+  display: flex;
+  height: inherit;
+  align-items: center;
+}
+.solInputButton {
+  height: inherit;
+  width: calc(gridUnit * 4);
+  border: none;
+  border-left: 1px solid gray70;
+  border-radius: 0;
+}
+.solInputButton:last-child {
+  border-top-right-radius: borderRadius;
+  border-bottom-right-radius: borderRadius;
+}
+.solInput::-webkit-inner-spin-button,
+.solInput::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* TODO Generalize empty state design */
+.noResults {
+  composes: smallCaps from './common/typography.module.css';
+  background: gray100;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(gridUnit * 3);
+  text-align: center;
+}
+
+.errorStateMessage {
+  composes: smallCaps from './common/typography.module.css';
+  flex-direction: column;
+  line-height: calc(gridUnit * 4);
+  color: red;
+  flex: 1;
+  height: calc(gridUnit * 8);
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  opacity: 1;
+}
+
+.infiniteScrollContainer {
+  background: gray100;
+  width: 100%;
+  overflow: auto;
+  height: 100%;
+}
+
+.parentScroll {
+  background: gray100;
+  width: 100%;
+}
+
+.clearFilterButton {
+  margin-top: gridUnit;
+}
+
+.searchResultContainer {
+  position: relative;
+  display: flex;
+}
+
+.searchResultContainer:hover .openInNewTabButton {
+  visibility: visible;
+}
+
+.openInNewTabButton {
+  z-index: 1;
+  visibility: hidden;
+  position: absolute;
+  top: calc(gridUnit * 4);
+  right: gridUnit;
+}
+
+.openInNewTabButtonImage {
+  background: gray100;
+}
+
+.openInNewTabButtonFilename {
+  top: calc(50% - 12px);
+}
+
+.openInNewTabButtonCompactImage {
+  top: calc(gridUnit / 2);
+  right: calc(gridUnit / 2);
+  margin-top: 0 !important;
+}
+
+.openInNewTabButtonCompactFilename {
+  top: calc(50% - 10px);
+  width: 20px;
+  height: 20px;
+}
+
+.openInNewTabButtonNoTopLabelImage {
+  margin-top: calc(gridUnit * -3);
+}
+
+.controlsOverlayHeader {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.controlsOverlayHeader div {
+  flex: 1 1;
+}

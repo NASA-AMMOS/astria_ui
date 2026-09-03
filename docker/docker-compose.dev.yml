@@ -1,0 +1,24 @@
+name: astria-dev
+
+services:
+  astria-api-dev:
+    image: node:20.18.0
+    environment:
+      ASTRIA_APP_VERSION: ${ASTRIA_APP_VERSION:-0.0.1}
+      ASTRIA_PROXY_HOSTNAME: 'host.docker.internal'
+      ASTRIA_UI_PORT: ${ASTRIA_UI_PORT:-3000}
+      ASTRIA_API_PORT: ${ASTRIA_API_PORT:-3001}
+    volumes:
+      - ..:/app:ro
+    working_dir: /app
+    command: npm run server
+    ports:
+      - ${ASTRIA_UI_PORT:-3000}:${ASTRIA_UI_PORT:-3000}
+      - ${ASTRIA_API_PORT:-3001}:${ASTRIA_API_PORT:-3001}
+    networks:
+      - astria_net
+
+networks:
+  astria_net:
+    name: astria_net
+    driver: bridge

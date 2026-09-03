@@ -1,0 +1,92 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, red, gray10, gray40, gray50, gray60, gray80, gray90, gray100 from color;
+
+.container {
+  overflow: auto;
+}
+
+.clearBtn {
+  margin-top: gridUnit;
+}
+
+.productResult {
+  border-top: 1px solid black;
+  padding: calc(gridUnit / 2) 0px;
+}
+
+.productResultHeader {
+  composes: label from './common/typography.module.css';
+  opacity: 1;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dataPoints {
+  padding: 0px gridUnit 0px calc(gridUnit * 4.5);
+}
+
+.productCollapse {
+  display: flex;
+  align-items: center;
+}
+
+.productCollapse button {
+  margin-left: gridUnit;
+  margin-right: calc(gridUnit / 2);
+}
+
+.panelTitle {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-right: calc(gridUnit / 2);
+  composes: smallCaps from './common/typography.module.css';
+}
+
+.panelBody {
+  padding: gridUnit;
+}
+
+.secondaryBody {
+  background: gray100;
+}
+
+.buttonPadding {
+  padding: calc(gridUnit / 2);
+}
+
+.availableProducts {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.toggle {
+  display: flex;
+  justify-content: space-between;
+  padding: gridUnit 0 gridUnit;
+}
+
+.panelHeader {
+  cursor: default;
+  background: gray90;
+}
+
+.productResultLoading,
+.productResultNoData {
+  opacity: 0.65;
+}
+
+.productResultError {
+  color: red;
+}
+
+.inlineLabeledValue {
+  font-family: 'IBM Plex Mono';
+}
+
+.dataResultFooter {
+  padding: 0px gridUnit 0px calc(gridUnit * 19.5);
+}

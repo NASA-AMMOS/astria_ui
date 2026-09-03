@@ -1,0 +1,35 @@
+@value color: "./common/color.module.css";
+@value yellow, green, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.root {
+  padding: calc(gridUnit * 2) calc(gridUnit * 2) calc(gridUnit * 3) calc(gridUnit * 2);
+}
+
+.header {
+  composes: header from './common/typography.module.css';
+  margin-bottom: calc(gridUnit * 3);
+  white-space: normal;
+  word-break: break-all;
+}
+
+.valuesContainer button {
+  height: auto;
+}
+
+.linkButton {
+  display: flex;
+  align-items: center;
+  text-align: left;
+}
+
+.linkButton span {
+  margin-left: calc(gridUnit / 2);
+}
+
+.findTargetButton {
+  width: 100%;
+  margin-top: calc(gridUnit * 4);
+}

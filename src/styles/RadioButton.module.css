@@ -1,0 +1,60 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray40, gray60, gray70, gray80, gray100 from color;
+
+.container {
+  display: flex;
+  background: none;
+  border: none;
+  padding: calc(8px / 2) 0;
+  cursor: pointer;
+}
+
+.radioButton {
+  padding: 0;
+  position: relative;
+  display: inline-block;
+  background-color: gray80;
+  border: 1px solid gray10;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  vertical-align: middle;
+  align-self: center;
+  cursor: pointer;
+}
+
+.radioButtonSelected {
+  border-color: yellow;
+}
+.radioButtonSelected:after {
+  content: '';
+  position: absolute;
+  display: block;
+  top: 2px;
+  left: 2px;
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  border-radius: 9999px;
+  background-color: yellow;
+}
+
+.label {
+  composes: label from './common/typography.module.css';
+  flex: 1;
+  word-break: break-word;
+  margin-left: gridUnit;
+  margin-right: gridUnit;
+  text-align: left;
+}
+
+.label:hover,
+.styledCheckboxContainer.checked .label {
+  opacity: 1;
+}
+
+.labelRight {
+  composes: label from './common/typography.module.css';
+}

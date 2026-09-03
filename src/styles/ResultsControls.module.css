@@ -1,0 +1,55 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+.resultsControls {
+  display: flex;
+  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
+  padding: gridUnit;
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background: gray100;
+  border-bottom: 1px solid black;
+}
+
+.resultsControlsOverlays {
+  display: flex;
+  gap: 8px;
+}
+
+.resultControlsOverlayHeader {
+  composes: header from './common/typography.module.css';
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: gridUnit;
+}
+
+.resultControlsOverlayHeader > div {
+  opacity: 0.9;
+}
+
+button.resultsControlsOverlayButtonCompact {
+  width: min-content;
+  padding: 0px 4px;
+}
+
+.resultStatsContainer {
+  display: flex;
+  gap: 8px;
+}
+
+.resultStats {
+  composes: smallCaps from './common/typography.module.css';
+  white-space: nowrap;
+  align-items: center;
+  display: flex;
+}
+
+.hidden {
+  display: none;
+}

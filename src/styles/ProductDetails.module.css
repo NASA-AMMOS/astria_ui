@@ -1,0 +1,119 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+@value leftColSize: calc(gridUnit * 12);
+
+.root {
+  background: gray90;
+  flex: 1;
+  overflow: auto;
+}
+
+.section {
+  padding: gridUnit;
+}
+
+.header {
+  display: flex;
+  margin: gridUnit 0px 0px 0px;
+  align-items: center;
+}
+
+.titleContainer {
+  display: flex;
+  flex-flow: row wrap;
+  word-break: break-all;
+  margin-left: calc(gridUnit * 2);
+  flex: 1;
+}
+
+.title {
+  composes: header from './common/typography.module.css';
+  align-items: center;
+  display: flex;
+  margin-bottom: gridUnit;
+  word-break: break-word;
+  flex: 1 1;
+}
+
+.subtitle {
+  composes: label from './common/typography.module.css';
+  flex-basis: 100%;
+  width: 100%;
+}
+
+.productActionBtns {
+  flex-basis: calc(gridUnit * 6.5);
+  width: calc(gridUnit * 6.5);
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: gridUnit;
+}
+
+.actionButton {
+  margin-right: calc(gridUnit * 0.5);
+}
+
+.downloadFormatButton {
+  text-transform: uppercase;
+}
+
+.productImage {
+  width: calc(leftColSize - gridUnit * 2);
+  min-width: calc(leftColSize - gridUnit * 2);
+  height: calc(leftColSize - gridUnit * 2);
+  min-height: calc(leftColSize - gridUnit * 2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.overviewItem {
+  display: flex;
+  padding: 0px 0px gridUnit;
+}
+.overviewItemLabel {
+  composes: label from './common/typography.module.css';
+  min-width: leftColSize;
+  max-width: leftColSize;
+  word-break: break-word;
+}
+.overviewItemValue {
+  composes: body from './common/typography.module.css';
+  word-break: break-word;
+  margin-left: gridUnit;
+}
+
+.overviewItemValueMissing {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.emptyStateMessage,
+.emptyStateMessageFullHeight {
+  composes: smallCaps from './common/typography.module.css';
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(gridUnit * 3);
+  text-align: center;
+}
+
+.emptyStateMessageFullHeight {
+  height: 100%;
+}
+
+.metadataFilterSelect {
+  margin-bottom: gridUnit;
+}
+
+.fresherProduct {
+  padding: 0px 8px 8px;
+}

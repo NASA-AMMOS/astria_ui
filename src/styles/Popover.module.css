@@ -1,0 +1,9 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value purple, purpleHover, yellow, gray10, gray20, gray40, gray60, gray70, gray80, gray100 from color;
+
+.closeButton > * {
+  pointer-events: none;
+}

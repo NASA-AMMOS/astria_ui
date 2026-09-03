@@ -1,0 +1,80 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value gray90 from color;
+
+.overlayBase {
+  z-index: 999999;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transition: opacity 250ms ease-in-out;
+}
+
+.alert {
+  composes: overlayShadow from './common/shadows.module.css';
+  background: gray90;
+  padding: calc(2 * gridUnit);
+  display: flex;
+  flex-direction: column;
+  max-width: calc(52 * 8px);
+  max-height: 100vh;
+  border-radius: borderRadius;
+}
+
+.afterOpen {
+  opacity: 1;
+}
+
+.beforeClose {
+  opacity: 0;
+}
+
+.headerContainer {
+  display: flex;
+}
+
+.title {
+  composes: header from './common/typography.module.css';
+  flex: 1;
+  user-select: none;
+}
+
+.message {
+  margin-top: calc(2 * gridUnit);
+  composes: body from './common/typography.module.css';
+}
+
+.messageIcon {
+  height: 6px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.messageIcon span {
+  width: 14px;
+  height: 14px;
+}
+
+.messageIcon span svg {
+  width: 14px;
+  height: 14px;
+}
+
+.actionRow {
+  margin-top: calc(2 * gridUnit);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.actionRow button {
+  margin-left: gridUnit;
+}

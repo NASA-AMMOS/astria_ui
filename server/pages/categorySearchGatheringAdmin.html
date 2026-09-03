@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Marsviewer Category Search Gathering Admin</title>
+    <script>
+      (function (f) {
+        if (typeof exports === 'object' && typeof module !== 'undefined') {
+          module.exports = f();
+        } else if (typeof define === 'function' && define.amd) {
+          define([], f);
+        } else {
+          var g;
+          if (typeof window !== 'undefined') {
+            g = window;
+          } else if (typeof global !== 'undefined') {
+            g = global;
+          } else if (typeof self !== 'undefined') {
+            g = self;
+          } else {
+            g = this;
+          }
+          g.HyperList = f();
+        }
+      })(function () {
+        var define, module, exports;
+        return (function () {
+          function r(e, n, t) {
+            function o(i, f) {
+              if (!n[i]) {
+                if (!e[i]) {
+                  var c = 'function' == typeof require && require;
+                  if (!f && c) return c(i, !0);
+                  if (u) return u(i, !0);
+                  var a = new Error("Cannot find module '" + i + "'");
+                  throw ((a.code = 'MODULE_NOT_FOUND'), a);
+                }
+                var p = (n[i] = { exports: {} });
+                e[i][0].call(
+                  p.exports,
+                  function (r) {
+                    var n = e[i][1][r];
+                    return o(n || r);
+                  },
+                  p,
+                  p.exports,
+                  r,
+                  e,
+                  n,
+                  t
+                );
+              }
+              return n[i].exports;
+            }
+            for (var u = 'function' == typeof require && require, i = 0; i < t.length; i++) o(t[i]);
+            return o;
+          }
+          return r;
+        })()(
+          {
+            1: [
+              function (_dereq_, module, exports) {
+                'use strict';
+
+                Object.defineProperty(exports, '__esModule', {
+                  value: true,
+                });
+
+                var _createClass = (function () {
+                  function defineProperties(target, props) {
+                    for (var i = 0; i < props.length; i++) {
+                      var descriptor = props[i];
+                      descriptor.enumerable = descriptor.enumerable || false;
+                      descriptor.configurable = true;
+                      if ('value' in descriptor) descriptor.writable = true;
+                      Object.defineProperty(target, descriptor.key, descriptor);
+                    }
+                  }
+                  return function (Constructor, protoProps, staticProps) {
+                    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+                    if (staticProps) defineProperties(Constructor, staticProps);
+                    return Constructor;
+                  };
+                })();
+
+                function _defineProperty(obj, key, value) {
+                  if (key in obj) {
+                    Object.defineProperty(obj, key, {
+                      value: value,
+                      enumerable: true,
+                      configurable: true,
+                      writable: true,
+                    });
+                  } else {
+                    obj[key] = value;
+                  }
+                  return obj;
+                }
+
+                function _classCallCheck(instance, Constructor) {
+                  if (!(instance instanceof Constructor)) {
+                    throw new TypeError('Cannot call a class as a function');
+                  }
+                }
+
+                var defaultConfig = {
+                  width: '100%',
+                  height: '100%',
+                };
+                var isNumber = function isNumber(input) {
+                  return Number(input) === Number(input);
+                };
+
+                var addClass =
+                  'classList' in document.documentElement
+                    ? function (element, className) {
+                        element.classList.add(className);
+                      }
+                    : function (element, className) {
+                        var oldClass = element.getAttribute('class') || '';
+                        element.setAttribute('class', oldClass + ' ' + className);
+                      };
+
+                var HyperList = (function () {
+                  _createClass(HyperList, null, [
+                    {
+                      key: 'create',
+                      value: function create(element, userProvidedConfig) {
+                        return new HyperList(element, userProvidedConfig);
+                      },
+                    },
+                    {
+                      key: 'mergeStyle',
+                      value: function mergeStyle(element, style) {
+                        for (var i in style) {
+                          if (element.style[i] !== style[i]) {
+                            element.style[i] = style[i];
+                          }
+                        }
+                      },
+                    },
+                    {
+                      key: 'getMaxBrowserHeight',
+                      value: function getMaxBrowserHeight() {
+                        var wrapper = document.createElement('div');
+                        var fixture = document.createElement('div');
+
+                        HyperList.mergeStyle(wrapper, { position: 'absolute', height: '1px', opacity: 0 });
+                        HyperList.mergeStyle(fixture, { height: '1e7px' });
+
+                        wrapper.appendChild(fixture);
+                        document.body.appendChild(wrapper);
+
+                        var maxElementHeight = fixture.offsetHeight;
+
+                        document.body.removeChild(wrapper);
+
+                        return maxElementHeight;
+                      },
+                    },
+                  ]);
+
+                  function HyperList(element, userProvidedConfig) {
+                    var _this = this;
+
+                    _classCallCheck(this, HyperList);
+
+                    this._config = {};
+                    this._lastRepaint = null;
+                    this._maxElementHeight = HyperList.getMaxBrowserHeight();
+
+                    this.refresh(element, userProvidedConfig);
+
+                    var config = this._config;
+
+                    var render = function render() {
+                      var scrollTop = _this._getScrollPosition();
+                      var lastRepaint = _this._lastRepaint;
+
+                      _this._renderAnimationFrame = window.requestAnimationFrame(render);
+
+                      if (scrollTop === lastRepaint) {
+                        return;
+                      }
+
+                      var diff = lastRepaint ? scrollTop - lastRepaint : 0;
+                      if (!lastRepaint || diff < 0 || diff > _this._averageHeight) {
+                        var rendered = _this._renderChunk();
+
+                        _this._lastRepaint = scrollTop;
+
+                        if (rendered !== false && typeof config.afterRender === 'function') {
+                          config.afterRender();
+                        }
+                      }
+                    };
+
+                    render();
+                  }
+
+                  _createClass(HyperList, [
+                    {
+                      key: 'destroy',
+                      value: function destroy() {
+                        window.cancelAnimationFrame(this._renderAnimationFrame);
+                      },
+                    },
+                    {
+                      key: 'refresh',
+                      value: function refresh(element, userProvidedConfig) {
+                        var _scrollerStyle;
+
+                        Object.assign(this._config, defaultConfig, userProvidedConfig);
+
+                        if (!element || element.nodeType !== 1) {
+                          throw new Error('HyperList requires a valid DOM Node container');
+                        }
+
+                        this._element = element;
+
+                        var config = this._config;
+
+                        var scroller =
+                          this._scroller || config.scroller || document.createElement(config.scrollerTagName || 'tr');
+
+                        if (typeof config.useFragment !== 'boolean') {
+                          this._config.useFragment = true;
+                        }
+
+                        if (!config.generate) {
+                          throw new Error('Missing required `generate` function');
+                        }
+
+                        if (!isNumber(config.total)) {
+                          throw new Error('Invalid required `total` value, expected number');
+                        }
+
+                        if (!Array.isArray(config.itemHeight) && !isNumber(config.itemHeight)) {
+                          throw new Error(
+                            '\n        Invalid required `itemHeight` value, expected number or array\n      '.trim()
+                          );
+                        } else if (isNumber(config.itemHeight)) {
+                          this._itemHeights = Array(config.total).fill(config.itemHeight);
+                        } else {
+                          this._itemHeights = config.itemHeight;
+                        }
+
+                        Object.keys(defaultConfig)
+                          .filter(function (prop) {
+                            return prop in config;
+                          })
+                          .forEach(function (prop) {
+                            var value = config[prop];
+                            var isValueNumber = isNumber(value);
+
+                            if (value && typeof value !== 'string' && typeof value !== 'number') {
+                              var msg = 'Invalid optional `' + prop + '`, expected string or number';
+                              throw new Error(msg);
+                            } else if (isValueNumber) {
+                              config[prop] = value + 'px';
+                            }
+                          });
+
+                        var isHoriz = Boolean(config.horizontal);
+                        var value = config[isHoriz ? 'width' : 'height'];
+
+                        if (value) {
+                          var isValueNumber = isNumber(value);
+                          var isValuePercent = isValueNumber ? false : value.slice(-1) === '%';
+                          var numberValue = isValueNumber ? value : parseInt(value.replace(/px|%/, ''), 10);
+                          var innerSize = window[isHoriz ? 'innerWidth' : 'innerHeight'];
+
+                          if (isValuePercent) {
+                            this._containerSize = (innerSize * numberValue) / 100;
+                          } else {
+                            this._containerSize = isNumber(value) ? value : numberValue;
+                          }
+                        }
+
+                        var scrollContainer = config.scrollContainer;
+                        var scrollerHeight = config.itemHeight * config.total;
+                        var maxElementHeight = this._maxElementHeight;
+
+                        if (scrollerHeight > maxElementHeight) {
+                          console.warn(
+                            [
+                              'HyperList: The maximum element height',
+                              maxElementHeight + 'px has',
+                              'been exceeded; please reduce your item height.',
+                            ].join(' ')
+                          );
+                        }
+
+                        var elementStyle = {
+                          width: '' + config.width,
+                          height: scrollContainer ? scrollerHeight + 'px' : '' + config.height,
+                          overflow: scrollContainer ? 'none' : 'auto',
+                          position: 'relative',
+                        };
+
+                        HyperList.mergeStyle(element, elementStyle);
+
+                        if (scrollContainer) {
+                          HyperList.mergeStyle(config.scrollContainer, { overflow: 'auto' });
+                        }
+
+                        var scrollerStyle =
+                          ((_scrollerStyle = {
+                            opacity: '0',
+                            position: 'absolute',
+                          }),
+                          _defineProperty(_scrollerStyle, isHoriz ? 'height' : 'width', '1px'),
+                          _defineProperty(_scrollerStyle, isHoriz ? 'width' : 'height', scrollerHeight + 'px'),
+                          _scrollerStyle);
+
+                        HyperList.mergeStyle(scroller, scrollerStyle);
+
+                        if (!this._scroller) {
+                          element.appendChild(scroller);
+                        }
+
+                        var padding = this._computeScrollPadding();
+                        this._scrollPaddingBottom = padding.bottom;
+                        this._scrollPaddingTop = padding.top;
+
+                        this._scroller = scroller;
+                        this._scrollHeight = this._computeScrollHeight();
+
+                        this._itemPositions = this._itemPositions || Array(config.total).fill(0);
+
+                        this._computePositions(0);
+
+                        this._renderChunk(this._lastRepaint !== null);
+
+                        if (typeof config.afterRender === 'function') {
+                          config.afterRender();
+                        }
+                      },
+                    },
+                    {
+                      key: '_getRow',
+                      value: function _getRow(i) {
+                        var config = this._config;
+                        var item = config.generate(i);
+                        var height = item.height;
+
+                        if (height !== undefined && isNumber(height)) {
+                          item = item.element;
+
+                          if (height !== this._itemHeights[i]) {
+                            this._itemHeights[i] = height;
+                            this._computePositions(i);
+                            this._scrollHeight = this._computeScrollHeight(i);
+                          }
+                        } else {
+                          height = this._itemHeights[i];
+                        }
+
+                        if (!item || item.nodeType !== 1) {
+                          throw new Error('Generator did not return a DOM Node for index: ' + i);
+                        }
+
+                        addClass(item, config.rowClassName || 'vrow');
+
+                        var top = this._itemPositions[i] + this._scrollPaddingTop;
+
+                        HyperList.mergeStyle(
+                          item,
+                          _defineProperty(
+                            {
+                              position: 'absolute',
+                            },
+                            config.horizontal ? 'left' : 'top',
+                            top + 'px'
+                          )
+                        );
+
+                        return item;
+                      },
+                    },
+                    {
+                      key: '_getScrollPosition',
+                      value: function _getScrollPosition() {
+                        var config = this._config;
+
+                        if (typeof config.overrideScrollPosition === 'function') {
+                          return config.overrideScrollPosition();
+                        }
+
+                        return this._element[config.horizontal ? 'scrollLeft' : 'scrollTop'];
+                      },
+                    },
+                    {
+                      key: '_renderChunk',
+                      value: function _renderChunk(force) {
+                        var config = this._config;
+                        var element = this._element;
+                        var scrollTop = this._getScrollPosition();
+                        var total = config.total;
+
+                        var from = config.reverse ? this._getReverseFrom(scrollTop) : this._getFrom(scrollTop) - 1;
+
+                        if (from < 0 || from - this._screenItemsLen < 0) {
+                          from = 0;
+                        }
+
+                        if (!force && this._lastFrom === from) {
+                          return false;
+                        }
+
+                        this._lastFrom = from;
+
+                        var to = from + this._cachedItemsLen;
+
+                        if (to > total || to + this._cachedItemsLen > total) {
+                          to = total;
+                        }
+
+                        var fragment = config.useFragment ? document.createDocumentFragment() : [];
+
+                        var scroller = this._scroller;
+
+                        fragment[config.useFragment ? 'appendChild' : 'push'](scroller);
+
+                        for (var i = from; i < to; i++) {
+                          var row = this._getRow(i);
+
+                          fragment[config.useFragment ? 'appendChild' : 'push'](row);
+                        }
+
+                        if (config.applyPatch) {
+                          return config.applyPatch(element, fragment);
+                        }
+
+                        element.innerHTML = '';
+                        element.appendChild(fragment);
+                      },
+                    },
+                    {
+                      key: '_computePositions',
+                      value: function _computePositions() {
+                        var from = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+
+                        var config = this._config;
+                        var total = config.total;
+                        var reverse = config.reverse;
+
+                        if (from < 1 && !reverse) {
+                          from = 1;
+                        }
+
+                        for (var i = from; i < total; i++) {
+                          if (reverse) {
+                            if (i === 0) {
+                              this._itemPositions[0] = this._scrollHeight - this._itemHeights[0];
+                            } else {
+                              this._itemPositions[i] = this._itemPositions[i - 1] - this._itemHeights[i];
+                            }
+                          } else {
+                            this._itemPositions[i] = this._itemHeights[i - 1] + this._itemPositions[i - 1];
+                          }
+                        }
+                      },
+                    },
+                    {
+                      key: '_computeScrollHeight',
+                      value: function _computeScrollHeight() {
+                        var _HyperList$mergeStyle2,
+                          _this2 = this;
+
+                        var config = this._config;
+                        var isHoriz = Boolean(config.horizontal);
+                        var total = config.total;
+                        var scrollHeight =
+                          this._itemHeights.reduce(function (a, b) {
+                            return a + b;
+                          }, 0) +
+                          this._scrollPaddingBottom +
+                          this._scrollPaddingTop;
+
+                        HyperList.mergeStyle(
+                          this._scroller,
+                          ((_HyperList$mergeStyle2 = {
+                            opacity: 0,
+                            position: 'absolute',
+                            top: '0px',
+                          }),
+                          _defineProperty(_HyperList$mergeStyle2, isHoriz ? 'height' : 'width', '1px'),
+                          _defineProperty(_HyperList$mergeStyle2, isHoriz ? 'width' : 'height', scrollHeight + 'px'),
+                          _HyperList$mergeStyle2)
+                        );
+
+                        var sortedItemHeights = this._itemHeights.slice(0).sort(function (a, b) {
+                          return a - b;
+                        });
+                        var middle = Math.floor(total / 2);
+                        var averageHeight =
+                          total % 2 === 0
+                            ? (sortedItemHeights[middle] + sortedItemHeights[middle - 1]) / 2
+                            : sortedItemHeights[middle];
+
+                        var clientProp = isHoriz ? 'clientWidth' : 'clientHeight';
+                        var element = config.scrollContainer ? config.scrollContainer : this._element;
+                        var containerHeight = element[clientProp] ? element[clientProp] : this._containerSize;
+                        this._screenItemsLen = Math.ceil(containerHeight / averageHeight);
+                        this._containerSize = containerHeight;
+
+                        this._cachedItemsLen = Math.max(this._cachedItemsLen || 0, this._screenItemsLen * 3);
+                        this._averageHeight = averageHeight;
+
+                        if (config.reverse) {
+                          window.requestAnimationFrame(function () {
+                            if (isHoriz) {
+                              _this2._element.scrollLeft = scrollHeight;
+                            } else {
+                              _this2._element.scrollTop = scrollHeight;
+                            }
+                          });
+                        }
+
+                        return scrollHeight;
+                      },
+                    },
+                    {
+                      key: '_computeScrollPadding',
+                      value: function _computeScrollPadding() {
+                        var config = this._config;
+                        var isHoriz = Boolean(config.horizontal);
+                        var isReverse = config.reverse;
+                        var styles = window.getComputedStyle(this._element);
+
+                        var padding = function padding(location) {
+                          var cssValue = styles.getPropertyValue('padding-' + location);
+                          return parseInt(cssValue, 10) || 0;
+                        };
+
+                        if (isHoriz && isReverse) {
+                          return {
+                            bottom: padding('left'),
+                            top: padding('right'),
+                          };
+                        } else if (isHoriz) {
+                          return {
+                            bottom: padding('right'),
+                            top: padding('left'),
+                          };
+                        } else if (isReverse) {
+                          return {
+                            bottom: padding('top'),
+                            top: padding('bottom'),
+                          };
+                        } else {
+                          return {
+                            bottom: padding('bottom'),
+                            top: padding('top'),
+                          };
+                        }
+                      },
+                    },
+                    {
+                      key: '_getFrom',
+                      value: function _getFrom(scrollTop) {
+                        var i = 0;
+
+                        while (this._itemPositions[i] < scrollTop) {
+                          i++;
+                        }
+
+                        return i;
+                      },
+                    },
+                    {
+                      key: '_getReverseFrom',
+                      value: function _getReverseFrom(scrollTop) {
+                        var i = this._config.total - 1;
+
+                        while (i > 0 && this._itemPositions[i] < scrollTop + this._containerSize) {
+                          i--;
+                        }
+
+                        return i;
+                      },
+                    },
+                  ]);
+
+                  return HyperList;
+                })();
+
+                exports.default = HyperList;
+                module.exports = exports['default'];
+              },
+              {},
+            ],
+          },
+          {},
+          [1]
+        )(1);
+      });
+    </script>
+    <style>
+      html,
+      body {
+        font-family: sans-serif;
+        margin: 0;
+      }
+      body {
+        padding: 8px 24px 24px;
+      }
+      .enabled,
+      .disabled {
+        padding: 2px 4px;
+        font-weight: 600;
+      }
+      .green {
+        background: #b0ff4e;
+      }
+      .red {
+        background: #ffb1b1;
+      }
+      table {
+        border: 1px solid #000;
+        border-collapse: collapse;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+
+      tr {
+        width: 100%;
+        flex: 1;
+        display: flex;
+      }
+      th,
+      td {
+        white-space: nowrap;
+        width: 20%;
+        text-align: left;
+        vertical-align: top;
+        border: 1px solid #00000038;
+        padding: 8px;
+      }
+      .infiniteTable tbody {
+        display: flex;
+        height: 700px !important;
+        overflow: scroll !important;
+      }
+      .infiniteTable thead {
+        display: flex;
+        width: calc(100% - 15px) !important;
+      }
+      caption {
+        background: black;
+        color: white;
+        padding: 8px;
+        text-align: left;
+        font-weight: bold;
+      }
+      caption a {
+        float: right;
+        color: white;
+      }
+      tr:hover {
+        background: #f0f0f0;
+        outline: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <br class="root" />
+    <h2>Marsviewer Category Search Gathering Admin</h2>
+    <div id="allRuntimesMessage">
+      <div>
+        <b>Viewing All Runtimes, Auto-refresh is disabled by default</b>
+      </div>
+      <a href="./categorySearchGatheringAdmin">Back to standard admin view</a>
+    </div>
+    <br />
+    <div>
+      <span>Auto Refresh Data: </span>
+      <input id="autoRefresh" checked onclick="toggleAutoRefresh()" type="checkbox" />
+    </div>
+    <br />
+    <div>
+      <span>Category Search Gathering Enabled: </span>
+      <span id="gatheringEnabled">Loading</span>
+    </div>
+    <br />
+    <div>
+      <span>Currently Gathering Category Search Images: </span>
+      <span id="currentlyGathering">Loading</span>
+    </div>
+    <br />
+    <div>
+      <span>Minutes to Next Gather: </span>
+      <b id="minutesToNextGather">Loading</b>
+    </div>
+    <br />
+    <div>
+      <span>Gather category search images now: </span>
+      <button onclick="forceGather()">Gather</button>
+    </div>
+    <br />
+    <div>
+      <span>Enable category search gathering: </span>
+      <button onclick="enableGathering()">Enable</button>
+    </div>
+    <br />
+    <div>
+      <span>Disable category search gathering: </span>
+      <button onclick="disableGathering()">Disable</button>
+    </div>
+    <br />
+    <div>
+      Links to AWS telemetry dashboards:
+      <ul>
+        <li>DEV: <a href="https://console.amazonaws-us-gov.com/cloudwatch/home?region=us-gov-west-1#dashboards:name=m20-mv-dev-frontend" target="_blank">aws</a></li>
+        <li>GDSIT: <a href="https://console.amazonaws-us-gov.com/cloudwatch/home?region=us-gov-west-1#dashboards:name=m20-gdsit-ids-marsviewer-front" target="_blank">aws</a></li>
+        <li>SBETA: <a href="https://console.amazonaws-us-gov.com/cloudwatch/home?region=us-gov-west-1#dashboards:name=m20-sbeta-ids-marsviewer-front" target="_blank">aws</a></li>
+        <li>SSTAGE: <a href="https://console.amazonaws-us-gov.com/cloudwatch/home?region=us-gov-west-1#dashboards:name=m20-sstage-ids-marsviewer-front" target="_blank">aws</a></li>
+        <li>SOPS: <a href="https://console.amazonaws-us-gov.com/cloudwatch/home?region=us-gov-west-1#dashboards:name=m20-sops-ids-marsviewer-front" target="_blank">aws</a></li>
+      </ul>
+    </div>
+    <br />
+    <div>
+      <span>Average Runtime: </span>
+      <b id="averageRuntime">Loading</b>
+    </div>
+    <br />
+    <div>
+      <span>Runtime Standard Deviation: </span>
+      <b id="stdDeviation">Loading</b>
+    </div>
+    <br />
+    <div>
+      <span>Max Runtime: </span>
+      <b id="maxRuntime">Loading</b>
+    </div>
+    <br />
+    <div>
+      <span>Min Runtime: </span>
+      <b id="minRuntime">Loading</b>
+    </div>
+    <br />
+    <div>
+      <span>Number of Failed Runs: </span>
+      <b id="numFailedRuns">Loading</b>
+    </div>
+    <br />
+    <div>
+      <table id="runtimesTable">
+        <caption>
+          Category Search Gathering Runtimes
+          <span id="numberOfRuntimes">(Last 300)</span>
+          <span id="viewAllRuntimesLink">
+            <a href="./categorySearchGatheringAdmin?autoRefresh=false&viewAllRuntimes=true">View All</a>
+          </span>
+          <span id="viewSomeRuntimesLink">
+            <a href="./categorySearchGatheringAdmin">View Limited Runtimes</a>
+          </span>
+        </caption>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Success</th>
+            <th>Runtime (seconds)</th>
+            <th>Result Count</th>
+            <th>Query Download Size (kb)</th>
+          </tr>
+        </thead>
+        <tbody id="runtimesTableBody"></tbody>
+      </table>
+    </div>
+
+    <script type="text/javascript">
+      let autoRefresh = true;
+      let viewAllRuntimes = false;
+      let initialLoadComplete = false;
+
+      const queryString = new URLSearchParams(window.location.search);
+      const queryAutoRefresh = queryString.get('autoRefresh');
+      const queryViewAllRuntimes = queryString.get('viewAllRuntimes');
+
+      if (queryAutoRefresh === 'false') autoRefresh = false;
+      if (queryViewAllRuntimes === 'true') viewAllRuntimes = true;
+
+      if (!viewAllRuntimes) {
+        document.getElementById('allRuntimesMessage').hidden = true;
+        document.getElementById('viewSomeRuntimesLink').hidden = true;
+      } else {
+        document.getElementById('viewAllRuntimesLink').hidden = true;
+      }
+
+      function toggleAutoRefresh() {
+        autoRefresh = !autoRefresh;
+      }
+
+      function forceGather() {
+        fetch('./forceCategorySearchGathering', {
+          method: 'POST',
+        });
+      }
+
+      function enableGathering() {
+        const r = confirm('Are you sure you want to enable category search gathering?');
+        if (r)
+          fetch('./enableCategorySearchGathering', {
+            method: 'POST',
+          });
+      }
+
+      function disableGathering() {
+        const r = confirm('Are you sure you want to disable category search gathering?');
+        if (r)
+          fetch('./disableCategorySearchGathering', {
+            method: 'POST',
+          });
+      }
+
+      const standardDeviation = (arr, avg, usePopulation = true) => {
+        return Math.sqrt(
+          arr.reduce((acc, val) => acc.concat((val - avg) ** 2), []).reduce((acc, val) => acc + val, 0) /
+            (arr.length - (usePopulation ? 0 : 1))
+        );
+      };
+
+      const getStatus = async () => {
+        if (autoRefresh || !initialLoadComplete) {
+          try {
+            const response = await fetch('./categorySearchGatheringStatus');
+            const status = await response.json();
+
+            const gatheringEnabledContent = status.gather_category_search_enabled
+              ? "<span class='enabled green'>True</span>"
+              : "<span class='disabled red'>False</span>";
+            document.getElementById('gatheringEnabled').innerHTML = gatheringEnabledContent;
+
+            const currentlyGatheringContent = status.gathering_category_search
+              ? "<span class='enabled green'>True</span>"
+              : "<span class='disabled red'>False</span>";
+            document.getElementById('currentlyGathering').innerHTML = currentlyGatheringContent;
+
+            const minutesToNextGatherContent = status.minutes_to_next_gather;
+            document.getElementById('minutesToNextGather').innerHTML = minutesToNextGatherContent.toFixed(2);
+
+            let runtimeTDs = [];
+            let minRuntime = Number.POSITIVE_INFINITY;
+            let maxRuntime = 0;
+            let avg = status.runtimes.reduce((acc, val) => acc + val.runtimeSeconds, 0) / status.runtimes.length;
+            let runtimeSecondsStdDev = standardDeviation(
+              status.runtimes.map((x) => x.runtimeSeconds),
+              avg
+            );
+            let numFailedRuns = 0;
+            const numberOfRuntimes = viewAllRuntimes ? status.runtimes.length : 300;
+            document.getElementById('numberOfRuntimes').innerHTML = viewAllRuntimes
+              ? `(${numberOfRuntimes})`
+              : `(Last ${numberOfRuntimes})`;
+            status.runtimes
+              .reverse()
+              .slice(0, numberOfRuntimes)
+              .forEach((runtime) => {
+                if (runtime.runtimeSeconds < minRuntime) minRuntime = runtime.runtimeSeconds;
+                if (runtime.runtimeSeconds > maxRuntime) maxRuntime = runtime.runtimeSeconds;
+                if (!runtime.success) numFailedRuns += 1;
+
+                const successContent = runtime.success ? "<td class='green'>True</td>" : "<td class='red'>False</td>";
+                const numStdDev = 2;
+                const runtimeSecondsContent =
+                  runtime.runtimeSeconds > avg + runtimeSecondsStdDev * numStdDev ||
+                  runtime.runtimeSeconds < avg - runtimeSecondsStdDev * numStdDev
+                    ? `<td class='red'>${runtime.runtimeSeconds}</td>`
+                    : `<td>${runtime.runtimeSeconds}</td>`;
+
+                runtimeTDs.push(`
+              <tr>
+                <td>${new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeStyle: 'long' }).format(
+                  new Date(runtime.date)
+                )}</td>
+                ${successContent}
+                ${runtimeSecondsContent}
+                <td>${runtime.numResults}</td>
+                <td>${runtime.queryDownloadSizeKB}</td>
+              </tr>
+              `);
+              });
+            document.getElementById('minRuntime').innerHTML = minRuntime;
+            document.getElementById('maxRuntime').innerHTML = maxRuntime;
+            document.getElementById('averageRuntime').innerHTML = avg.toFixed(3);
+            document.getElementById('stdDeviation').innerHTML = runtimeSecondsStdDev.toFixed(3);
+            document.getElementById('numFailedRuns').innerHTML = numFailedRuns;
+
+            const runtimesTable = document.getElementById('runtimesTable');
+            const runtimesTableBody = document.getElementById('runtimesTableBody');
+            if (viewAllRuntimes) {
+              runtimesTable.classList.add('infiniteTable');
+              const list = HyperList.create(runtimesTableBody, {
+                itemHeight: 36,
+                height: runtimesTableBody.getBoundingClientRect().height,
+                total: runtimeTDs.length,
+                generate(index) {
+                  const el = document.createElement('tr');
+                  el.innerHTML = runtimeTDs[index];
+                  return el;
+                },
+              });
+            } else {
+              runtimesTableBody.innerHTML = runtimeTDs.join('');
+              runtimesTable.classList.remove('infiniteTable');
+            }
+
+            if (!initialLoadComplete) {
+              document.getElementById('autoRefresh').checked = autoRefresh;
+              initialLoadComplete = true;
+            }
+          } catch (err) {
+            console.log(err);
+            console.log(status);
+          }
+        }
+        setTimeout(() => {
+          getStatus();
+        }, 2000);
+      };
+      document.body.onload = () => getStatus();
+    </script>
+  </body>
+</html>

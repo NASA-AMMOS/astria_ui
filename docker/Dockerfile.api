@@ -1,0 +1,54 @@
+FROM node:20.18.0
+
+# the spefific env file that should be used for this build
+# specifies things like authentication server URL and frontend config files
+ARG ENV_FILE=""
+
+# optional tweaks for the FS within the image
+ARG _WORKSPACE="/app"
+ARG _ENV_WORKSPACE="/app_env"
+
+ENV ASTRIA_ENV_DIR=${_ENV_WORKSPACE}
+ENV NODE_ENV=production
+
+# make sure we're up to date and install curl for healthchecks
+RUN apt-get -y update && \
+  apt-get install -y curl && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
+
+# copy in the mission specific files
+RUN mkdir -p ${_ENV_WORKSPACE}
+COPY --from=env_dir . ${_ENV_WORKSPACE}
+
+# copy in the app source (we need server.js, config.js, src/utils, src/constants, and server/ directory)
+RUN mkdir -p ${_WORKSPACE}
+WORKDIR ${_WORKSPACE}
+
+# Copy package files first for better layer caching
+COPY package*.json ${_WORKSPACE}/
+
+# Install dependencies
+RUN npm install --force && \
+  npm cache clean --force
+
+# Copy over the source files
+COPY . ${_WORKSPACE}
+
+# build ASTRIA config
+RUN export ASTRIA_ENV_DIR=${_ENV_WORKSPACE} && \
+  set -a && . ${_ENV_WORKSPACE}/${ENV_FILE} && set +a && \
+  npm run build:config
+
+# Build-time arguments for port and path (baked into image)
+ARG ASTRIA_API_PORT=3001
+ARG ASTRIA_PUBLIC_URL_PATH=/
+
+# Set as environment variables in the image
+ENV ASTRIA_API_PORT=${ASTRIA_API_PORT}
+ENV ASTRIA_PUBLIC_URL_PATH=${ASTRIA_PUBLIC_URL_PATH}
+
+EXPOSE ${ASTRIA_API_PORT}
+
+# Run Node.js directly - Docker handles process management
+CMD ["node", "server.js"]

@@ -1,0 +1,46 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray20, gray40, gray60, gray70, gray80 from color;
+
+.buttonWrapper {
+  display: flex;
+  width: min-content;
+}
+
+.button {
+  width: min-content;
+  white-space: nowrap;
+  margin-bottom: gridUnit;
+}
+
+.button[disabled] {
+  color: yellow;
+  opacity: 0.5;
+}
+
+.button[disabled]:hover {
+  color: yellow;
+  background: none;
+}
+
+.exportPathContainer {
+  display: flex;
+  flex-direction: column;
+  gap: gridUnit;
+}
+
+.exportPathInput {
+  display: flex;
+  gap: gridUnit;
+}
+
+.textInput {
+  flex: 1;
+}
+
+.externalLinkButton {
+  display: flex;
+  gap: calc(gridUnit / 2);
+}

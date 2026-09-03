@@ -1,0 +1,11 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray40, gray60, gray80, gray100 from color;
+
+.icon {
+  height: calc(gridUnit * 2);
+  width: calc(gridUnit * 2);
+  display: inline-block;
+}

@@ -1,0 +1,92 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, red, green, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray100 from color;
+
+.facet {
+  padding: gridUnit;
+}
+
+.autosuggestContainer {
+  composes: autosuggestContainer from './Forms.module.css';
+  flex: none;
+  margin-bottom: calc(gridUnit * 2);
+}
+
+.select {
+  margin-bottom: calc(gridUnit * 2);
+}
+
+.content {
+  composes: message from './Alert.module.css';
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal {
+  max-width: none;
+  width: calc(gridUnit * 70);
+  height: calc(gridUnit * 80);
+}
+
+.scienceIntentResults {
+  overflow: auto;
+}
+
+.scienceIntentResult {
+  display: flex;
+  flex-direction: column;
+  padding: calc(gridUnit * 1.5) 0;
+  border: none;
+  border-bottom: 1px solid black;
+  cursor: pointer;
+  width: 100%;
+  background: transparent;
+}
+
+.scienceIntentResult:hover {
+  background-color: gray80;
+}
+
+.scienceIntentResult:first-child {
+  border-top: 1px solid black;
+}
+
+.topRow {
+  composes: medium from './common/typography.module.css';
+  display: flex;
+  text-align: left;
+}
+
+.topRow button {
+  flex-shrink: 0;
+  margin: 2px gridUnit;
+  padding: 0;
+  align-self: flex-start;
+}
+
+.bottomRow {
+  composes: smallCaps from './common/typography.module.css';
+  margin-left: 28px;
+}
+
+.noResultsMessage {
+  composes: label from './common/typography.module.css';
+  margin: calc(gridUnit * 4);
+  text-align: center;
+}
+
+.secondaryContentTask {
+  display: flex;
+  flex-direction: column;
+}
+
+.secondaryContentTaskParent {
+  composes: label from './common/typography.module.css';
+  text-transform: none;
+  opacity: 1;
+  margin-bottom: calc(gridUnit / 2);
+}

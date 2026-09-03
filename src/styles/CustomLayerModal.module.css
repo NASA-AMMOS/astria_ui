@@ -1,0 +1,15 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+.modal {
+  max-width: 510px;
+}
+
+.body {
+  display: flex;
+  gap: calc(gridUnit * 2);
+  flex-direction: column;
+}

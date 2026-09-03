@@ -1,0 +1,59 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, red, gray10, gray40, gray60, gray70, gray80, gray90, gray100 from color;
+
+.primaryTimeInputForm {
+  display: flex;
+  flex: 1;
+}
+.primaryTimeInputForm {
+  composes: bold from './common/typography.module.css';
+  height: calc(gridUnit * 4);
+  display: flex;
+  align-items: center;
+  color: gray10;
+  flex: 1;
+}
+.primaryTimeInputContainer {
+  background: gray80;
+  border: 1px solid gray70;
+  border-radius: borderRadius;
+  display: flex;
+  height: inherit;
+  flex: 1;
+  align-items: center;
+}
+.primaryTimeInputLabel {
+  padding: 0 gridUnit;
+  user-select: none;
+}
+.primaryTimeInput {
+  composes: medium from './common/typography.module.css' !important;
+  border: none;
+  display: flex;
+  background: transparent;
+  width: 100%;
+  padding: 0 gridUnit;
+}
+.primaryTimeInputRightActions {
+  display: flex;
+  height: inherit;
+  align-items: center;
+}
+.primaryTimeInputButton {
+  height: inherit;
+  width: calc(gridUnit * 4);
+  border-radius: 0px;
+}
+.primaryTimeInputButton:last-of-type {
+  border-top-right-radius: borderRadius;
+  border-bottom-right-radius: borderRadius;
+  border-left: 1px gray70 solid;
+}
+.primaryTimeInput::-webkit-inner-spin-button,
+.primaryTimeInput::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

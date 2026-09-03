@@ -1,0 +1,81 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray60, gray70, gray80, gray100 from color;
+
+.modal {
+  padding: calc(2 * gridUnit) 0;
+  user-select: none;
+}
+
+.headerContainer {
+  padding: 0px calc(2 * gridUnit);
+}
+
+.content {
+  margin-top: calc(gridUnit * 2);
+  grid-row: 1;
+  grid-row-gap: calc(gridUnit * 2);
+  display: grid;
+  width: calc(gridUnit * 35);
+  overflow: auto;
+}
+
+.section {
+}
+.sectionTitle {
+  composes: bold from './common/typography.module.css';
+  line-height: calc(gridUnit * 3);
+  padding: 0 calc(gridUnit * 2);
+  opacity: 0.9;
+}
+.sectionShortcuts {
+}
+
+.sectionShortcut {
+  display: flex;
+  justify-content: space-between;
+  line-height: calc(gridUnit * 2);
+  padding: calc(gridUnit / 2) calc(gridUnit * 2);
+  align-items: center;
+}
+
+.sectionShortcut:hover {
+  background: gray80;
+}
+
+.sectionShortcut {
+  composes: body from './common/typography.module.css';
+}
+
+.sectionShortcutTitle {
+  opacity: 0.7;
+}
+
+.sectionShortcutKeys {
+  display: flex;
+  align-items: center;
+}
+
+.sectionShortcutKey {
+  background: gray70;
+  width: 20px;
+  height: 20px;
+  min-width: min-content;
+  padding: 0px calc(gridUnit / 2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.sectionShortcutAlternateSeparator {
+  padding: 0px gridUnit;
+  opacity: 0.7;
+}
+
+.sectionShortcutKeySeparator {
+  padding: 0px calc(gridUnit / 2);
+  opacity: 0.7;
+}

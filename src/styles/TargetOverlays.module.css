@@ -1,0 +1,98 @@
+@value color: "./common/color.module.css";
+@value yellow, green, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.root {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  overflow: auto;
+  background: gray100;
+}
+
+.targets {
+  flex: 1 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.emptyStateContainer {
+  padding: calc(gridUnit * 2) calc(gridUnit * 2);
+}
+
+.topContent {
+  padding: calc(gridUnit * 2) calc(gridUnit * 2);
+  display: flex;
+  gap: gridUnit;
+}
+
+.targets {
+  flex: 1;
+}
+
+.target {
+  opacity: 1;
+  display: flex;
+  align-items: center;
+  /* flex: 1; */
+  overflow: hidden;
+  cursor: pointer;
+  padding: calc(gridUnit * 1.5) calc(gridUnit * 2);
+  height: calc(gridUnit * 5);
+}
+
+.target:hover {
+  background: gray80;
+}
+
+.targetTitle {
+  composes: label from './common/typography.module.css';
+  opacity: 0.9;
+  flex: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.targetIcon {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: calc(gridUnit * 3);
+  height: calc(gridUnit * 3);
+  margin-right: 6px;
+  opacity: 0.65;
+}
+
+.targetActions {
+  display: none;
+}
+
+.target:hover .targetActions {
+  display: flex;
+}
+
+.footer {
+  padding: calc(gridUnit * 4) calc(gridUnit * 2) gridUnit;
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+}
+
+.toggleContainer {
+  padding: calc(gridUnit * 2) calc(gridUnit * 2) 0;
+}
+
+.filter {
+  padding: calc(gridUnit * 2) calc(gridUnit * 2) gridUnit;
+  border-top: 1px solid black;
+}
+
+.noTargetsMatchingFilterMessage {
+  composes: medium from './common/typography.module.css';
+  padding: calc(gridUnit * 2) calc(gridUnit * 2) gridUnit;
+  opacity: 0.5;
+  user-select: none;
+}

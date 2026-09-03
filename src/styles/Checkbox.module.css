@@ -1,0 +1,89 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray40, gray60, gray70, gray80, gray100 from color;
+
+.container {
+  display: inline-block;
+  user-select: none;
+  width: 100%;
+}
+
+.hiddenCheckbox {
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+:global([data-whatintent='mouse']) .hiddenCheckbox:focus + .styledCheckboxContainer .styledCheckbox {
+  outline: none;
+}
+
+.hiddenCheckbox:focus + .styledCheckboxContainer .styledCheckbox {
+  outline: auto;
+  outline-color: #56a6ff;
+  outline-width: thick;
+}
+
+.styledCheckboxContainer {
+  display: flex;
+  padding: calc(gridUnit / 2) 0;
+  cursor: pointer;
+}
+
+.styledCheckbox {
+  width: 12px;
+  height: 12px;
+  border: 1px solid gray10;
+  color: yellow;
+  background: rgba(255, 221, 92, 0.1); /* 10% yellow */
+  border-radius: 2px;
+  transition: all 150ms;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+.styledCheckbox svg {
+  visibility: hidden;
+}
+
+.styledCheckboxContainer.checked .styledCheckbox {
+  border: 1px solid yellow;
+}
+
+.styledCheckboxContainer.checked .styledCheckbox svg {
+  visibility: visible;
+}
+
+.label {
+  composes: label from './common/typography.module.css';
+  flex: 1;
+  word-break: break-word;
+  margin-left: gridUnit;
+  margin-right: gridUnit;
+}
+
+.label:hover,
+.styledCheckboxContainer.checked .label {
+  opacity: 1;
+}
+
+.labelRight {
+  composes: label from './common/typography.module.css';
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

@@ -1,0 +1,58 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray40, gray60, gray70, gray80, gray100 from color;
+
+.multiSelect {
+  margin-bottom: gridUnit;
+}
+.label {
+  composes: label from './common/typography.module.css';
+  margin-bottom: gridUnit;
+}
+.options {
+  box-sizing: content-box;
+  height: calc(gridUnit * 3);
+  display: flex;
+  align-items: center;
+  background: gray80;
+  border-radius: 4px;
+  flex: 1 1;
+}
+.option {
+  height: inherit;
+  background: none;
+  border: none;
+  /* border-right: 1px solid gray80; */
+  flex: 1;
+  cursor: pointer;
+}
+.option:first-child {
+  border-top-left-radius: borderRadius;
+  border-bottom-left-radius: borderRadius;
+}
+
+.option:last-child {
+  border: none;
+  border-top-right-radius: borderRadius;
+  border-bottom-right-radius: borderRadius;
+}
+
+.optionText {
+  composes: medium from './common/typography.module.css';
+  opacity: 0.65;
+}
+
+.selected {
+  background: gray70;
+  border-radius: 4px;
+  box-shadow: 0px 0px 8px #00000073;
+  opacity: 1;
+  border: none;
+  z-index: 0;
+}
+
+.selected .optionText {
+  opacity: 0.9;
+}

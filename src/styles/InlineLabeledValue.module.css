@@ -1,0 +1,40 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, red, gray10, gray20, gray40, gray60, gray70, gray80, gray100 from color;
+
+.container {
+  word-break: break-word;
+  display: flex;
+  padding: calc(gridUnit / 2) 0;
+}
+
+.container:not(.noHover):hover {
+  background: gray80;
+}
+
+.label {
+  composes: label from './common/typography.module.css';
+}
+
+.dnValue {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+.value {
+  composes: body from './common/typography.module.css';
+  word-break: break-word;
+  margin-left: gridUnit;
+  width: 100%;
+}
+
+.valueMissing .value {
+  opacity: 0.6;
+  font-style: italic;
+}
+
+.valueIsError .value {
+  color: red;
+  font-style: italic;
+}

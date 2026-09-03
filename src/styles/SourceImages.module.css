@@ -1,0 +1,131 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+.root {
+  background: gray100;
+}
+
+.tip {
+  padding: calc(gridUnit * 1.5) gridUnit gridUnit;
+  border-bottom: 1px solid black;
+}
+
+.multiselect {
+  padding: gridUnit gridUnit 0;
+}
+
+.imageResults {
+  padding-top: 0px;
+}
+
+.sourceImageResult {
+  width: 100%;
+}
+
+.filenameText {
+  display: flex;
+  flex-direction: column;
+  padding-right: 72px;
+}
+
+.filenameResultError,
+.filenameTextError {
+  cursor: default;
+}
+
+.filenameTextNoZoomTo {
+  padding-right: 40px;
+}
+
+.filenameResultError:hover {
+  background: initial;
+}
+
+.imageResultContainer {
+  position: relative;
+}
+
+.imageResultContainer .productNotFoundBadge {
+  position: absolute;
+  bottom: gridUnit;
+  left: gridUnit;
+  z-index: 1;
+}
+
+.productNotFoundBadge {
+  composes: smallCaps from './common/typography.module.css';
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 1;
+  background: #9d3131;
+  display: inline-block;
+  padding: 1px 4px;
+  margin-top: 4px;
+  border-radius: 4px;
+  font-weight: 600;
+  width: max-content;
+}
+
+.rowWrapper {
+  padding: gridUnit;
+}
+
+.associatedMosaicsForCursorContainer {
+  border-top: 1px solid black;
+  padding-top: gridUnit;
+  margin-top: calc(gridUnit * 5);
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.associatedMosaicsForCursorLabel {
+  margin: calc(gridUnit / 2) gridUnit gridUnit;
+  composes: smallCaps from './common/typography.module.css';
+}
+
+.undernoteWrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.inlineButtonWrapper {
+  composes: undernoteWrapper;
+  justify-content: space-between;
+  align-items: center;
+  padding: gridUnit;
+  border-bottom: 1px solid black;
+}
+
+.inputWrapper {
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  min-width: calc(gridUnit * 2);
+}
+
+.toggleContainer {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.zoomToImageButtonFilename {
+  right: 40px;
+}
+
+.zoomToImageButtonImage {
+  top: calc(gridUnit * 8);
+}
+
+.activeImage .filenameText {
+  color: yellow !important;
+}
+
+button.clearSelectionButton {
+  padding: 8px;
+  height: 32px;
+}

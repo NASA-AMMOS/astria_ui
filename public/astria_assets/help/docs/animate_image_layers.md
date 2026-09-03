@@ -1,0 +1,3 @@
+#### Animate image layers
+
+Animate image layers from within the Layers tab. To create an animation, add one or more image layers on top of a base image and click on the three dot menu to the right of the active overlays header within the Layers tab and select "Animate Layers". An animation will begin and will cycle through all of the layers. Additionally, you can control the playing state and speed of the animation using the controls that appear above the active layers. One common workflow to generate animations is to use {APPNAME}'s result list export and image layer import functionalities to quickly add a sequence of images such as video frames.

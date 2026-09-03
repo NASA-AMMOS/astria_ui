@@ -1,0 +1,124 @@
+{
+  "app_title": "ASTRIA",
+  "using_csso": false,
+  "users_list": [],
+  "help_config": "help.yml",
+  "tile_service_url": "",
+  "tile_service_proxy": "s3",
+  "tile_service_proxy_thumb": "data",
+  "use_tiler_thumbs": true,
+  "data_provider_type": "ocs",
+  "label_key": "vicar_label",
+  "label_xml_url_key": "",
+  "data_query_service_url": "",
+  "es_url": "",
+  "es_version": 7,
+  "telemetry_url": "",
+  "mosaic_timeline": {
+    "url_base": "./api"
+  },
+  "category_search": {
+    "url_base": "./api",
+    "app_account_user": "",
+    "app_account_password_location": "",
+    "es_types": [],
+    "base_query": {
+      "bool": {
+        "must": [],
+        "should": [],
+        "must_not": []
+      }
+    },
+    "source_fields": [],
+    "categories": []
+  },
+  "api_endpoints": {},
+  "image_upload": {},
+  "annotation_upload": {},
+  "image_feature_upload": {},
+  "saved_search_upload": {},
+  "custom_product_types": [],
+  "support_email_address": "astria_support@jpl.nasa.gov",
+  "non_OSD_file_extensions": ["pdf", "gif"],
+  "object_type_mappings": {
+    "single_frame": "",
+    "mosaic": "",
+    "quicklook": "",
+    "user_upload": "",
+    "annotation": "",
+    "image_feature": ""
+  },
+  "feature_flags": {
+    "search": {
+      "enable_time_search": true,
+      "enable_facet_search": true,
+      "enable_mosaic_browse": true,
+      "enable_category_search": false,
+      "enable_target_search": true,
+      "enable_rdr_search": true
+    },
+    "general": {
+      "enable_package_selection": true,
+      "enable_image_viewing_history": true,
+      "enable_saved_searches": true,
+      "enable_image_upload": true,
+      "enable_telemetry_logging": true,
+      "enable_user_menu": true
+    },
+    "active_product": {
+      "enable_science_intent_metadata": false,
+      "enable_map": true,
+      "enable_related_images": true,
+      "enable_rdrs": true,
+      "enable_targets": true,
+      "enable_orbital_position": true,
+      "enable_annotations": true,
+      "enable_image_features": true,
+      "enable_product_freshness": true,
+      "deeplinks": {
+        "asttro": true,
+        "datadrive": true,
+        "astria": true,
+        "camp": true,
+        "pds": false
+      }
+    }
+  },
+  "url_keys": {
+    "searchProduct": "EDR",
+    "overlays": "overlays",
+    "overlaysVisible": "overlaysVisible",
+    "dataCursor": "cursor",
+    "dataCursorOrbital": "cursorOrbital",
+    "dataCursorOrigin": "cursorOrigin",
+    "zoom": "zoom",
+    "rotation": "rotation",
+    "center": "center",
+    "transformations": {
+      "opacity": "a",
+      "opacityOverridesVisibility": "f",
+      "allExcept": "allExcept",
+      "customImageLayer": "custom"
+    },
+    "opControls": "opControls",
+    "measurements": "measurements",
+    "scalebars": "scalebars",
+    "package": "package",
+    "annotation": "annotation",
+    "selectedTarget": "selectedTarget",
+    "targets": "targets",
+    "stretch": {
+      "localStretch": "localStretch",
+      "percentStretch": "percentStretch",
+      "DNStretch": "DNStretch"
+    },
+    "searchTabIndex": "sti",
+    "imageTabIndex": "iti",
+    "activeMosaicBrowseCategory": "mbCategory",
+    "activeCategorySearchCategory": "csCategory",
+    "facetSearchInversions": "inversionsFS",
+    "browseInversions": "inversionsB",
+    "animationState": "animState",
+    "animationSpeed": "animSpeed"
+  }
+}

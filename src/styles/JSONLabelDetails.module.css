@@ -1,0 +1,235 @@
+@value color: "./common/color.module.css";
+@value yellow, blueSecondary, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+@value leftColSize: calc(gridUnit * 12);
+
+.tree {
+  composes: label from './common/typography.module.css';
+  opacity: 1;
+  min-height: 500px;
+  font-feature-settings: 'tnum' 1; /* tabular numbers */
+}
+
+.loadingText {
+  display: none;
+}
+
+.loading .loadingText {
+  display: block;
+}
+
+.loading .tree {
+  display: none;
+}
+
+.input {
+  margin-bottom: gridUnit;
+}
+
+.starButton,
+.starButton:hover {
+  color: yellow !important;
+}
+
+.starButton,
+.unStarButton {
+  height: calc(gridUnit * 2) !important;
+  width: calc(gridUnit * 2) !important;
+  margin-left: calc(gridUnit / 2) !important;
+  position: absolute !important;
+  left: -23px !important;
+  top: -1px !important;
+}
+
+.unStarButton {
+  visibility: hidden;
+}
+
+:global(.json-inspector__leaf:not(.json-inspector__leaf_composite)) {
+  padding-left: 16px;
+  margin-left: -8px;
+}
+
+:global(.json-inspector__leaf:not(.json-inspector__leaf_composite)):hover .unStarButton,
+:global(
+    .json-inspector__leaf.json-inspector__leaf_composite
+      > .json-inspector__leaf.json-inspector__leaf_composite
+      > .json-inspector__leaf.json-inspector__leaf_composite
+  ):hover
+  .unStarButton {
+  visibility: visible;
+}
+
+:global(
+    .json-inspector__leaf.json-inspector__leaf_composite
+      > .json-inspector__leaf.json-inspector__leaf_composite
+      > .json-inspector__leaf.json-inspector__leaf_composite
+  )
+  .starButtonBase {
+  left: -34px;
+}
+
+:global(.json-inspector) > :global(.json-inspector__leaf_root) {
+  padding-left: 12px;
+}
+
+/* TODO Move to a new tree component */
+:global(.json-inspector),
+:global(.json-inspector__selection) {
+  overflow: hidden;
+}
+
+:global(.json-inspector__leaf) {
+  padding-left: gridUnit;
+  /* margin-left: gridUnit; */
+}
+
+:global(.json-inspector__line) {
+  display: block;
+  /* display: flex; */
+  position: relative;
+  cursor: default;
+  padding: calc(gridUnit / 4) 0 calc(gridUnit / 4);
+}
+
+:global(.json-inspector__line):after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -200px;
+  right: -50px;
+  bottom: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+:global(.json-inspector__line):hover:after {
+  background: gray80;
+  z-index: 0;
+}
+
+:global(.json) {
+  position: relative;
+}
+
+:global(.json-inspector__leaf_composite) > :global(.json-inspector__line) {
+  cursor: pointer;
+  /* margin-left: calc(-1 * gridUnit);
+  padding-left: gridUnit; */
+  margin-left: calc(-1 * 22px);
+  padding-left: 24px;
+}
+
+:global(.json-inspector__radio),
+:global(.json-inspector__flatpath) {
+  display: none;
+}
+
+:global(.json-inspector__value) {
+  margin-left: 5px;
+  position: relative;
+  z-index: 1;
+}
+
+:global(.json-inspector__key) {
+  color: blueSecondary;
+  position: relative;
+  z-index: 1;
+  word-break: break-word;
+  padding-left: 1px;
+}
+
+:global(.json-inspector__value_helper),
+:global(.json-inspector__value_null),
+:global(.json-inspector__not-found) {
+  color: gray50;
+  position: relative;
+  z-index: 1;
+}
+
+:global(.json-inspector__value_string) {
+  /* color: #798953; */
+  /* color: gray10; */
+  /* color: #f8f8f8bd; */
+  color: gray20;
+  position: relative;
+  z-index: 1;
+  word-break: break-all;
+}
+
+:global(.json-inspector__value_boolean) {
+  /* color: #75b5aa; */
+}
+
+:global(.json-inspector__value_number) {
+  /* color: #d28445; */
+}
+
+:global(.json-inspector__hl) {
+  /* background: yellow; */
+  /* box-shadow: 0 -1px 0 2px yellow; */
+  /* background: #ffffff4d; */
+  /* box-shadow: 0 -1px 0 2px #ffffff42; */
+  /* background: #636363; */
+  /* box-shadow: 0 0px 0 2px #636363; */
+  background: gray60;
+  box-shadow: 0 0px 0 2px gray60;
+  border-radius: 2px;
+  /* color: gray100; */
+}
+
+:global(.json-inspector__show-original) {
+  display: inline-block;
+  padding: 0 6px;
+  position: relative;
+  z-index: 1;
+  color: gray20;
+  cursor: pointer;
+  width: 74px;
+}
+
+:global(.json-inspector__show-original):hover {
+  color: gray10;
+}
+
+:global(.json-inspector__show-original):before {
+  content: '⥂';
+}
+
+:global(.json-inspector__show-original):hover:after {
+  content: ' expand';
+}
+
+:global(.json-inspector__leaf_composite) {
+  position: relative;
+}
+
+:global(.json-inspector__leaf_composite):after {
+  content: '›';
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  font-size: 20px;
+  line-height: 17px;
+  cursor: pointer;
+  color: #ffffffb0;
+  pointer-events: none;
+}
+
+:global(.json-inspector__leaf_composite):global(.json-inspector__leaf_expanded):after {
+  content: '›';
+  left: 0px;
+  top: 0px;
+  transform: rotate(90deg);
+}
+/* Hide root node */
+:global(.json-inspector) > :global(.json-inspector__leaf_root) > :global(.json-inspector__line) {
+  display: none;
+}
+
+:global(.json-inspector) > :global(.json-inspector__leaf_root):after {
+  display: none;
+}

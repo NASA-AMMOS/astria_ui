@@ -1,0 +1,3 @@
+#### Browse top mosaics
+
+Select the `Mosaic` tab in the left side panel. From this view you can browse mosaics from a particular category across the entire mission. This can be useful when trying to build context around a particular time or place. You can navigate a category of mosaics by scrolling or by using your browser's text search to look for a particular piece of metadata. In the future, the sequence IDs and activity names of the source images for each mosaic will be displayed.

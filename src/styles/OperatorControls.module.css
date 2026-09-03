@@ -1,0 +1,97 @@
+@value color: "./common/color.module.css";
+@value yellow, green, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.root {
+  display: flex;
+  flex-flow: column nowrap;
+  flex: 1 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.header {
+  position: sticky;
+  top: 0px;
+  z-index: 1;
+  background: gray100;
+  padding: calc(gridUnit * 2);
+}
+
+.title {
+  composes: header from './common/typography.module.css';
+  margin-bottom: calc(gridUnit * 0.5);
+}
+
+.content {
+  flex: 1 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.mainContent {
+  position: relative;
+  overflow: auto;
+  height: 100%;
+}
+
+.footer {
+  flex-basis: calc(gridUnit * 10);
+  height: calc(gridUnit * 10);
+  max-height: calc(gridUnit * 10);
+  min-height: calc(gridUnit * 10);
+  padding: 0px calc(gridUnit * 1.5);
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid gray80;
+}
+
+.footerBtn {
+  margin-bottom: gridUnit;
+}
+
+.footerBtn:last-of-type {
+  margin-bottom: 0px;
+}
+
+.inputWrapper {
+  display: flex;
+  flex-flow: column nowrap;
+  min-width: calc(gridUnit * 2);
+}
+
+.controlSet {
+  border-bottom: 1px solid gray70;
+  padding: calc(gridUnit * 2);
+}
+
+.controlSet:last-of-type {
+  border-bottom: none;
+}
+
+.controlSetLabel {
+  composes: smallCaps from './common/typography.module.css';
+  margin-bottom: gridUnit;
+}
+
+.controlWrapper {
+  margin-bottom: calc(gridUnit * 2);
+}
+
+.controlWrapper:last-of-type {
+  margin-bottom: none;
+}
+
+.emptyMessage {
+  composes: body from './common/typography.module.css';
+  padding: calc(gridUnit * 2);
+}
+
+.emptyPanelMsg span {
+  margin-bottom: 0px;
+  padding: gridUnit;
+}

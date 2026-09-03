@@ -1,0 +1,240 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: gray90;
+  overflow: hidden;
+}
+
+.header {
+  composes: header from './common/typography.module.css';
+  min-height: calc(gridUnit * 4);
+  display: flex;
+  align-items: center;
+}
+
+.headerContainer {
+  flex: 1;
+  padding: calc(gridUnit * 2);
+}
+
+.subheader {
+  composes: label from './common/typography.module.css';
+  opacity: 0.65;
+}
+
+.categoryList {
+  overflow: auto;
+  background: gray100;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.instrument {
+  display: flex;
+  background: none;
+  border: none;
+  border-bottom: 1px solid black;
+  padding: calc(gridUnit * 1.5) calc(gridUnit * 2);
+  cursor: pointer;
+  align-items: center;
+  gap: gridUnit;
+}
+
+.instrument:first-of-type {
+  border-top: 1px solid black;
+}
+
+.instrument:hover {
+  background: gray80;
+}
+
+.instrumentNameContainer {
+  composes: medium from './common/typography.module.css';
+  display: flex;
+  gap: calc(gridUnit / 2);
+  flex: 1;
+}
+
+.instrumentName {
+  opacity: 0.9;
+  text-align: left;
+}
+
+.instrumentIcon {
+  display: flex;
+  align-items: center;
+  opacity: 0.65;
+  color: gray10;
+}
+
+.instrumentImageCount {
+  opacity: 0.6;
+}
+
+.chevron {
+  color: gray10;
+  opacity: 0.65;
+}
+
+.instrumentHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  border-bottom: 1px solid black;
+  background: gray90;
+}
+
+.instrumentHeader .headerContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.instrumentHeaderContainerTop {
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttonContainer {
+  display: flex;
+  height: calc(gridUnit * 4);
+  align-items: center;
+  gap: gridUnit;
+}
+
+.fixedContentButton {
+  width: calc(gridUnit * 4);
+  height: calc(gridUnit * 4);
+}
+
+.mosaicsListContainer {
+  height: 100%;
+  overflow: auto;
+  background: gray100;
+}
+
+.mosaicsListPadding {
+  padding: calc(2 * gridUnit);
+  display: flex;
+  flex-direction: column;
+}
+
+.productMetadata {
+  display: flex;
+  flex-direction: column;
+  gap: calc(gridUnit / 2);
+}
+
+.productTitle {
+  composes: medium from './common/typography.module.css';
+  white-space: nowrap;
+  margin-bottom: calc(gridUnit / 2);
+}
+
+.imageContainer {
+  background: black;
+  word-break: break-word;
+  border: none;
+}
+
+.imageContainerUnknownSize {
+  width: 100%;
+}
+
+.imageContainerUnknownSize :global(.lazyload),
+.imageContainerUnknownSize :global(.lazyloading) {
+  min-height: 200px;
+}
+
+.activeImage {
+  border: 1px solid yellow !important;
+}
+
+:global(.lazyloaded) {
+  opacity: 1 !important;
+}
+
+.img {
+  color: #ffffff8f;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.input {
+  position: relative;
+}
+
+.product {
+  background-color: black;
+  border: 1px solid gray90;
+  border-radius: 1px;
+  padding: calc(2 * gridUnit);
+  margin-bottom: calc(2 * gridUnit);
+  cursor: pointer;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: gridUnit;
+}
+
+.product:hover {
+  border: 1px solid gray40;
+}
+
+.product:last-child {
+  margin-bottom: 0;
+}
+
+.productRTT {
+  composes: body from './common/typography.module.css';
+}
+
+.productRTTLabel {
+  opacity: 0.65;
+  composes: medium from './common/typography.module.css';
+}
+
+.productDescription {
+  composes: body from './common/typography.module.css';
+  opacity: 0.65;
+  word-break: break-word;
+}
+
+.categoryRefreshContent {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  background: gray100;
+  opacity: 1;
+}
+
+.refreshMessage {
+  composes: initialLoadMoreMessage from './EdrList.module.css';
+}
+
+.bottomContent {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+}
+
+.retryContainer {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.openInNewTabButton {
+  top: gridUnit;
+}

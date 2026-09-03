@@ -1,0 +1,55 @@
+* {
+  box-sizing: border-box;
+}
+
+/*
+ * only suppress the focus ring once what-input has successfully started
+ */
+
+/* suppress focus ring on form controls for mouse users */
+[data-whatintent='mouse'] *:focus {
+  outline: none;
+}
+
+/*
+ * Set default focus since many component libraries will remove the outline and
+ * getting back to specific browser defaults doesn't seem feasible
+*/
+*:focus {
+  outline: auto;
+  outline-color: #56a6ff;
+  outline-width: thick;
+}
+
+html {
+  height: 100%;
+  width: 100%;
+  background: black;
+  font-size: 14px;
+}
+body {
+  margin: 0px;
+  padding: 0;
+  font-family: sans-serif;
+  height: 100%;
+  overflow: hidden;
+  overflow-x: visible !important;
+  background: black;
+}
+#root {
+  height: 100%;
+}
+
+.cursorOverlay {
+  display: flex !important;
+  transform: translate(-50%, -50%);
+}
+
+.cursorUncertaintyWarning {
+  color: #ff7760;
+  filter: drop-shadow(1px 0px 0px black) drop-shadow(-1px 0px 0px black) drop-shadow(0px 1px 0px black)
+    drop-shadow(0px -1px 0px black);
+  position: absolute;
+  top: -8px;
+  right: -8px;
+}

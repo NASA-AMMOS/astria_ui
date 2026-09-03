@@ -1,0 +1,65 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, red, blue, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+.loading,
+.error {
+  composes: smallCaps from './common/typography.module.css';
+  height: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  height: 200px;
+}
+
+.error {
+  color: red;
+}
+
+.sciIntentCard {
+  background-color: gray80;
+  border-radius: borderRadius;
+  padding: gridUnit;
+}
+
+.sciIntentCard .sciIntentValue:first-child {
+  color: red;
+}
+
+.sciIntentLabel {
+  composes: smallCaps from './common/typography.module.css';
+  line-height: 10px;
+  margin: gridUnit 0px;
+}
+
+.sciIntentLabel:first-child {
+  margin-top: 0;
+}
+
+.sciIntentValue {
+  composes: label from './common/typography.module.css';
+  opacity: 0.9;
+  margin-bottom: calc(gridUnit * 2);
+  position: relative;
+}
+
+.borderedGroup {
+  padding-left: gridUnit;
+  margin-bottom: gridUnit;
+  border-left: 1px solid gray70;
+}
+
+.indent {
+  margin-left: gridUnit;
+}
+
+.emptyState {
+  height: calc(gridUnit * 30) !important;
+  padding: 0 gridUnit;
+}
+
+.emptyState span {
+  margin-bottom: calc(8px * 4);
+}

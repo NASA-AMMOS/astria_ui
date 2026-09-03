@@ -1,0 +1,61 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.root {
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  display: flex;
+}
+
+.pickerWrapper {
+  position: absolute;
+  top: 120%;
+  left: 0px;
+  z-index: 2;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.pickerWrapperOpen {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+button.pickerButton {
+  width: 100%;
+  justify-content: flex-start;
+  padding: 0px;
+  overflow: hidden;
+}
+
+.colorPreview {
+  flex-basis: calc(gridUnit * 3);
+  width: calc(gridUnit * 3);
+  height: calc(gridUnit * 3);
+  padding: 0px !important;
+  border-radius: 2px;
+  width: calc(gridUnit * 2);
+  height: calc(gridUnit * 2);
+  box-shadow: rgb(27, 29, 30) 0px 0px 1px 0px;
+  margin: 4px !important;
+}
+
+:global(.sketch-picker) {
+  width: 180px !important; /* override default width so inputs aren't cut off */
+}
+
+:global(.sketch-picker .flexbox-fix label) {
+  width: 80%;
+}
+
+:global(.compact-picker) {
+  width: 121px !important; /* good width for the number of color presets we currently have */
+}
+
+:global(.compact-picker .flexbox-fix) {
+  display: none !important; /* hide the summary info at the bottom because we don't want this editable */
+}

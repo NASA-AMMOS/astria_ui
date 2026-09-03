@@ -1,0 +1,75 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value purple, purpleHover, yellow, gray10, gray20, gray40, gray60, gray70, gray80, gray100 from color;
+
+.chip {
+  background: purple;
+  border-radius: borderRadius;
+  padding: 0;
+  min-height: calc(gridUnit * 3);
+  align-items: stretch;
+  display: inline-flex;
+  justify-content: center;
+  line-height: 14px;
+  user-select: none;
+  cursor: pointer;
+  border: none;
+  margin-right: gridUnit;
+  margin-top: gridUnit;
+}
+
+.chipPadded {
+  padding: calc(gridUnit / 2) gridUnit;
+}
+
+.chip:hover {
+  background: purpleHover;
+}
+
+.label {
+  composes: label from './common/typography.module.css';
+  align-items: center;
+  display: flex;
+}
+
+.value {
+  composes: medium from './common/typography.module.css';
+}
+
+.value,
+.icon {
+  margin-left: gridUnit;
+}
+
+.value {
+  word-break: break-word;
+  text-align: left;
+}
+
+.icon {
+  color: gray40;
+  line-height: 0;
+  align-items: center;
+  display: flex;
+}
+
+.paddedChipContent {
+  padding: calc(gridUnit / 2) gridUnit;
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+}
+
+.leftLabel {
+  composes: smallCaps from './common/typography.module.css';
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  opacity: 1;
+  background: #795a6e;
+  border-top-left-radius: calc(gridUnit / 2);
+  border-bottom-left-radius: calc(gridUnit / 2);
+  padding: calc(gridUnit / 2) gridUnit;
+}

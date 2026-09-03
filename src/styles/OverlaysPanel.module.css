@@ -1,0 +1,233 @@
+@value color: "./common/color.module.css";
+@value yellow, green, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.contentRoot {
+  padding: calc(gridUnit * 2);
+  flex: 1;
+  background: gray100;
+  overflow: auto;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.contentRootPadding {
+  composes: contentRoot;
+  padding: 0px;
+}
+
+.root {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+  height: 100%;
+  padding-top: gridUnit;
+}
+
+.activeSettingLabel {
+  display: flex;
+  margin-left: 8px;
+  opacity: 0.65;
+}
+
+.overlaysList {
+  grid-row-gap: gridUnit;
+  display: grid;
+}
+
+.overlaysListPadded {
+  composes: overlaysList;
+  padding: calc(gridUnit * 2);
+}
+
+.overlaysContainer {
+  composes: overlaysList;
+}
+
+.overlayControlsContainer {
+  position: relative;
+  z-index: 3;
+  padding: gridUnit calc(gridUnit * 2);
+}
+
+.panelSectionHeaderRow {
+  height: calc(gridUnit * 3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: gridUnit;
+}
+
+.panelSectionHeader {
+  composes: smallCaps from './common/typography.module.css';
+  user-select: none;
+}
+
+.panelSectionHeaderRow:not(:first-child) {
+  margin-top: calc(gridUnit * 3);
+}
+
+.panelSectionHeaderRow div {
+  display: flex;
+}
+
+.overlayAddedIcon {
+  color: green;
+}
+
+.overlayAddedIcon:hover {
+  color: green;
+}
+
+.overlaySpinnerIcon {
+  pointer-events: none;
+  animation: rotation 1s infinite linear;
+  cursor: default;
+}
+
+.overlaySpinnerIcon:hover {
+  background: none !important;
+}
+
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.tabPanel {
+  overflow: auto;
+  background: gray100;
+}
+
+.tabsContent {
+  cursor: auto;
+  overflow: hidden;
+  height: 100%;
+}
+
+.overlayChip {
+  composes: smallCaps from './common/typography.module.css';
+  opacity: 1;
+  padding: 2px 4px;
+  background: #595959;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.79);
+}
+
+.annotationDate {
+  cursor: help;
+}
+
+.subtabContainer {
+  composes: overlaysContainer;
+  margin-bottom: calc(gridUnit * 2);
+}
+
+.toggleContainer {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+.draggableWrapper {
+  margin-bottom: gridUnit;
+}
+
+.overlaySectionDivider {
+  width: 100%;
+  height: 1px;
+  background: gray80;
+}
+
+.dragHint {
+  composes: hint from './common/typography.module.css';
+}
+
+.bottomButtonWrapper {
+  padding: 0px calc(gridUnit * 2);
+  margin-bottom: gridUnit;
+}
+
+.featureButtonRow {
+  display: flex;
+  gap: gridUnit;
+}
+
+.featureConfidenceLow {
+  background: rgba(255, 119, 96, 0.12);
+  color: rgba(255, 119, 96, 0.9);
+}
+
+.featureConfidenceMedium {
+  background: rgba(255, 221, 92, 0.09);
+  color: rgba(255, 221, 92, 0.9);
+}
+
+.featureConfidenceHigh {
+  background: rgba(79, 255, 97, 0.09);
+  color: rgba(79, 255, 97, 0.9);
+}
+
+.dnOptionWrapper {
+  padding: 0px gridUnit;
+}
+
+.undernoteWrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.inlineButtonWrapper {
+  composes: undernoteWrapper;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  border-bottom: 1px solid black;
+}
+
+.inputControlContainer {
+  position: relative;
+  display: flex;
+  padding: calc(8px / 2) 0;
+}
+
+.inputWrapper {
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  min-width: calc(gridUnit * 2);
+}
+
+.decoratedInput {
+  composes: textInputEndDec from './Forms.module.css';
+  min-width: calc(gridUnit * 10);
+}
+
+.filterResultsLabel {
+  composes: label from './Forms.module.css';
+  padding: 0px gridUnit;
+}
+
+.animationControls {
+  display: flex;
+  align-items: center;
+  padding: 3px calc(gridUnit / 2);
+  border-radius: calc(gridUnit / 2);
+  gap: gridUnit;
+  margin-bottom: gridUnit;
+  background: #293137;
+  border: 1px solid #293137;
+}
+
+.animationControlsSelect {
+  flex: 1;
+}

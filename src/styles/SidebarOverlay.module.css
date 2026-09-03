@@ -1,0 +1,44 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.root {
+  height: 100%;
+  display: none;
+  overflow: hidden;
+  overflow-y: auto;
+  flex-flow: column nowrap;
+  position: absolute;
+  width: 100%;
+  left: 100%;
+  top: 0px;
+  visibility: hidden;
+  background: gray100;
+  z-index: 4;
+}
+
+.rootOpen {
+  left: 0px;
+  visibility: visible;
+  display: flex;
+}
+
+.header {
+  composes: label from './common/typography.module.css';
+  flex-basis: calc(gridUnit * 4);
+  height: calc(gridUnit * 4);
+  min-height: calc(gridUnit * 4);
+  background: gray80;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+button.closeBtn {
+  height: 100%;
+  width: 100%;
+  border-radius: 0px;
+  justify-content: flex-start;
+}

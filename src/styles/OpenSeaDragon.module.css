@@ -1,0 +1,12 @@
+.osdViewer {
+  flex: 1 1;
+  cursor: crosshair;
+}
+
+.osdHidden {
+  display: none;
+}
+
+:global(.openseadragon-canvas:focus) {
+  outline: none;
+}

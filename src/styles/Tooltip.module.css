@@ -1,0 +1,179 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray40, gray60, gray70, gray80, gray90, gray100 from color;
+
+.tooltip {
+  composes: body from './common/typography.module.css';
+  opacity: 1;
+  max-width: 300px;
+  z-index: 999999;
+}
+
+.invisible {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.keyboardShortcut {
+  color: gray40;
+  margin-left: calc(gridUnit * 2);
+}
+
+.learnMoreContainer {
+  text-align: left;
+}
+
+/* Padding for learn more button */
+.learnMoreContainer button {
+  margin-top: calc(gridUnit / 2);
+}
+
+.overlayContent {
+  display: flex;
+}
+
+:global(.rc-tooltip) {
+  background: none;
+  z-index: 999999;
+}
+
+:global(.rc-tooltip-arrow) {
+  pointer-events: none;
+}
+
+:global(.rc-tooltip-inner) {
+  padding: gridUnit calc(gridUnit * 2) !important;
+  box-shadow: 0px 1px 11px #000000 !important;
+  min-width: 24px !important;
+  /* height: calc(gridUnit * 4) !important; */
+  font-size: inherit !important;
+  line-height: calc(gridUnit * 2) !important;
+  color: #fff !important;
+  background-color: gray90 !important;
+  border-radius: borderRadius !important;
+  /* white-space: nowrap !important; */
+  opacity: 1 !important;
+  min-height: inherit !important;
+  border: none !important;
+  text-align: center;
+}
+
+:global(.rc-tooltip-placement-top .rc-tooltip-arrow),
+:global(.rc-tooltip-placement-topLeft .rc-tooltip-arrow),
+:global(.rc-tooltip-placement-topRight .rc-tooltip-arrow) {
+  border-top-color: gray90 !important;
+}
+
+:global(.rc-tooltip-placement-bottom .rc-tooltip-arrow),
+:global(.rc-tooltip-placement-bottomLeft .rc-tooltip-arrow),
+:global(.rc-tooltip-placement-bottomRight .rc-tooltip-arrow) {
+  border-bottom-color: gray90 !important;
+}
+
+:global(.rc-tooltip-placement-left .rc-tooltip-arrow) {
+  border-left-color: gray90 !important;
+}
+
+:global(.rc-tooltip-placement-right .rc-tooltip-arrow) {
+  border-right-color: gray90 !important;
+}
+
+/* .rc-tooltip-zoom-down-enter,
+.rc-tooltip-zoom-down-appear {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+  display: block !important;
+  animation-play-state: paused;
+}
+.rc-tooltip-zoom-down-leave {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+  display: block !important;
+  animation-play-state: paused;
+}
+.rc-tooltip-zoom-down-enter.rc-tooltip-zoom-down-enter-active,
+.rc-tooltip-zoom-down-appear.rc-tooltip-zoom-down-appear-active {
+  animation-name: rcSliderTooltipZoomDownIn;
+  animation-play-state: running;
+}
+.rc-tooltip-zoom-down-leave.rc-tooltip-zoom-down-leave-active {
+  animation-name: rcSliderTooltipZoomDownOut;
+  animation-play-state: running;
+}
+.rc-tooltip-zoom-down-enter,
+.rc-tooltip-zoom-down-appear {
+  transform: scale(0, 0);
+  animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+.rc-tooltip-zoom-down-leave {
+  animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+}
+@keyframes rcSliderTooltipZoomDownIn {
+  0% {
+    opacity: 0;
+    transform-origin: 50% 100%;
+    transform: scale(0, 0);
+  }
+  100% {
+    transform-origin: 50% 100%;
+    transform: scale(1, 1);
+  }
+}
+@keyframes rcSliderTooltipZoomDownOut {
+  0% {
+    transform-origin: 50% 100%;
+    transform: scale(1, 1);
+  }
+  100% {
+    opacity: 0;
+    transform-origin: 50% 100%;
+    transform: scale(0, 0);
+  }
+}
+.rc-tooltip {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  visibility: visible;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.rc-tooltip * {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.rc-tooltip-hidden {
+  display: none;
+}
+.rc-tooltip-placement-top {
+  padding: 4px 0 8px 0;
+}
+.rc-tooltip-inner {
+  padding: 6px 2px;
+  min-width: 24px;
+  height: 24px;
+  font-size: 12px;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  background-color: #6c6c6c;
+  border-radius: 6px;
+  box-shadow: 0 0 4px #d9d9d9;
+}
+.rc-tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+.rc-tooltip-placement-top .rc-tooltip-arrow {
+  bottom: 4px;
+  left: 50%;
+  margin-left: -4px;
+  border-width: 4px 4px 0;
+  border-top-color: #6c6c6c;
+} */

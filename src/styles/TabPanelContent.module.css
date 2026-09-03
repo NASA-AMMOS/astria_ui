@@ -1,0 +1,48 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray60, gray70, gray80, gray100 from color;
+
+.root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.headerRow {
+  display: flex;
+  flex-direction: column;
+  grid-gap: calc(8px / 2);
+  gap: calc(8px / 2);
+  padding: 14px 16px;
+  border-bottom: 1px solid black;
+  background: #2d3437;
+  user-select: none;
+}
+
+.headerTopRow {
+  display: flex;
+}
+
+.title {
+  composes: header from './common/typography.module.css';
+  flex: 1;
+}
+
+.subtitle {
+  composes: label from './common/typography.module.css';
+  flex: 1;
+}
+
+.headerButtons {
+  display: flex;
+  gap: calc(gridUnit / 2);
+}
+
+.popoutChildrenContainer {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}

@@ -1,0 +1,112 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.root {
+  display: flex;
+  flex-flow: row nowrap;
+  width: calc(gridUnit * 6);
+  height: calc(gridUnit * 4);
+  border-radius: borderRadius;
+  border: 1px solid gray70;
+  overflow: hidden;
+}
+
+.root.labeled {
+  display: inline-flex;
+  width: auto;
+}
+
+.noChildren {
+  width: calc(gridUnit * 4);
+}
+
+button.mainBtn {
+  border-radius: 0px;
+  height: 100%;
+  flex: 1 1;
+  border: none;
+}
+
+button.secondaryBtn {
+  height: 100%;
+  border-radius: 0px;
+  padding: 0px calc(gridUnit / 8);
+  width: calc(gridUnit * 2);
+  background: gray70;
+}
+
+button.secondaryBtn span {
+  margin-right: 0px !important;
+  height: 30px !important;
+  display: flex !important;
+  flex: 1 !important;
+}
+
+/* style the icon so the tooltip appears on top of the button */
+.secondaryBtn span > span {
+  align-items: center;
+}
+
+.active .secondaryBtn {
+  background: yellow;
+}
+
+.active .secondaryBtn:hover {
+  background: #ffe88f;
+}
+
+.active:not(.dark) .secondaryBtn svg {
+  color: #3d3a27;
+}
+
+.active {
+  border-color: yellow;
+}
+
+.active:hover {
+  border-color: #ffe88f;
+}
+
+.active .mainBtn {
+  background: rgba(255, 221, 92, 0.15);
+  color: yellow;
+}
+
+.active .mainBtn:hover {
+  background: rgba(255, 221, 92, 0.25);
+  color: #ffe88f;
+}
+/* ------- */
+.active.dark .secondaryBtn {
+  background: gray90;
+}
+
+.active.dark .secondaryBtn:hover {
+  background: gray100;
+}
+
+.active.dark {
+  border: 1px solid #4a5357;
+}
+
+.active.dark .mainBtn {
+  background: black;
+  color: gray10;
+}
+
+.active.dark .mainBtn:hover {
+  background: gray90;
+  color: gray10;
+}
+
+.disabledButtonWrapper {
+  display: block;
+  cursor: not-allowed;
+}
+
+.disabledButtonWrapper button {
+  pointer-events: none;
+}

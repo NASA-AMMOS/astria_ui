@@ -1,0 +1,10 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+.exportOption {
+  margin-bottom: gridUnit;
+}
+
+.exportOption:last-of-type {
+  margin-top: 0px;
+}

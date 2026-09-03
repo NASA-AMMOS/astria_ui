@@ -1,0 +1,83 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, blue, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value toggleWidth: calc(gridUnit * 4);
+@value toggleHeight: calc(gridUnit * 2);
+
+.toggle {
+  display: grid;
+  grid-template-columns: 1fr toggleWidth;
+  align-items: center;
+  gap: gridUnit;
+}
+
+.toggle:not(.disabled):hover {
+  cursor: pointer;
+}
+
+.toggle:not(.disabled):hover .toggleBar {
+  opacity: 1;
+}
+
+.toggleLabel {
+  composes: label from './common/typography.module.css';
+  flex: 1;
+  user-select: none;
+}
+
+.noLabel {
+  display: flex;
+}
+
+.toggleBar {
+  background: none;
+  border-radius: 50px;
+  display: inline-block;
+  height: toggleHeight;
+  position: relative;
+  width: toggleWidth;
+  border: 1px solid gray20;
+  /* transition: all .2s ease-in-out; */
+  opacity: 0.8;
+}
+
+.toggleOn .toggleBar {
+  background-color: rgba(26, 255, 102, 0.5);
+  border: 1px solid #1aff66;
+}
+
+.toggleBall {
+  background-color: #fff;
+  border-radius: 50px;
+  bottom: 0;
+  display: block;
+  position: absolute;
+  top: 0;
+  transition: all 0.2s ease-in-out, right 0.2s ease-in-out;
+  width: 14px;
+  height: 14px;
+  transform: scale(0.714); /* scaled so that the width and heights are 10px */
+  z-index: 1;
+  right: calc(100% - 14px);
+}
+
+.toggleOn .toggleBall {
+  right: 0;
+  background-color: #fff;
+}
+
+.toggle.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.right-label {
+  grid-template-columns: (sliderWidth) 1fr;
+}
+
+.two-labels {
+  display: block;
+}

@@ -1,0 +1,160 @@
+@value color: "./common/color.module.css";
+@value yellow, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit from layout;
+
+/* width */
+:global(::-webkit-scrollbar) {
+  width: 7px;
+}
+
+/* Track */
+:global(::-webkit-scrollbar-track) {
+  /* background: gray90; */
+  background: transparent;
+}
+
+/* Handle */
+:global(::-webkit-scrollbar-thumb) {
+  background: gray70;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+:global(::-webkit-scrollbar-thumb:hover) {
+  background: gray60;
+}
+
+:global(::-webkit-scrollbar-corner) {
+  background: transparent;
+}
+
+/* Firefox scrollbar styling */
+:global(body) {
+  /* scrollbar-color: gray70 gray90; */
+  scrollbar-color: gray70 transparent;
+}
+
+:global(input[type='number']::-webkit-outer-spin-button),
+:global(input[type='number']::-webkit-inner-spin-button) {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+:global(input[type='number']) {
+  -moz-appearance: textfield;
+}
+
+.appContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: gray100;
+  color: gray10;
+}
+
+.splitPaneContainer {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.splitPaneLeft {
+  position: relative !important;
+  /* transition: transform; */
+}
+
+:global(.splitter-layout) > :global(.layout-splitter) {
+  z-index: 1;
+  background: transparent !important;
+  width: 6px;
+}
+
+:global(.splitter-layout) > :global(.layout-splitter):hover {
+  z-index: 1;
+  background: transparent !important;
+}
+
+:global(.splitter-layout) > :global(.layout-pane) {
+  overflow: hidden;
+}
+
+.splitPaneLeft > :global(.layout-splitter) {
+  margin-right: -6px;
+}
+
+.splitPaneLeft > :global(.layout-splitter) {
+  margin-right: -6px;
+}
+
+.splitPaneRight {
+  position: relative !important;
+}
+
+.splitPaneRight > :global(.layout-splitter) {
+  margin-left: -6px;
+}
+
+.hideSplitPaneLeft > :global(.layout-pane):first-child {
+  width: 0px !important;
+}
+
+.hideSplitPaneRight > :global(.layout-pane):last-child {
+  width: 0px !important;
+}
+
+.hideSplitPaneLeft > :global(.layout-splitter),
+.hideSplitPaneRight > :global(.layout-splitter) {
+  pointer-events: none;
+  cursor: default;
+}
+
+.minimizeSplitPaneRight > :global(.layout-pane),
+.minimizeSplitPaneLeft > :global(.layout-pane) {
+  width: 56px !important;
+}
+
+.minimizeSplitPaneRight :global(.layout-splitter) {
+  display: none;
+}
+
+/* TODO break into separate file */
+:global(.displayregion) {
+  border-color: yellow !important;
+}
+
+/* TODO break into separate file */
+.tooltip {
+  composes: body from './common/typography.module.css';
+  background-color: gray90 !important;
+  transition: none !important;
+  opacity: 0;
+  padding: gridUnit calc(gridUnit * 2) !important;
+}
+
+.tooltip:global(.show) {
+  animation-name: show-tooltip;
+  animation-duration: 1s;
+  opacity: 1;
+}
+
+:global(#new-window-container) {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  background: gray90;
+  height: 100%;
+}
+
+@keyframes show-tooltip {
+  0% {
+    opacity: 0;
+  }
+  99% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1 !important;
+  }
+}

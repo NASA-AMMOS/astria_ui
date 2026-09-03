@@ -1,0 +1,143 @@
+@value color: "./common/color.module.css";
+@value yellow, green, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.facet {
+  padding: gridUnit;
+  flex-direction: column;
+  display: flex;
+}
+
+.modal {
+  max-width: none !important;
+  width: 93vw;
+  height: 93vh;
+  padding: 0 !important;
+}
+
+.headerContainer {
+  padding: calc(gridUnit * 2);
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+  border-bottom: 1px solid black;
+}
+
+.message {
+  padding: calc(2 * 8px);
+  padding-top: 0;
+}
+
+.actionRow {
+  margin: calc(2 * 8px);
+}
+
+.row {
+  padding: calc(2 * 8px);
+  gap: gridUnit;
+  display: flex;
+  border-bottom: 1px solid black;
+}
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid black;
+}
+
+.editorBottomRow {
+  display: flex;
+  align-items: center;
+  padding: 0px calc(gridUnit * 2) calc(gridUnit * 2);
+  justify-content: space-between;
+}
+
+.textarea {
+  margin: calc(gridUnit * 2) calc(gridUnit * 2) gridUnit;
+  height: 200px;
+}
+
+.input {
+  width: calc(6 * 8px);
+}
+
+.sliderLabel {
+  composes: label from './common/typography.module.css';
+  white-space: nowrap;
+  margin-right: 0;
+}
+
+.slider {
+  /* min-width: 50px; */
+  margin: 0 12px;
+}
+
+.map {
+  width: 100%;
+  height: 184px;
+  margin-bottom: calc(gridUnit * 2);
+}
+
+.submitButton {
+  width: 100px;
+}
+
+.footprintCountContainer {
+  display: flex;
+  height: 100%;
+  margin-right: calc(gridUnit * 2);
+}
+
+.footprintCount {
+  composes: label from './common/typography.module.css';
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.select {
+  min-width: 100px;
+  flex: 1;
+  color: gray10;
+  margin: 0;
+}
+
+.select :global(.select-drop-down__menu) {
+  border-radius: 4px 4px 0 0 !important;
+}
+
+.select :global(.select-drop-down__menu-list) {
+  box-shadow: 0 -8px 12px 0px rgba(0, 0, 0, 0.24);
+}
+
+.select :global(.select-drop-down__menu) {
+  margin: 0 0 -2px !important;
+}
+
+.instrumentsSelectContainer {
+  display: flex;
+  flex: 1;
+}
+
+.sliderInputs {
+  display: flex;
+  gap: calc(gridUnit * 6);
+  flex: 1;
+}
+
+.sliderInputGroup {
+  display: flex;
+  flex: 1;
+  gap: gridUnit;
+  align-items: center;
+}
+
+.sliderInput {
+  max-width: 60px;
+}

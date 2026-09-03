@@ -1,0 +1,18 @@
+@value color: "./common/color.module.css";
+@value yellow, red, blue, gray10, gray20, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+.root {
+  margin-left: gridUnit;
+}
+
+.error {
+  composes: medium from './common/typography.module.css';
+  padding: gridUnit calc(gridUnit * 2) calc(gridUnit * 2);
+  color: red;
+}
+
+.openInNewTab {
+  margin-bottom: gridUnit;
+}

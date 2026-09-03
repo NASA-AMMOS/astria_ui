@@ -1,0 +1,30 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+@value color: "./common/color.module.css";
+@value gray90 from color;
+
+.modal {
+  width: 100%;
+  height: 100%;
+  max-width: 560px;
+  max-height: 60vh;
+}
+
+.body {
+  gap: 16px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.exportSection {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 8px;
+}
+
+.textarea {
+  width: 100%;
+  flex: 1;
+}

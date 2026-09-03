@@ -1,0 +1,411 @@
+@value layout: "./common/layout.module.css";
+@value gridUnit, borderRadius from layout;
+
+@value color: "./common/color.module.css";
+@value yellow, red, gray10, gray30, gray40, gray50, gray60, gray70, gray80, gray90, gray100 from color;
+
+.reactiveBaseWrapper {
+  /* TODO pull RS things out into RS overrides CSS module */
+  height: 100%;
+
+  display: flex;
+  flex: 1 1;
+  flex-direction: column;
+  /* overflow: hidden;  */
+}
+
+.facet:hover .facetInvertButton {
+  display: inherit;
+}
+
+.facet:hover .facetInverted {
+  color: yellow;
+}
+
+button.facetInvertButton {
+  display: none;
+}
+
+.invertButtonContainer {
+  display: flex;
+}
+
+.invertButtonContainer button[disabled] {
+  pointer-events: none;
+}
+
+.facetInverted {
+  display: inherit;
+  color: yellow;
+}
+
+.facets {
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.facetHidden {
+  display: none;
+}
+
+.facetsContainer {
+  min-width: calc(gridUnit * 28);
+  width: calc(gridUnit * 28);
+  border-right: 1px solid black;
+  display: flex;
+  flex-direction: column;
+}
+
+.facetsAndResultsContainer {
+  display: flex;
+  height: 100%;
+  overflow: hidden;
+}
+
+.resultsAndFiltersContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.filterRow {
+  border-bottom: 1px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: content-box !important;
+  min-height: calc(gridUnit * 4);
+  padding-left: gridUnit;
+  padding-bottom: gridUnit;
+}
+
+.reactiveList {
+  height: 100%;
+  background: gray100;
+}
+
+.multiList {
+  margin: 0 calc(gridUnit / 2);
+  display: flex;
+  flex-direction: column;
+}
+
+.multiListMessage {
+  composes: smallCaps from './common/typography.module.css';
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  height: calc(8 * gridUnit);
+}
+
+.noActiveFiltersMessage {
+  composes: smallCaps from './common/typography.module.css';
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 0px gridUnit;
+  margin-top: 8px;
+  text-align: center;
+  user-select: none;
+}
+
+.searchBoxRow {
+  display: flex;
+  /* align-items: center; */
+  padding: gridUnit;
+  border-bottom: 1px solid black;
+}
+
+.inlineSearchButton {
+  margin-left: gridUnit;
+  height: calc(gridUnit * 3);
+  width: calc(gridUnit * 3);
+}
+
+.fullSearchButton {
+  margin-top: gridUnit;
+}
+
+.compactRangeSeparator {
+  composes: label from './common/typography.module.css';
+  padding: 0px gridUnit;
+}
+
+.inlineLabelFacet {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+/* TODO move to generic textInput component */
+.textInput {
+  composes: body from './common/typography.module.css';
+  height: calc(gridUnit * 3);
+  background: gray80;
+  border: 1px solid gray70;
+  border-radius: borderRadius;
+  color: gray10;
+  width: 100%;
+  min-width: calc(gridUnit * 2);
+  padding: 0px gridUnit;
+  opacity: 1 !important;
+}
+
+.textInput::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: gray50;
+  opacity: 1; /* Firefox */
+}
+
+.textInputInline {
+  composes: textInput;
+  height: calc(gridUnit * 4);
+}
+
+.textInputRangeLabel {
+  composes: body from './common/typography.module.css';
+  color: gray50;
+  margin: 0 gridUnit;
+}
+
+.rangeInputForm {
+  display: flex;
+  align-items: center;
+  flex: 1 1;
+}
+
+.rangeSelect {
+  margin-bottom: gridUnit !important;
+}
+
+.histogramBrush {
+  fill: white !important;
+  fill-opacity: 0.1 !important;
+}
+
+.histogramBrush:active {
+  fill-opacity: 0.05 !important;
+}
+
+:global(.VictoryContainer):hover .histogramBrushHandle:not(:hover):not(:active) {
+  fill: #fedd5c9e !important;
+}
+
+.histogramBrushHandle:hover {
+  fill: yellow !important;
+}
+
+.histogramBrushHandle:active {
+  fill: #fedd5c9c !important;
+}
+
+:global(.select-drop-down__multi-value) {
+  border-radius: borderRadius !important;
+  background-color: #70445f !important;
+  border: 1px solid #412234a3 !important;
+  color: white !important;
+}
+
+:global(.select-drop-down__multi-value__remove):hover {
+  background: #7c6472 !important;
+  color: white !important;
+}
+
+.selectValueLabel {
+  composes: medium from './common/typography.module.css';
+  padding: calc(gridUnit / 4) calc(gridUnit / 2);
+  line-height: 14px;
+}
+
+.defaultSelectValueLabel + :global(.select-drop-down__multi-value__remove) {
+  display: none;
+}
+
+.selectOptionCount {
+  composes: label from './common/typography.module.css';
+  margin-left: gridUnit;
+  display: inline-block;
+}
+
+.inputFacetList {
+  margin-top: gridUnit;
+}
+
+.inputFacetListItem {
+  composes: label from './common/typography.module.css';
+  user-select: none;
+  display: flex;
+  padding: calc(8px / 2);
+  cursor: pointer;
+  outline: none;
+  border: none;
+  background: none;
+  text-align: left;
+  opacity: 1;
+  width: 100%;
+  word-break: break-word;
+}
+
+.inputFacetListItemLabel {
+  opacity: 0.65;
+  margin-right: gridUnit;
+  flex: 1;
+}
+
+.inputFacetListItem:hover .inputFacetListItemLabel {
+  opacity: 1;
+}
+
+.inputFacetListItemCount {
+  opacity: 0.65;
+}
+
+.inputFacetTopResultsLabel {
+  composes: smallCaps from './common/typography.module.css';
+  margin: calc(gridUnit * 1.5) 0 gridUnit calc(gridUnit / 2);
+  opacity: 0.9;
+  user-select: none;
+}
+
+.inputShowMoreButton {
+  padding: gridUnit calc(gridUnit / 2);
+  box-sizing: content-box;
+}
+
+.histogramLoadingMessage {
+  min-height: 83px;
+}
+
+.histogramLoadingMessage.histogramLoadingMessageWithInput {
+  min-height: 107px;
+}
+
+.multivalueinputrow {
+  margin-bottom: gridUnit;
+}
+
+.multivalueinputrow:last-of-type {
+  margin-bottom: 0px;
+}
+
+.facetCustomizationOverlay {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.facetCustomizationOverlayButtonIcon {
+  display: flex;
+  position: relative;
+}
+
+.facetCustomizationOverlayButtonIconActive:after {
+  content: ' ';
+  width: 6px;
+  height: 6px;
+  background: yellow;
+  border-radius: 8px;
+  position: absolute;
+  right: -4px;
+  border: 2px solid gray90;
+  top: -4px;
+}
+
+.facetCustomizationOverlayButton:hover .facetCustomizationOverlayButtonIconActive:after,
+.facetCustomizationOverlayButtonOpen .facetCustomizationOverlayButtonIconActive:after {
+  border-color: gray70;
+}
+
+.facetCustomization {
+  composes: bold from './common/typography.module.css';
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: gridUnit gridUnit gridUnit calc(gridUnit * 2);
+  background: gray90;
+  border-bottom: 1px solid black;
+}
+
+.facetCustomizationList {
+  max-height: calc(100vh - 363px);
+  width: 208px;
+  overflow: auto;
+  padding: calc(gridUnit * 2);
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
+}
+
+.facetCustomizationHeader {
+  padding: calc(gridUnit * 2) calc(gridUnit * 2) 0px;
+  margin: 0;
+}
+.facetCustomizationListItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: gridUnit;
+  margin-right: calc(-1 * gridUnit);
+}
+
+.grabIcon {
+  visibility: hidden;
+}
+
+.facetCustomizationListItem:hover .grabIcon {
+  visibility: visible;
+}
+
+.facetCustomizationListItemDragging {
+  color: white;
+}
+
+.facetCustomizationListItemDragging .grabIcon {
+  visibility: visible;
+}
+
+.facetCustomizationListItemCheckbox {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.dragHint {
+  composes: hint from './common/typography.module.css';
+  margin-bottom: gridUnit;
+}
+
+.resetOrderButton {
+  margin-top: gridUnit;
+}
+
+.facetCustomizationBottomContent {
+  padding: 0px calc(gridUnit * 2) calc(gridUnit * 2);
+}
+
+.facetsHiddenMessage {
+  composes: label from './common/typography.module.css';
+  font-style: italic;
+  padding: calc(gridUnit * 1.5) calc(gridUnit * 2);
+  user-select: none;
+  opacity: 0.5;
+  margin-top: -1px;
+  border-top: 1px solid black;
+}
+
+.selectionStatusMessage {
+  composes: label from './common/typography.module.css';
+  opacity: 1;
+  margin-bottom: calc(gridUnit * 2);
+  justify-content: space-between;
+  height: calc(gridUnit * 3);
+  display: flex;
+  align-items: center;
+}
+
+.selectionStatusMessage > span {
+  opacity: 0.65;
+}
