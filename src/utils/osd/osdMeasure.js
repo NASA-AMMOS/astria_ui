@@ -5,13 +5,14 @@ import { getDistanceMeasurement } from 'src/utils/dataQuery';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 // NOTE: requires OSDMeasureMixin(OSDFabricMixin(OSDViewer))
 
 export const OSDMeasureMixin = (base) =>
   class extends base {
     constructor(options) {
       super(options);
+      const config = getConfig();
 
       this._measuring = false;
       this._activeMeasureId = null;
@@ -99,6 +100,7 @@ export const OSDMeasureMixin = (base) =>
     }
 
     handleClickEvent(event) {
+      const config = getConfig();
       super.handleClickEvent(event);
 
       // check our interaction state
@@ -283,6 +285,7 @@ export const OSDMeasureMixin = (base) =>
     }
 
     addMeasurement(options) {
+      const config = getConfig();
       return new Promise((resolve, reject) => {
         const { lsPoint1, lsPoint2, text } = options;
         const measureId = this.getMeasureId();

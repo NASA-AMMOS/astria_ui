@@ -9,15 +9,14 @@ import Button from 'src/components/common/Button';
 import { CloseIcon, SearchIcon } from 'src/components/common/Icons';
 import RadioButton from 'src/components/common/RadioButton';
 import Select from 'src/components/common/Select';
-import { USING_CSSO } from 'src/constants/api';
 import alertStyles from 'src/styles/Alert.module.css';
 import FacetSearchStyles from 'src/styles/FacetSearch.module.css';
 import FormsStyles from 'src/styles/Forms.module.css';
 import ScienceIntentFacetStyles from 'src/styles/ScienceIntentFacet.module.css';
+import { getConfig } from 'src/utils/configRegistry';
 import * as telemetry from 'src/utils/telemetryUtils';
 import urlJoin from 'url-join';
 
-import config from 'config.js';
 let suggestionsRequestId;
 let searchController;
 
@@ -51,7 +50,9 @@ class ScienceIntentFacet extends React.Component {
     try {
       const results = await this.searchItems();
       this.setState({ results });
-    } catch (err) {}
+    } catch (_err) {
+      /* ignore */
+    }
   }
 
   async componentDidUpdate(prevProps) {
@@ -105,7 +106,7 @@ class ScienceIntentFacet extends React.Component {
         // Try/catch the search since we're using abort controller which could abort if
         // props change
         matchingItems = await this.searchItems('id', itemID, true, true);
-      } catch (err) {
+      } catch (_err) {
         // Nothing to do since this is an abort error
         matchingItems = [];
       }
@@ -166,7 +167,7 @@ class ScienceIntentFacet extends React.Component {
       const query = await this.getQuery([], activityIDs);
       this.setState({ isModalOpen: false, submitting: false });
       this.props.onChange(query, [item.id]);
-    } catch (err) {
+    } catch (_err) {
       // Abort or network error from searchItems in getActivityIDsFromItem
       this.setState({ submitting: false });
     }
@@ -209,6 +210,7 @@ class ScienceIntentFacet extends React.Component {
   };
 
   async searchItems(key = 'title', text = '', forceConnections = false, abortPrevious = false) {
+    const config = getConfig();
     const {
       facet: { scienceIntentItem },
     } = this.props;
@@ -237,7 +239,7 @@ class ScienceIntentFacet extends React.Component {
         signal = searchController.signal;
       }
 
-      const response = await fetch(url, { ...(USING_CSSO ? { credentials: 'include' } : null), signal });
+      const response = await fetch(url, { ...(config.using_csso ? { credentials: 'include' } : null), signal });
       if (!response || !response.ok) return [];
       const json = await response.json();
       if (!json.data || !json.data.length) return [];
@@ -270,7 +272,9 @@ class ScienceIntentFacet extends React.Component {
           suggestions,
         });
       }
-    } catch (err) {}
+    } catch (_err) {
+      /* ignore */
+    }
   }
 
   onInputChange = async (event, { newValue, method }) => {
@@ -282,7 +286,9 @@ class ScienceIntentFacet extends React.Component {
           results,
           searchValue: newValue,
         });
-      } catch (err) {}
+      } catch (_err) {
+        /* ignore */
+      }
     } else {
       // Otherwise just some keypress, update input
       this.setState({
@@ -298,7 +304,9 @@ class ScienceIntentFacet extends React.Component {
         searchValue: newValue,
         results,
       });
-    } catch (err) {}
+    } catch (_err) {
+      /* ignore */
+    }
   };
 
   onSuggestionsFetchRequested = ({ value }) => {

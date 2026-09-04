@@ -3,6 +3,7 @@ FROM node:20.18.0
 # the spefific env file that should be used for this build
 # specifies things like authentication server URL and frontend config files
 ARG ENV_FILE=""
+ARG ASTRIA_MISSION_CONFIG_NAME="config"
 
 # optional tweaks for the FS within the image
 ARG _WORKSPACE="/app"
@@ -21,7 +22,7 @@ RUN apt-get -y update && \
 RUN mkdir -p ${_ENV_WORKSPACE}
 COPY --from=env_dir . ${_ENV_WORKSPACE}
 
-# copy in the app source (we need server.js, config.js, src/utils, src/constants, and server/ directory)
+# copy in the app source (we need server.js, src/utils, public/configs, and server/ directory)
 RUN mkdir -p ${_WORKSPACE}
 WORKDIR ${_WORKSPACE}
 
@@ -37,6 +38,7 @@ COPY . ${_WORKSPACE}
 
 # build ASTRIA config
 RUN export ASTRIA_ENV_DIR=${_ENV_WORKSPACE} && \
+  export ASTRIA_MISSION_CONFIG_NAME=${ASTRIA_MISSION_CONFIG_NAME} && \
   set -a && . ${_ENV_WORKSPACE}/${ENV_FILE} && set +a && \
   npm run build:config
 
@@ -47,6 +49,7 @@ ARG ASTRIA_PUBLIC_URL_PATH=/
 # Set as environment variables in the image
 ENV ASTRIA_API_PORT=${ASTRIA_API_PORT}
 ENV ASTRIA_PUBLIC_URL_PATH=${ASTRIA_PUBLIC_URL_PATH}
+ENV ASTRIA_MISSION_CONFIG_NAME=${ASTRIA_MISSION_CONFIG_NAME}
 
 EXPOSE ${ASTRIA_API_PORT}
 

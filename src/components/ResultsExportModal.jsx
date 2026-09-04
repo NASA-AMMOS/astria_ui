@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Modal from 'react-modal';
@@ -8,6 +7,7 @@ import alertStyles from 'src/styles/Alert.module.css';
 import FormsStyles from 'src/styles/Forms.module.css';
 import ResultsExportModalStyles from 'src/styles/ResultsExportModal.module.css';
 import { getURLForProductWithExistingParams } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { getPreviewImageForProduct } from 'src/utils/endpoints';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import { CheckIcon, CloseIcon } from './common/Icons';
@@ -28,13 +28,14 @@ class ResultsExportModal extends React.Component {
   };
 
   downloadResultsAsJson = () => {
+    const config = getConfig();
     const exportName = `${config.app_title}_exported_metadata_${new Date().toJSON().slice(0, 10)}`;
     // Adapted from https://stackoverflow.com/a/30800715
 
     //
     const exportObj = this.props.results.map((result) => {
       // Exclude ASTRIA internal metadata
-      const { _filenameDiff: _a, _group: _b, _backprojectPixelLoc: _c, ...obj } = result;
+      const { _filenameDiff: _fd, _group: _grp, _backprojectPixelLoc: _bpl, ...obj } = result;
 
       // Add in additional metadata
       obj.additionalMetadata = {};
@@ -57,6 +58,7 @@ class ResultsExportModal extends React.Component {
     downloadAnchorNode.remove();
   };
   render() {
+    const config = getConfig();
     const { copied, exportOption } = this.state;
     const { open, results } = this.props;
 

@@ -1,9 +1,13 @@
 import moment from 'moment';
 import 'moment-timezone';
 import queryString from 'query-string';
-import config from '../../configs/config.js';
-import { ES_BASE_QUERY_STRING, USING_CSSO } from '../constants/api.js';
+import { getConfig } from './configRegistry.js';
 import { getDescendantProp, getPropFromProduct } from './sharedUtils.js';
+
+export const getESBaseQueryString = () => {
+  const config = getConfig();
+  return config.es_type ? `${config.es_url}/${config.es_type}/_search?` : `${config.es_url}/_search?`;
+};
 
 function defaultEquality(i1, i2) {
   return i1 === i2;
@@ -91,6 +95,7 @@ export function objAlphaSort(arr, key, reverse = false, ignoreCase = true, numer
  * @param {String} url
  */
 export function openSupportEmail({ subject, message }) {
+  const config = getConfig();
   const url = window.location.toString();
   const address = config.support_email_address;
   const encodedSubject = encodeURIComponent(subject);
@@ -106,6 +111,7 @@ export function openSupportEmail({ subject, message }) {
  * @param {String} url
  */
 export function openGenericEmail({ subject, message }) {
+  const config = getConfig();
   const address = config.api_endpoints.ScienceIntent.science_information_manager_email;
   const encodedSubject = encodeURIComponent(subject);
   const encodedBody = encodeURIComponent(message);
@@ -119,6 +125,7 @@ export function openGenericEmail({ subject, message }) {
  * @param {Object} ES OCS object
  */
 export function getFileExtensionFromProduct(product) {
+  const config = getConfig();
   const filename = getPropFromProduct(product, config.es_mappings.filename);
   return getExtension(filename).toLocaleLowerCase();
 }
@@ -130,7 +137,7 @@ export function getFileExtensionFromProduct(product) {
  * @param {Object} ES OCS object
  */
 export function isOSDViewableFileType(product) {
-  return config.non_OSD_file_extensions.indexOf(getFileExtensionFromProduct(product)) < 0;
+  return getConfig().non_OSD_file_extensions.indexOf(getFileExtensionFromProduct(product)) < 0;
 }
 
 /**
@@ -139,6 +146,7 @@ export function isOSDViewableFileType(product) {
  * @param {Object} ES OCS object
  */
 export function getProductFileType(product) {
+  const config = getConfig();
   let isPDF = false;
   let isGIF = false;
 
@@ -171,6 +179,7 @@ export function openInNewTab(url, encode = true) {
  * @param {Object} product
  */
 export function isCustomProduct(product) {
+  const config = getConfig();
   return config.custom_product_types.indexOf(getPropFromProduct(product, config.es_mappings.object_type)) > -1;
 }
 
@@ -180,7 +189,7 @@ export function isCustomProduct(product) {
  * @param {Object} product
  */
 export function isTile(product) {
-  return getPropFromProduct(product, config.es_mappings.tile_flag, false);
+  return getPropFromProduct(product, getConfig().es_mappings.tile_flag, false);
 }
 
 /**
@@ -194,7 +203,7 @@ export function isAnnotatableProduct(product) {
   return (
     !isCustomProduct(product) ||
     acceptedImageExtensions.indexOf(
-      getExtension(getPropFromProduct(product, config.es_mappings.filename)).toLowerCase()
+      getExtension(getPropFromProduct(product, getConfig().es_mappings.filename)).toLowerCase()
     ) > -1 // determine extension ourselves since the "ext" field is not always populated
   );
 }
@@ -213,6 +222,7 @@ export function getExtension(path) {
  * @param {Object} product
  */
 export function isAnnotation(product) {
+  const config = getConfig();
   return getPropFromProduct(product, config.es_mappings.object_type) === config.object_type_mappings.annotation;
 }
 
@@ -221,7 +231,7 @@ export function isAnnotation(product) {
  * @param {Object} product
  */
 export function isTarget(product) {
-  return getPropFromProduct(product, config.es_mappings.object_type) === 'm20-target';
+  return getPropFromProduct(product, getConfig().es_mappings.object_type) === 'm20-target';
 }
 
 /**
@@ -229,6 +239,7 @@ export function isTarget(product) {
  * @param {Object} product
  */
 export function isFeature(product) {
+  const config = getConfig();
   return getPropFromProduct(product, config.es_mappings.object_type) === config.object_type_mappings.image_feature;
 }
 
@@ -237,6 +248,7 @@ export function isFeature(product) {
  * @param {Object} product
  */
 export function isMosaic(product) {
+  const config = getConfig();
   return (
     getPropFromProduct(product, config.es_mappings.object_type, null, false, false) ===
     config.object_type_mappings.mosaic
@@ -248,6 +260,7 @@ export function isMosaic(product) {
  * @param {Object} product
  */
 export function isSingleFrame(product) {
+  const config = getConfig();
   return (
     getPropFromProduct(product, config.es_mappings.object_type, null, false, false) ===
     config.object_type_mappings.single_frame
@@ -260,11 +273,11 @@ export function isSingleFrame(product) {
  */
 export function isHeli(product) {
   const heliInstrumentIDs = ['HN', 'HS', 'V', 'H'];
-  return heliInstrumentIDs.indexOf(getPropFromProduct(product, config.es_mappings.instrument_id)) > -1;
+  return heliInstrumentIDs.indexOf(getPropFromProduct(product, getConfig().es_mappings.instrument_id)) > -1;
 }
 
 export function getIDForLayer(layer) {
-  return getPropFromProduct(layer, config.es_mappings.id);
+  return getPropFromProduct(layer, getConfig().es_mappings.id);
 }
 
 /**
@@ -322,7 +335,7 @@ export function formatWithUnit(value, unitSuffix = 'm', dec = 3) {
 
 // From https://github.com/NASA-AMMOS/MMGIS/blob/58fc382ad26557a0cd18ca7cb9385e50fbb34990/src/essence/Basics/Formulae_/Formulae_.js#L86
 export function metersToDegrees(meters) {
-  return (meters / config.constants.body_radius) * (180 / Math.PI);
+  return (meters / getConfig().constants.body_radius) * (180 / Math.PI);
 }
 
 export function convertToMeters(value, unit = 'm') {
@@ -719,7 +732,7 @@ export const processHighestStringValueCriteriaType = (images, key) => {
     if (typeof value !== 'string') {
       try {
         value = value.toString();
-      } catch (err) {
+      } catch (_err) {
         value = '';
       }
     }
@@ -739,7 +752,7 @@ export const processLowestStringValueCriteriaType = (images, key) => {
     if (typeof value !== 'string')
       try {
         value = value.toString();
-      } catch (err) {
+      } catch (_err) {
         value = '';
       }
     if (value < minValue) minValue = value;
@@ -755,6 +768,8 @@ export const determineBestImageInGroup = (images, criteria) => {
     console.warn('No images given to determineBestImageInGroup');
     return;
   }
+
+  const config = getConfig();
 
   let bestMatches = images;
   let newBestMatches = bestMatches.slice(0); // make a copy of best matches so we can refer to the previous set of best matches
@@ -803,6 +818,7 @@ export const determineBestImageInGroup = (images, criteria) => {
     // Investigate if the images have the same filenames
     const identicalFilenames =
       new Set(bestMatches.map((x) => getPropFromProduct(x, config.es_mappings.filename))).size === 1;
+
     if (identicalFilenames) {
       console.warn('Images with the same filename found in the same image group', images);
     }
@@ -830,13 +846,14 @@ export const performElasticSearchQuery = (body, signal) => {
     Note: This function is designed to be wrapped in a try catch and is only
     meant to abstract the actual ES request and basic response sanity checking.
    */
+  const config = getConfig();
   return new Promise((resolve, reject) => {
-    fetch(ES_BASE_QUERY_STRING, {
+    fetch(getESBaseQueryString(), {
       method: 'POST',
       headers: { 'content-type': 'application/json', accept: 'application/json' },
       body: JSON.stringify(body),
       signal,
-      ...(USING_CSSO ? { credentials: 'include' } : null),
+      ...(config.using_csso ? { credentials: 'include' } : null),
     })
       .then((response) => {
         if (!response || !response.ok) {
@@ -855,6 +872,7 @@ export const getURLParams = (url = window.location.search) => {
 };
 
 export const getURLForProductWithExistingParams = (product, optParams = {}) => {
+  const config = getConfig();
   // Returns URL for product and includes current params that are not specific
   // to the active product
 
@@ -899,6 +917,7 @@ export const constructFullURLWithParams = (params) => {
 };
 
 export const orbitalCoordsToLatLon = (orbitalCoords) => {
+  const config = getConfig();
   const x = orbitalCoords[0];
   const y = orbitalCoords[1];
 
@@ -913,6 +932,7 @@ export const orbitalCoordsToLatLon = (orbitalCoords) => {
 };
 
 export const latLonToOrbitalCoords = (latLon) => {
+  const config = getConfig();
   const lat = latLon.latitude;
   const lon = latLon.longitude;
 
@@ -1018,6 +1038,7 @@ export class FetchPollingManager {
 }
 
 export const lsToAzEl = (product, lineSample) => {
+  const config = getConfig();
   const { line, sample } = lineSample;
   const MAP_RESOLUTION = parseFloat(getPropFromProduct(product, config.es_mappings.map_resolution, -1));
   const START_AZIMUTH = parseFloat(getPropFromProduct(product, config.es_mappings.start_azimuth, -1));
@@ -1033,7 +1054,7 @@ export const lsToAzEl = (product, lineSample) => {
 };
 
 export const getDescriptionsForProduct = (product, productDescriptions) => {
-  const typeKey = getPropFromProduct(product, config.es_mappings.image_type);
+  const typeKey = getPropFromProduct(product, getConfig().es_mappings.image_type);
   if (!typeKey) return {};
   return productDescriptions[typeKey];
 };
@@ -1121,6 +1142,7 @@ export const parseWKTString = (wktString) => {
 };
 
 export function getDefaultOperatorControls(imageType) {
+  const config = getConfig();
   const imageControl = config.overlay_operator_controls.image_types[imageType];
 
   if (imageControl) {
@@ -1223,6 +1245,7 @@ export function getQueryStringForOperatorControl(control, imageTypeKey) {
 }
 
 export function getAdditionalCustomLabelPropsForProduct(product, key, targetKey = 'title') {
+  const config = getConfig();
   const additionalProps = {};
   if (
     key === 'activity_name_rtt' ||

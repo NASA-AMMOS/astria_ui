@@ -4,6 +4,7 @@ FROM node:20.18.0 AS build
 # specifies things like authentication server URL and frontend config files
 ARG ENV_FILE=""
 ARG ASTRIA_BUILD_HASH="unknown"
+ARG ASTRIA_MISSION_CONFIG_NAME="config"
 
 # optional tweaks for the FS within the image
 ARG _WORKSPACE="/app"
@@ -30,6 +31,7 @@ RUN npm install -g serve && \
 
 # build ASTRIA config
 RUN export ASTRIA_ENV_DIR=${_ENV_WORKSPACE} && \
+  export ASTRIA_MISSION_CONFIG_NAME=${ASTRIA_MISSION_CONFIG_NAME} && \
   set -a && . ${_ENV_WORKSPACE}/${ENV_FILE} && set +a && \
   npm run build:config
 
@@ -40,7 +42,9 @@ RUN cp -r ${_ENV_WORKSPACE}/public/* ${_WORKSPACE}/public/
 RUN export ASTRIA_ENV_DIR=${_ENV_WORKSPACE} && \
   export ASTRIA_BUILD_HASH=${ASTRIA_BUILD_HASH} && \
   set -a && . ${_ENV_WORKSPACE}/${ENV_FILE} && set +a && \
-  npm run build -- --base=${ASTRIA_PUBLIC_URL_PATH}
+  ASTRIA_BASE="${ASTRIA_PUBLIC_URL_PATH:-/}" && \
+  ASTRIA_BASE="${ASTRIA_BASE%/}/" && \
+  npm run build -- --base=${ASTRIA_BASE}
 
 FROM nginx:1.30 AS serve
 

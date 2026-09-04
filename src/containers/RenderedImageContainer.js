@@ -37,7 +37,7 @@ import {
 import { INVALID_POINT } from 'src/components/OpenSeaDragonWrapper';
 import RenderedImagePane from 'src/components/RenderedImagePane';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 const mapStateToProps = (state) => {
   return {
     stretchMin: state.imageAdjustments.stretchMin,
@@ -105,10 +105,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(_setProductDetailsSidebarOpen(open));
     },
     resetInteractionMode() {
-      dispatch(setInteractionMode(config.interaction_modes.edit));
+      dispatch(setInteractionMode(getConfig().interaction_modes.edit));
     },
     resetViewOnlyMode() {
-      dispatch(setInteractionMode(config.interaction_modes.view_only));
+      dispatch(setInteractionMode(getConfig().interaction_modes.view_only));
     },
     addMeasurement(id, lsPoint1, lsPoint2) {
       dispatch(addMeasurement(id, lsPoint1, lsPoint2));

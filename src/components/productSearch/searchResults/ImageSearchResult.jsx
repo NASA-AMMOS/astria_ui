@@ -1,4 +1,3 @@
-import config from 'config.js';
 import ImageResult from 'src/components/common/ImageResult';
 import EDRListStyles from 'src/styles/EdrList.module.css';
 import {
@@ -8,6 +7,7 @@ import {
   isAnnotation,
   isFeature,
 } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
 const ImageSearchResult = ({
@@ -20,6 +20,7 @@ const ImageSearchResult = ({
   imageResultTitleKey: stateImageResultTitleKey,
   productIsActive,
 }) => {
+  const config = getConfig();
   const resultSize = getDefined(viewOptions.resultSize, stateResultSize);
   const imageResultTimeKey = getDefined(viewOptions.imageResultTimeKey, stateImageResultTimeKey);
   const imageResultTitleKey = getDefined(viewOptions.imageResultTitleKey, stateImageResultTitleKey);
@@ -73,7 +74,7 @@ const ImageSearchResult = ({
       try {
         const timeRegex = /\d{2}:\d{2}:\d{2}/;
         secondaryTimeStr = secondaryTimeValue.match(timeRegex)[0] || 'Invalid Format';
-      } catch (err) {
+      } catch (_err) {
         // do nothing
       }
     } else if (imageResultTimeKey.value === config.es_mappings.ERT.key) {
@@ -84,7 +85,7 @@ const ImageSearchResult = ({
         pieces = time.split(':');
         time = pieces.slice(0, 2).join(':');
         secondaryTimeStr = `${date} ${time} UTC`;
-      } catch (err) {
+      } catch (_err) {
         secondaryTimeStr = 'Invalid Format';
       }
     }

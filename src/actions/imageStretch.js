@@ -1,4 +1,3 @@
-import config from 'config.js';
 import { pdsGetS3PathForImage } from 'src/utils/endpoints';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
@@ -7,6 +6,7 @@ import { buildImageHistogramURL } from '../utils/osd/osdUtils';
 export const fetchImageHistogram = (product) => {
   return async (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     // Clear out old histogram
     dispatch({
       type: 'SET_IMAGE_STRETCH_METADATA',
@@ -147,6 +147,7 @@ export const updateStretchMode = (stretchMode) => {
 
 export const backendStretchBaseImage = (isDNStretch, low, high) => {
   return (dispatch, getState) => {
+    const { config } = getState();
     dispatch({
       type: 'UPDATE_EXTREMA',
       extrema: isDNStretch,

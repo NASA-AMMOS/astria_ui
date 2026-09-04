@@ -4,9 +4,7 @@
 
 import * as frameDefinition from 'src/utils/asttroLib/frameDefinition';
 import { Vector3 } from 'src/utils/asttroLib/vector3';
-import { USING_CSSO } from '../../constants/api';
-
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 const requestHeaders = {
   'Content-Type': 'application/json',
   Accept: 'application/json',
@@ -136,6 +134,7 @@ const maxRetries = 5;
 const retryWaitTimeStepMs = 1000;
 const offsetQuaternionCallbacks = {};
 async function _getOffsetQuaternion(fromFrame, toFrame, callback, retryCount = 0) {
+  const config = getConfig();
   if (fromFrame === toFrame) {
     callback({ x: 0, y: 0, z: 0 }, { qx: 0, qy: 0, qz: 0, qc: 1 });
     return;
@@ -158,7 +157,7 @@ async function _getOffsetQuaternion(fromFrame, toFrame, callback, retryCount = 0
     try {
       const response = await fetch(`${config.api_endpoints.ROCS.frames}/offset_quaternion/${fromFrame}/${toFrame}`, {
         headers: requestHeaders,
-        ...(USING_CSSO ? { credentials: 'include' } : null),
+        ...(config.using_csso ? { credentials: 'include' } : null),
       });
       if (isErrorResponse(response)) throw Error('Bad ROCS response');
       const transform = await response.json();
@@ -422,12 +421,13 @@ const convertModelFramePointOrDirection = async function ({
   };
 
   const { x, y, z } = posOrDir;
+  const config = getConfig();
   const url = `${config.api_endpoints.ROCS.frames}/${method}/${fromFrame}/${serializeNum(x)}/${serializeNum(
     y
   )}/${serializeNum(z)}/${toFrame}?${allQueryArgs.join('&')}`;
   const resp = await fetch(url, {
     headers: requestHeaders,
-    ...(USING_CSSO ? { credentials: 'include' } : null),
+    ...(config.using_csso ? { credentials: 'include' } : null),
   });
   return resp;
 };
@@ -570,12 +570,13 @@ export async function convertModelFrameDirection({
 }
 
 export function getFrameTranslationOffset(targetFrame, parentFrame) {
+  const config = getConfig();
   return new Promise((resolve, reject) => {
     fetch(
       `${config.api_endpoints.ROCS.frames}/transform/MODEL=${targetFrame}/0/0/0/MODEL=${parentFrame}?fROVER_X=0&fROVER_Y=0&fROVER_Z=0&tROVER_X=0&tROVER_Y=0&tROVER_Z=0&fQUAT_C=1&fQUAT_Z=0&fQUAT_X=0&fQUAT_Y=0&tQUAT_C=1&tQUAT_Z=0&tQUAT_X=0&tQUAT_Y=0&fRMC_SITE=8&tRMC_SITE=8`,
       {
         headers: requestHeaders,
-        ...(USING_CSSO ? { credentials: 'include' } : null),
+        ...(config.using_csso ? { credentials: 'include' } : null),
       }
     )
       .then(handleResponse.bind(null, resolve, reject))
@@ -584,12 +585,13 @@ export function getFrameTranslationOffset(targetFrame, parentFrame) {
 }
 
 export function getFrameRotationalOffset(targetFrame, parentFrame) {
+  const config = getConfig();
   return new Promise((resolve, reject) => {
     fetch(
       `${config.api_endpoints.ROCS.frames}/rotate/MODEL=${targetFrame}/0/0/0/MODEL=${parentFrame}?fROVER_X=0&fROVER_Y=0&fROVER_Z=0&tROVER_X=0&tROVER_Y=0&tROVER_Z=0&fQUAT_C=1&fQUAT_Z=0&fQUAT_X=0&fQUAT_Y=0&tQUAT_C=1&tQUAT_Z=0&tQUAT_X=0&tQUAT_Y=0&fRMC_SITE=8&tRMC_SITE=8`,
       {
         headers: requestHeaders,
-        ...(USING_CSSO ? { credentials: 'include' } : null),
+        ...(config.using_csso ? { credentials: 'include' } : null),
       }
     )
       .then(handleResponse.bind(null, resolve, reject))

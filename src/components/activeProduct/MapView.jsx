@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import { Field, Form, Formik } from 'formik';
 import leaflet from 'leaflet';
 import 'leaflet-draw/dist/leaflet.draw.css';
@@ -34,6 +33,7 @@ import FormsStyles from 'src/styles/Forms.module.css';
 import MapViewStyles from 'src/styles/MapView.module.css';
 import renderedImagePaneStyles from 'src/styles/RenderedImagePane.module.css';
 import { isHeli, metersToDegrees, openInNewTab } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import {
   getFootprintForImage,
   getLatLonForXYZ,
@@ -90,6 +90,7 @@ export class MapView extends React.Component {
   }
 
   async componentDidMount() {
+    const config = getConfig();
     let mapConfig;
     try {
       // Fetch map view configuration
@@ -198,6 +199,7 @@ export class MapView extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    const config = getConfig();
     const { product, cursor: propCursor, fetchingGroups: propFetchingGroups } = this.props;
     const { cursor: prevCursor, product: prevProduct, fetchingGroups: prevFetchingGroups } = prevProps;
 
@@ -235,7 +237,7 @@ export class MapView extends React.Component {
   }
 
   getLayerURL(layer) {
-    return urljoin(config.api_endpoints.CAMP.base, layer.url);
+    return urljoin(getConfig().api_endpoints.CAMP.base, layer.url);
   }
 
   getDrawMarkerIconStyle() {
@@ -591,7 +593,7 @@ export class MapView extends React.Component {
             return style;
           }
         },
-        pointToLayer: function (feature, latlng) {
+        pointToLayer: function (feature, _latlng) {
           if (feature.type === 'Point') {
             if (feature.properties.annotation) {
               const s = feature.properties.style;
@@ -683,6 +685,7 @@ export class MapView extends React.Component {
   }
 
   async fetchFootprint() {
+    const config = getConfig();
     try {
       if (!this.props.product) return;
       const productID = this.props.product ? getPropFromProduct(this.props.product, config.es_mappings.id, null) : null;
@@ -883,6 +886,7 @@ export class MapView extends React.Component {
   }
 
   productHasSiteAndDrive(product) {
+    const config = getConfig();
     const site = getPropFromProduct(product, config.es_mappings.site);
     const drive = getPropFromProduct(product, config.es_mappings.drive);
     return (
@@ -891,6 +895,7 @@ export class MapView extends React.Component {
   }
 
   async visualizeRMC(zoomTo = false) {
+    const config = getConfig();
     const { product } = this.props;
 
     if (!product) return;
@@ -947,6 +952,7 @@ export class MapView extends React.Component {
   }
 
   showRoverDot(lat, lng, zoomTo = false) {
+    const config = getConfig();
     const { product } = this.props;
 
     // Find orbital position of the RMC
@@ -1100,7 +1106,7 @@ export class MapView extends React.Component {
           { latitude: e.latlng.lat, longitude: e.latlng.lng },
           this.props.product
         );
-      } catch (err) {
+      } catch (_err) {
         console.warn('Failed to convert lat/lon to line/sample');
         // this.props.clearDataCursor();
       }
@@ -1119,7 +1125,7 @@ export class MapView extends React.Component {
   //Uses haversine to calculate distances over arcs
   // From https://github.com/NASA-AMMOS/MMGIS/blob/58fc382ad26557a0cd18ca7cb9385e50fbb34990/src/essence/Basics/Formulae_/Formulae_.js#L67
   lngLatDistBetween(lon1, lat1, lon2, lat2) {
-    var R = config.constants.body_radius;
+    var R = getConfig().constants.body_radius;
     var φ1 = lat1 * (Math.PI / 180);
     var φ2 = lat2 * (Math.PI / 180);
     var Δφ = (lat2 - lat1) * (Math.PI / 180);
@@ -1196,6 +1202,7 @@ export class MapView extends React.Component {
   };
 
   openInCAMP = () => {
+    const config = getConfig();
     const { dnLatLng } = this.state;
     const { product } = this.props;
 

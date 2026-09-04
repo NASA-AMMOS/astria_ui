@@ -24,7 +24,6 @@ export default defineConfig({
   plugins: [patchCssModules(), react()],
   resolve: {
     alias: {
-      'config.js': '/configs/config.js',
       src: '/src',
     },
   },
@@ -39,10 +38,7 @@ export default defineConfig({
   },
   define: {
     'process.env.ASTRIA_APP_VERSION': JSON.stringify(process.env.npm_package_version),
-    'process.env.APP_ACCOUNT_PASS': JSON.stringify(process.env.APP_ACCOUNT_PASS),
-    'process.env.APP_ACCOUNT_USER': JSON.stringify(process.env.APP_ACCOUNT_USER),
     'process.env.CSSO_ENDPOINT_URL': JSON.stringify(process.env.CSSO_ENDPOINT_URL),
     'process.env.ASTRIA_BUILD_HASH': JSON.stringify(process.env.ASTRIA_BUILD_HASH),
-    'process.env.ASTRIA_PUBLIC_URL_PATH': JSON.stringify(process.env.ASTRIA_PUBLIC_URL_PATH),
   },
 });

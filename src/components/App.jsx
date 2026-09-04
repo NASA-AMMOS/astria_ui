@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import 'leaflet/dist/leaflet.css';
 import PropTypes from 'prop-types';
 import 'rc-slider/assets/index.css';
@@ -42,7 +41,6 @@ class App extends React.Component {
     this.minImageViewerSpace = 100;
 
     console.log(`App built using commit hash: ${process.env.ASTRIA_BUILD_HASH}`);
-    console.log('App config:', config);
   }
 
   componentDidMount() {

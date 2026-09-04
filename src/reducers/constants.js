@@ -1,13 +1,3 @@
-import config from 'config.js';
-const defaultFacetSearchValues = config.search_config.facet_search.facets.reduce((acc, el) => {
-  acc[el.key] = el.defaults || [];
-  return acc;
-}, {});
-const defaultTimeSearchValues = config.search_config.time_search.facets.reduce((acc, el) => {
-  acc[el.key] = el.defaults || [];
-  return acc;
-}, {});
-
 const getImageViewingHistory = () => {
   try {
     // Array of objects mapping s3 paths to optional metadata
@@ -23,20 +13,21 @@ const getImageViewingHistory = () => {
   }
 };
 
-export const defaultStarredMetadataFieldsValue = { ocs: [], [config.label_key]: [] };
-const getStarredMetadataFields = () => {
+export const createDefaultStarredMetadataFieldsValue = (config) => ({ ocs: [], [config.label_key]: [] });
+
+const getStarredMetadataFieldsWithDefault = (defaultVal) => {
   try {
     const item = localStorage.getItem('starredMetadataFields');
-    if (!item) return defaultStarredMetadataFieldsValue;
+    if (!item) return defaultVal;
     if (typeof item !== 'string') throw Error('Bad starred metadata fields data');
     const fields = JSON.parse(item);
-    if (fields && Array.isArray(fields.ocs) && Array.isArray(fields.vicar_label)) {
+    if (fields && Array.isArray(fields.ocs)) {
       return fields;
     } else throw Error('Bad starred metadata fields data');
   } catch (err) {
     console.log(err, ' ...resetting starred metadata fields.');
     localStorage.removeItem('starredMetadataFields');
-    return defaultStarredMetadataFieldsValue;
+    return defaultVal;
   }
 };
 
@@ -47,13 +38,20 @@ export const DEFAULT_DEBUG = {
 export const DEFAULT_SIDEBAR = {
   productSearchSidebarOpen: localStorage.getItem('productSearchSidebarOpen') !== 'false',
   productDetailsSidebarOpen: localStorage.getItem('productDetailsSidebarOpen') !== 'false',
+  searchTabIndex: localStorage.getItem('leftPaneTabIndex') ? parseInt(localStorage.getItem('leftPaneTabIndex')) : 0,
+  imageTabIndex: localStorage.getItem('rightPaneTabIndex') ? parseInt(localStorage.getItem('rightPaneTabIndex')) : 0,
+};
+
+export const createDefaultSidebar = (config) => ({
+  productSearchSidebarOpen: localStorage.getItem('productSearchSidebarOpen') !== 'false',
+  productDetailsSidebarOpen: localStorage.getItem('productDetailsSidebarOpen') !== 'false',
   searchTabIndex: localStorage.getItem('leftPaneTabIndex')
     ? parseInt(localStorage.getItem('leftPaneTabIndex'))
     : config.search_config.default_search_tab === 'facet_search'
     ? 1
     : 0,
   imageTabIndex: localStorage.getItem('rightPaneTabIndex') ? parseInt(localStorage.getItem('rightPaneTabIndex')) : 0,
-};
+});
 
 export const DEFAULT_VIEWER_STATE = {
   defaultZoom: localStorage.getItem('defaultZoom') ? parseInt(localStorage.getItem('defaultZoom')) : null,
@@ -93,7 +91,7 @@ export const DEFAULT_IMAGE_VIEWER = {
 };
 
 export const DEFAULT_ANNOTATION_MODE = {
-  interactionMode: config.interaction_modes.view_only,
+  interactionMode: 'view_only',
   measurements: [],
   initialMeasurements: [],
   scalebars: [],
@@ -108,6 +106,23 @@ export const DEFAULT_ANNOTATION_MODE = {
   deleteModalOpen: false,
   clickedShape: null,
 };
+
+export const createDefaultAnnotationMode = (config) => ({
+  interactionMode: config.interaction_modes.view_only,
+  measurements: [],
+  initialMeasurements: [],
+  scalebars: [],
+  initialScalebars: [],
+  selectedShapes: [],
+  annotationEditorOpen: false,
+  annotations: [],
+  activeAnnotation: {},
+  savedAnnotationRef: {},
+  imageFeatureEditorOpen: false,
+  annotationToDelete: null,
+  deleteModalOpen: false,
+  clickedShape: null,
+});
 
 export const ACTIVE_SEARCH_PRODUCT = {
   searchProduct: {},
@@ -148,9 +163,9 @@ export const DEFAULT_SEARCH_STATE = {
   keywords: [],
   keywordsMap: {},
   facetSearchValues: {},
-  defaultFacetSearchValues,
+  defaultFacetSearchValues: {},
   browseValues: {},
-  defaultBrowseValues: defaultTimeSearchValues,
+  defaultBrowseValues: {},
   facetSearchInversions: {},
   browseInversions: {},
   targetSearchValues: {},
@@ -162,8 +177,8 @@ export const DEFAULT_SEARCH_STATE = {
   rdrSearchInversions: {},
   rdrSearchViewOptions: {},
   ocsPackages: {
-    base: [config.image_upload.pkg_name, config.annotation_upload.pkg_name],
-    active: config.search_config.default_package,
+    base: [],
+    active: null,
   },
   storeQueryID: 0,
   resultsExportOpen: false,
@@ -238,5 +253,50 @@ export const DEFAULT_HELP = {
 export const DEFAULT_APP = {
   user: {},
   productDescriptions: {},
-  starredMetadataFields: getStarredMetadataFields(),
+  starredMetadataFields: { ocs: [] },
 };
+
+export const createDefaultSearchState = (config) => {
+  const defaultFacetSearchValues = config.search_config.facet_search.facets.reduce((acc, el) => {
+    acc[el.key] = el.defaults || [];
+    return acc;
+  }, {});
+  const defaultTimeSearchValues = config.search_config.time_search.facets.reduce((acc, el) => {
+    acc[el.key] = el.defaults || [];
+    return acc;
+  }, {});
+  return {
+    campaigns: [],
+    goals: [],
+    tasks: [],
+    keywords: [],
+    keywordsMap: {},
+    facetSearchValues: {},
+    defaultFacetSearchValues,
+    browseValues: {},
+    defaultBrowseValues: defaultTimeSearchValues,
+    facetSearchInversions: {},
+    browseInversions: {},
+    targetSearchValues: {},
+    defaultTargetSearchValues: {},
+    targetSearchInversions: {},
+    targetSearchViewOptions: {},
+    rdrSearchValues: {},
+    defaultRDRSearchValues: {},
+    rdrSearchInversions: {},
+    rdrSearchViewOptions: {},
+    ocsPackages: {
+      base: [config.image_upload.pkg_name, config.annotation_upload.pkg_name],
+      active: config.search_config.default_package,
+    },
+    storeQueryID: 0,
+    resultsExportOpen: false,
+    resultsExportItems: [],
+  };
+};
+
+export const createDefaultApp = (config) => ({
+  user: {},
+  productDescriptions: {},
+  starredMetadataFields: getStarredMetadataFieldsWithDefault(createDefaultStarredMetadataFieldsValue(config)),
+});

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { CrosshairsFineOutlinedIcon, WarningIcon } from 'src/components/common/Icons';
 import Tooltip from 'src/components/common/Tooltip';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 export const OSDDataCursorMixin = (base) =>
   class extends base {
     addDataCursor(options) {
@@ -76,7 +76,7 @@ export const OSDDataCursorMixin = (base) =>
       if (
         !event.originalEvent.ctrlKey ||
         this.osdViewer.world.getItemCount() === 0 ||
-        this._viewMode !== config.interaction_modes.view_only
+        this._viewMode !== getConfig().interaction_modes.view_only
       ) {
         return;
       }

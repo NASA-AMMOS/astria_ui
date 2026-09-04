@@ -69,7 +69,6 @@ import {
   setTargetSearchValue,
 } from 'src/actions/searchActions';
 import { setImageTab, setSearchTab } from 'src/actions/sidebarState';
-import { USING_CSSO } from 'src/constants/api';
 import {
   capitalize,
   getDefaultOperatorControls,
@@ -83,6 +82,7 @@ import {
   openSupportEmail,
   performElasticSearchQuery,
 } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import {
   abortRequestControllers,
   fetchESDataForProduct,
@@ -91,12 +91,11 @@ import {
 } from 'src/utils/dataQuery';
 import { astriaGetProductDescriptions, campGetAllCampaigns } from 'src/utils/endpoints';
 import { getShortTargetID } from 'src/utils/osd/osdUtils';
-import { getPropFromProduct } from 'src/utils/sharedUtils';
+import { getPropFromProduct, setPropForProduct } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
 import urlJoin from 'url-join';
 import { setProductDescriptions } from './appActions';
 
-import config from 'config.js';
 import { ACTIVE_PRODUCT_TAB_INDICES } from 'src/components/activeProduct/ActiveProductSidebar';
 import { getNormalizeImageLabel } from 'src/utils/labels';
 
@@ -152,6 +151,7 @@ export const setActiveSearchProduct = (
   ignorePreserveRDRs = false
 ) => {
   return async (dispatch, getState) => {
+    const { config } = getState();
     // wrapper for dealing with annotations
     const handleProduct = async () => {
       // check if we need to fetch the base product for this annotation
@@ -187,6 +187,7 @@ export const setActiveSearchProduct = (
 const setSearchProductImage =
   (searchProduct, showImage = true, hasPartialMetadata = false, fetchAdditional = true, ignorePreserveRDRs = false) =>
   async (dispatch, getState) => {
+    const { config } = getState();
     // Cancel any previous requests by checking for an existing abort controller
     if (controller) controller.abort();
     const state = getState();
@@ -453,13 +454,15 @@ const setSearchProductImageFeature = (searchProduct) => async (dispatch, getStat
   }
 };
 
-const addProductToViewingHistory = (searchProduct) => {
+const addProductToViewingHistory = (searchProduct) => (dispatch, getState) => {
   // Search product is assumed to have partial metadata as to not store the entire product
   // in localstorage
-  return {
+  const { config } = getState();
+  dispatch({
     type: 'ADD_PRODUCT_TO_VIEWING_HISTORY',
     product: searchProduct,
-  };
+    productId: getPropFromProduct(searchProduct, config.es_mappings.id),
+  });
 };
 
 export const clearViewingHistory = () => {
@@ -480,7 +483,8 @@ export const clearSearchProductState = () => (dispatch) => {
   dispatch(setGroups([]));
 };
 
-export const clearDisplayState = () => (dispatch) => {
+export const clearDisplayState = () => (dispatch, getState) => {
+  const { config } = getState();
   dispatch(stopLayerAnimation());
   dispatch(clearPreferredImages());
   dispatch(setProductMetadataOpen(null));
@@ -504,7 +508,8 @@ export const clearDisplayState = () => (dispatch) => {
 };
 
 export const populateSearchValues = (URLParams) => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const { config } = getState();
     config.search_config.facet_search.facets.forEach((facet) => {
       // Look for URL param for this facet
       const key = `FS_${facet.key}`;
@@ -589,9 +594,10 @@ export const populateSearchValues = (URLParams) => {
 };
 
 export const fetchAllCampaigns = async () => {
+  const config = getConfig();
   const url = campGetAllCampaigns();
   try {
-    const response = await fetch(url, { ...(USING_CSSO ? { credentials: 'include' } : null) });
+    const response = await fetch(url, { ...(config.using_csso ? { credentials: 'include' } : null) });
     if (!response || !response.ok) throw Error('Bad CAMP response');
     const json = await response.json();
     if (json.status !== 'success' || !json.body || !json.body.results) {
@@ -605,9 +611,10 @@ export const fetchAllCampaigns = async () => {
 };
 
 export const fetchAllScienceIntentItems = async (type) => {
+  const config = getConfig();
   try {
     const url = urlJoin(config.api_endpoints.ScienceIntent.API, `${type}?sort=created_at`);
-    const response = await fetch(url, { ...(USING_CSSO ? { credentials: 'include' } : null) });
+    const response = await fetch(url, { ...(config.using_csso ? { credentials: 'include' } : null) });
     if (!response || !response.ok) throw Error('Bad Science Intent response');
     const json = await response.json();
     if (!json.data) throw Error('Bad Science Intent response');
@@ -653,7 +660,8 @@ export const setKeywords = (keywords) => {
   };
 };
 
-export const loadCampaignsAndScienceIntents = () => (dispatch) => {
+export const loadCampaignsAndScienceIntents = () => (dispatch, getState) => {
+  const { config } = getState();
   return new Promise(async (resolve) => {
     // Fetch Campaigns, Science Intent Goals and Tasks (without connections)
     const results = await Promise.all([
@@ -728,7 +736,7 @@ export const loadProductDescriptions = () => {
                       .map((x, i) => <div key={i}>{x}</div>)
                   : '';
               }
-            } catch (err) {
+            } catch (_err) {
               text = child.textContent;
             }
             productDescription[child.nodeName] = text;
@@ -745,6 +753,7 @@ export const loadProductDescriptions = () => {
 
 export const loadInitialData = () => {
   return async (dispatch, getState) => {
+    const { config } = getState();
     // Get url from window location
     const parsed = getURLParams();
 

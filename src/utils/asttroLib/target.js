@@ -1,9 +1,9 @@
 /* eslint-disable no-param-reassign */
+import * as frameDefinition from 'src/utils/asttroLib/frameDefinition';
 import { Point } from 'src/utils/asttroLib/point';
 import { Quaternion } from 'src/utils/asttroLib/quaternion';
-import { Vector3 } from 'src/utils/asttroLib/vector3';
 import * as TargetType from 'src/utils/asttroLib/targetType';
-import * as frameDefinition from 'src/utils/asttroLib/frameDefinition';
+import { Vector3 } from 'src/utils/asttroLib/vector3';
 
 /**
  * @class Target
@@ -253,7 +253,7 @@ function _convertFromRMLPathTarget(rmlJSON, out) {
             out.type = TargetType.Path;
           }
         }
-      } catch (error) {
+      } catch (_error) {
         // default to type Path
         out.type = TargetType.Path;
       }

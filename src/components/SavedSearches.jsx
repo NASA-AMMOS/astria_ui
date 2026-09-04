@@ -12,12 +12,11 @@ import FormStyles from 'src/styles/Forms.module.css';
 import headerStyles from 'src/styles/Header.module.css';
 import SavedSearchesStyles from 'src/styles/SavedSearches.module.css';
 import * as telemetry from 'src/utils/telemetryUtils';
-import { USING_CSSO } from '../constants/api';
 import { fetchSavedSearches } from '../utils/dataQuery';
 import { datadriveGetOCSObjectDownloadPath } from '../utils/endpoints';
 import { ArrowLeftIcon, EditIcon, SaveIcon } from './common/Icons';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 class SavedSearches extends React.Component {
   constructor(props) {
     super(props);
@@ -79,7 +78,10 @@ class SavedSearches extends React.Component {
     try {
       // Download saved searches file
       const url = datadriveGetOCSObjectDownloadPath(savedSearchFile);
-      const response = await fetch(url, { ...(USING_CSSO ? { credentials: 'include' } : null), cache: 'no-store' });
+      const response = await fetch(url, {
+        ...(getConfig().using_csso ? { credentials: 'include' } : null),
+        cache: 'no-store',
+      });
       const searchJSON = await response.json();
       this.setState({ searches: searchJSON, loadingSavedSearches: false, loadingSavedSearchesSuccess: true });
     } catch (err) {
@@ -102,6 +104,7 @@ class SavedSearches extends React.Component {
   };
 
   uploadSavedSearches = async (newSearches) => {
+    const config = getConfig();
     const { user } = this.props;
 
     this.setState({ saving: true });

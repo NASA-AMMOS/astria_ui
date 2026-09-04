@@ -1,4 +1,4 @@
-import { Vector2, Ray } from 'three';
+import { Ray, Vector2 } from 'three';
 
 export class CameraModel {
   type;
@@ -17,7 +17,7 @@ export class CameraModel {
    * @returns {Ray}
    * @memberof CameraModel
    */
-  ProjectRay(pixelPos) {
+  ProjectRay(_pixelPos) {
     return new Ray();
   }
 
@@ -85,7 +85,7 @@ export class CameraModel {
    * @returns {{ pixel: Vector2, range: number }}
    * @memberof CameraModel
    */
-  Backproject(pos) {}
+  Backproject(_pos) {}
 
   /**
    * @returns {Vector3}

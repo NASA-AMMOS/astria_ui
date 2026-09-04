@@ -1,7 +1,6 @@
 import booleanWithin from '@turf/boolean-within';
 import { point } from '@turf/helpers';
 import classNames from 'classnames';
-import config from 'config.js';
 import leaflet from 'leaflet';
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
@@ -23,6 +22,7 @@ import FootprintFacetStyles from 'src/styles/FootprintFacet.module.css';
 import FormsStyles from 'src/styles/Forms.module.css';
 import TypographyStyles from 'src/styles/common/typography.module.css';
 import { genWKTString, objAlphaSort } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { getFootprintsForGeoJSON, padGeoJSONBoundingBox } from 'src/utils/dataQuery';
 import { getAlias } from 'src/utils/sharedUtils';
 import Wkt from 'wicket';
@@ -165,7 +165,7 @@ class FootprintFacet extends React.Component {
   wktToGeoJSON(wktString) {
     try {
       return new Wkt.Wkt().read(wktString.replaceAll('_', ',')).toJson();
-    } catch (err) {
+    } catch (_err) {
       return null;
     }
   }
@@ -173,7 +173,7 @@ class FootprintFacet extends React.Component {
   geoJSONtoWKT(geoJSON) {
     try {
       return new Wkt.Wkt().fromObject(geoJSON).write();
-    } catch (err) {
+    } catch (_err) {
       return '';
     }
   }
@@ -255,12 +255,12 @@ class FootprintFacet extends React.Component {
     try {
       geoJSON = JSON.parse(editorValue);
       // TODO check for multipolygon...
-    } catch (err) {
+    } catch (_err) {
       // WKT
       try {
         geoJSON = this.wktToGeoJSON(editorValue);
         if (!geoJSON) throw new Error('Unable to parse WKT');
-      } catch (err) {
+      } catch (_err2) {
         try {
           const splits = editorValue.split(',');
           if (splits.length) {
@@ -276,7 +276,7 @@ class FootprintFacet extends React.Component {
           } else {
             error = 'Could not parse geometry';
           }
-        } catch (err) {
+        } catch (_err3) {
           error = 'Could not parse geometry';
         }
       }
@@ -289,6 +289,10 @@ class FootprintFacet extends React.Component {
       this.setState({ geoJSON, rmcShape }, () => {
         this.centerMapOnShapes(this.mapRef.current);
       });
+    }
+
+    if (error) {
+      console.warn(error);
     }
   };
 
@@ -367,7 +371,7 @@ class FootprintFacet extends React.Component {
   };
 
   CustomOption = (props) => {
-    const { data, children, ...rest } = props;
+    const { data, children: _children, ...rest } = props;
     return (
       <components.Option {...rest}>
         {this.getMultiSelectResultLabel(data.value)}
@@ -416,6 +420,7 @@ class FootprintFacet extends React.Component {
   }
 
   renderModal() {
+    const config = getConfig();
     const { loadingFootprints, isModalOpen, geoJSON, rmcDistance, footprints, range, angle } = this.state;
     const { openHelpArticle } = this.props;
 

@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ImageDataResult from 'src/components/activeProduct/ImageDataResult';
@@ -13,6 +12,7 @@ import panelStyles from 'src/styles/Panel.module.css';
 import ProductDetailsStyles from 'src/styles/ProductDetails.module.css';
 import ProductSummaryStyles from 'src/styles/ProductSummary.module.css';
 import { lsToAzEl, objAlphaSort, openInNewTab, round } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { fetchDataForProduct, getLatestVersionsByType, getOrbitalCoordsForLineSample } from 'src/utils/dataQuery';
 import { CAMPGetLinkForLatLon } from 'src/utils/endpoints';
 import { getDescendantProp, getPropFromProduct } from 'src/utils/sharedUtils';
@@ -57,6 +57,7 @@ export class ImageDataExplorer extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    const config = getConfig();
     const {
       product: prevProduct,
       cursor: prevCursor,
@@ -118,13 +119,14 @@ export class ImageDataExplorer extends React.Component {
           latitude: data.Latitude,
           longitude: data.Longitude,
         },
-        text: `point in ${getPropFromProduct(product, config.es_mappings.filename, null)}`,
+        text: `point in ${getPropFromProduct(product, getConfig().es_mappings.filename, null)}`,
       })
     );
   };
 
   // Adds product to the dataStore
   addProductToDataStore(product) {
+    const config = getConfig();
     const { dataMap } = this.dataStore;
     const id = getPropFromProduct(product, config.es_mappings.id);
     const label = getPropFromProduct(product, config.es_mappings.product_type);
@@ -142,6 +144,7 @@ export class ImageDataExplorer extends React.Component {
   }
 
   removeProductFromDataStore(productOrId) {
+    const config = getConfig();
     const { dataMap } = this.dataStore;
     const id = typeof productOrId === 'string' ? productOrId : getPropFromProduct(productOrId, config.es_mappings.id);
     const entry = dataMap[id];
@@ -180,6 +183,7 @@ export class ImageDataExplorer extends React.Component {
   }
 
   syncDataStore() {
+    const config = getConfig();
     const { product, groups, activeOverlays, autoAddRDRs } = this.props;
     const isOverlay = getPropFromProduct(product, config.es_mappings.overlayable);
 
@@ -214,6 +218,8 @@ export class ImageDataExplorer extends React.Component {
 
   // Updates either all the products in the dataStore or only those that don't have current data
   updateDataStore(updateAll = false) {
+    const config = getConfig();
+
     const { cursor } = this.props;
     const { line: prevLine, sample: prevSample, dataMap } = this.dataStore;
 
@@ -272,7 +278,8 @@ export class ImageDataExplorer extends React.Component {
   }
 
   updateCursorPositionData() {
-    return new Promise(async (resolve, reject) => {
+    const config = getConfig();
+    return new Promise(async (resolve, _reject) => {
       // signal that we're loading
       this.cursorPosition.data = { Data: productLoadingLabel };
       this.orbitalPosition.data = { Data: productLoadingLabel };
@@ -336,6 +343,8 @@ export class ImageDataExplorer extends React.Component {
 
   fetchDataForProduct(product, lineSample) {
     return new Promise((resolve, reject) => {
+      const config = getConfig();
+
       const id = getPropFromProduct(product, config.es_mappings.id);
       const controller = this.addRequestController(id);
 
@@ -406,6 +415,7 @@ export class ImageDataExplorer extends React.Component {
   };
 
   getLatestGroupItems(product, groups) {
+    const config = getConfig();
     const { preferredImageForType } = this.props;
     // filter out items that don't have product type or non-matching overlay
     const matchingItems = groups.filter(
@@ -441,6 +451,7 @@ export class ImageDataExplorer extends React.Component {
   };
 
   renderDisplayProduct = (displayProduct) => {
+    const config = getConfig();
     const id = getPropFromProduct(displayProduct, config.es_mappings.id);
     const active = !!this.dataStore.dataMap[id];
 
@@ -463,6 +474,7 @@ export class ImageDataExplorer extends React.Component {
   };
 
   render() {
+    const config = getConfig();
     const { product, cursor, autoAddRDRs, handleToggleAutoAddRDRs, fetchingGroups, groups } = this.props;
     const { dataMap } = this.dataStore;
 

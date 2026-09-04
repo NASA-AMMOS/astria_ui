@@ -1,4 +1,3 @@
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { JSONLabelDetails } from 'src/components/activeProduct/JSONLabelDetails';
@@ -29,6 +28,7 @@ import {
   isSingleFrame,
   openInNewTab,
 } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { getLatestVersionsForOverlayId } from 'src/utils/dataQuery';
 import {
   ASTTROGetLink,
@@ -69,6 +69,7 @@ export class ProductDetails extends React.Component {
   }
 
   getASTTROImg() {
+    const config = getConfig();
     const { product, fetchingGroups, groups, isCustomProduct } = this.props;
     if (!isCustomProduct && !fetchingGroups) {
       const latestMatchingProducts = getLatestVersionsForOverlayId(
@@ -93,6 +94,7 @@ export class ProductDetails extends React.Component {
   }
 
   renderProductActions() {
+    const config = getConfig();
     const { product } = this.props;
     const ASTTROImg = this.getASTTROImg();
     const imageHasSiteDrive = typeof product.site === 'number' && typeof product.drive === 'number';
@@ -213,6 +215,7 @@ export class ProductDetails extends React.Component {
   }
 
   renderProductTitle() {
+    const config = getConfig();
     const { product } = this.props;
 
     const objectType = getPropFromProduct(product, config.es_mappings.object_type, 'default', false, false);
@@ -248,6 +251,7 @@ export class ProductDetails extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const {
       product,
       fetchingInitialData,

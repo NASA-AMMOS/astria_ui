@@ -1,9 +1,10 @@
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import ProductDetailsStyles from 'src/styles/ProductDetails.module.css';
+import { getConfig } from 'src/utils/configRegistry';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
 const GroupsLoading = ({ product = null, fetchingInitialData, fetchingGroups, children }) => {
+  const config = getConfig();
   if (fetchingInitialData) {
     return <div className={ProductDetailsStyles.emptyStateMessage}>Loading</div>;
   }

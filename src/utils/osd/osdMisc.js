@@ -1,5 +1,5 @@
-import config from 'config.js';
 import { parseWKTString } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 // NOTE: requires OSDMiscMixin(OSDFabricMixin(OSDViewer))
 
 export const OSDMiscMixin = (base) =>
@@ -13,6 +13,7 @@ export const OSDMiscMixin = (base) =>
     }
 
     loadAllColorIcons() {
+      const config = getConfig();
       config.drawing_presets.colors.forEach((colorStr) => {
         const path = this.getDotIconPathForColor(colorStr, false);
         const invPath = this.getDotIconPathForColor(colorStr, true);

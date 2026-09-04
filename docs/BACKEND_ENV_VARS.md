@@ -49,9 +49,10 @@ ASTRIA_APP_ACCOUNT_PASS="secure_password_here"
 
 ## Optional Variables
 
-The backend will use defaults from the application's `config.js` if these are not set:
+The backend will use defaults from the application's generated config JSON if these are not set:
 - `NODE_ENV` - Set to `production` by default in docker-compose.yml
 - `PORT` - Defaults to 3001 if not specified
+- `ASTRIA_MISSION_CONFIG_NAME` - Name of the config file to load at runtime (default: `config`). The server reads `public/configs/<name>.json` on startup. Can be specified with or without the `.json` extension.
 
 ## Testing Locally
 
