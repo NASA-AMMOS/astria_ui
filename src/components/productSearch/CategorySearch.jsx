@@ -27,7 +27,7 @@ import { buildTiledImageURL } from 'src/utils/osd/osdUtils';
 import { getCategoryImages, getDescendantProp, getPropFromProduct } from 'src/utils/sharedUtils';
 import { logError } from 'src/utils/telemetryUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 
 const ICON_MAP = {
   ZCAMIcon: <ZCAMIcon />,
@@ -92,6 +92,7 @@ class CategorySearch extends React.Component {
   };
 
   onKeyUp = (event) => {
+    const config = getConfig();
     const { activeSearchProduct, activeCategorySearchCategory, isVisible } = this.props;
 
     let images = [];
@@ -136,6 +137,7 @@ class CategorySearch extends React.Component {
   };
 
   async fetchCategoryImages() {
+    const config = getConfig();
     if (this.isFetching) {
       return;
     }
@@ -198,6 +200,7 @@ class CategorySearch extends React.Component {
   }
 
   cullCategoryImages(categoryGroups) {
+    const config = getConfig();
     // Apply culling based on category configuration
     if (!config.category_search || !config.category_search.categories) {
       return categoryGroups;
@@ -246,6 +249,7 @@ class CategorySearch extends React.Component {
   }
 
   groupImagesByCategory(images) {
+    const config = getConfig();
     if (!config.category_search || !config.category_search.categories) {
       return {};
     }
@@ -464,6 +468,7 @@ class CategorySearch extends React.Component {
   }
 
   renderImageList(images) {
+    const config = getConfig();
     return (
       <div className={MosaicsTimelineStyles.mosaicsListContainer}>
         <div className={MosaicsTimelineStyles.mosaicsListPadding}>

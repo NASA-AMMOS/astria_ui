@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import sortObj from 'sortobject';
@@ -10,6 +9,7 @@ import Inspector from 'src/externals/react-json-inspector/json-inspector';
 import FormsStyles from 'src/styles/Forms.module.css';
 import JSONLabelDetailsStyles from 'src/styles/JSONLabelDetails.module.css';
 import ProductDetailsStyles from 'src/styles/ProductDetails.module.css';
+import { getConfig } from 'src/utils/configRegistry';
 
 class SearchInput extends React.Component {
   constructor(props) {
@@ -64,6 +64,7 @@ class SearchInput extends React.Component {
 
 export class JSONLabelDetails extends React.Component {
   render() {
+    const config = getConfig();
     const { product, loading } = this.props;
 
     const noProduct = <div className={ProductDetailsStyles.emptyStateMessage}>No VICAR Label</div>;

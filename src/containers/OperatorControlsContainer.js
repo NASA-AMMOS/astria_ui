@@ -8,8 +8,9 @@ import {
 import OperatorControls from 'src/components/activeProduct/OperatorControls';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 const mapStateToProps = (state) => {
+  const config = getConfig();
   return {
     product: state.imageLayers.operatorControlsProduct
       ? state.imageLayers.layers.find(

@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Img } from 'react-image';
@@ -24,6 +23,7 @@ import {
   isSingleFrame,
   isTarget,
 } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { datadriveGetOCSObjectDownloadPathForS3URL, getThumbnail } from 'src/utils/endpoints';
 import { buildTiledImageURL } from 'src/utils/osd/osdUtils';
 import { getDescendantProp, getPropFromProduct } from 'src/utils/sharedUtils';
@@ -60,6 +60,7 @@ class ImageResult extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const {
       product,
       fallback,

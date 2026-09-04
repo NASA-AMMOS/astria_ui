@@ -1,4 +1,3 @@
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import BaseImageSelector from 'src/components/activeProduct/BaseImageSelector';
@@ -18,6 +17,7 @@ import {
   getDescriptionsForProduct,
   getQueryStringForOperatorControl,
 } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
 class OperatorControls extends React.Component {
@@ -41,6 +41,7 @@ class OperatorControls extends React.Component {
   };
 
   handleApplyControls = () => {
+    const config = getConfig();
     const { product, operatorControlsMap, setOperatorControlsForProduct } = this.props;
     const { controlKeyMap } = this.state;
 
@@ -73,7 +74,7 @@ class OperatorControls extends React.Component {
   };
 
   getDefaultControls = (product) => {
-    const imageType = getPropFromProduct(product, config.es_mappings.image_type);
+    const imageType = getPropFromProduct(product, getConfig().es_mappings.image_type);
     return getDefaultOperatorControls(imageType);
   };
 
@@ -141,7 +142,7 @@ class OperatorControls extends React.Component {
           <Button
             variant="text"
             onClick={() => {
-              this.setState({ controlKeyMap: { ...controlKeyMap, [key]: value.map((x) => true) } });
+              this.setState({ controlKeyMap: { ...controlKeyMap, [key]: value.map((_x) => true) } });
             }}
             disabled={product.loading}
             text="Select All"
@@ -150,7 +151,7 @@ class OperatorControls extends React.Component {
           <Button
             variant="text"
             onClick={() => {
-              this.setState({ controlKeyMap: { ...controlKeyMap, [key]: value.map((x) => false) } });
+              this.setState({ controlKeyMap: { ...controlKeyMap, [key]: value.map((_x) => false) } });
             }}
             disabled={product.loading}
             text="Select None"
@@ -216,6 +217,7 @@ class OperatorControls extends React.Component {
   };
 
   renderProductDescription = () => {
+    const config = getConfig();
     const { product, productDescriptions } = this.props;
 
     const descriptions = getDescriptionsForProduct(product, productDescriptions);
@@ -239,6 +241,7 @@ class OperatorControls extends React.Component {
   };
 
   renderImageSelector = () => {
+    const config = getConfig();
     const { product, groups, selectNewRDRVersion } = this.props;
 
     const matchingProducts = groups.filter(
@@ -280,6 +283,7 @@ class OperatorControls extends React.Component {
   };
 
   render() {
+    const config = getConfig();
     const { product, operatorControlsMap } = this.props;
 
     if (!product) return null;

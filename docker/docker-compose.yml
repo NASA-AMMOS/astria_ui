@@ -3,10 +3,12 @@ name: astria
 services:
   astria:
     image: ${ASTRIA_FRONTEND_DOCKER_IMAGE_NAME:-astria_ui}
-    platform: linux/amd64,linux/arm64
     build:
       context: ..
       dockerfile: docker/Dockerfile
+      platforms:
+        - linux/amd64
+        - linux/arm64
       additional_contexts:
         - env_dir=${ASTRIA_ENV_DIR} # this should be a path to the directory containing the env file specified below
       args:
@@ -14,9 +16,10 @@ services:
         - ASTRIA_UI_PORT=${ASTRIA_UI_PORT:-3000}
         - ASTRIA_PUBLIC_URL_PATH=${ASTRIA_PUBLIC_URL_PATH:-/}
         - ASTRIA_BUILD_HASH=${ASTRIA_BUILD_HASH:-unknown}
+        - ASTRIA_MISSION_CONFIG_NAME=${ASTRIA_MISSION_CONFIG_NAME:-config}
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "sh", "-c", "curl -f http://localhost:$${ASTRIA_UI_PORT}$${ASTRIA_PUBLIC_URL_PATH}"]
+      test: ["CMD", "sh", "-c", "curl -f http://localhost:$${ASTRIA_UI_PORT}/"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -24,23 +27,26 @@ services:
 
   astria-backend:
     image: ${ASTRIA_API_DOCKER_IMAGE_NAME:-astria_api}
-    platform: linux/amd64,linux/arm64
     build:
       context: ..
       dockerfile: docker/Dockerfile.api
+      platforms:
+        - linux/amd64
+        - linux/arm64
       additional_contexts:
         - env_dir=${ASTRIA_ENV_DIR}
       args:
         - ENV_FILE=${ASTRIA_ENV_FILE}
         - ASTRIA_API_PORT=${ASTRIA_API_PORT:-3001}
         - ASTRIA_PUBLIC_URL_PATH=${ASTRIA_PUBLIC_URL_PATH:-/}
+        - ASTRIA_MISSION_CONFIG_NAME=${ASTRIA_MISSION_CONFIG_NAME:-config}
     environment:
       - APP_ACCOUNT_USER=${ASTRIA_APP_ACCOUNT_USER}
       - APP_ACCOUNT_PASS=${ASTRIA_APP_ACCOUNT_PASS}
       - NODE_ENV=production
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "sh", "-c", "curl -f http://localhost:$${ASTRIA_API_PORT}$${ASTRIA_PUBLIC_URL_PATH}api/health"]
+      test: ["CMD", "sh", "-c", "curl -f http://localhost:$${ASTRIA_API_PORT}/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3

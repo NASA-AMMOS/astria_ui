@@ -1,4 +1,3 @@
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ImageResult from 'src/components/common/ImageResult';
@@ -7,11 +6,13 @@ import Select from 'src/components/common/Select';
 import BaseImageSelectorStyles from 'src/styles/BaseImageSelector.module.css';
 import ProductDetailsStyles from 'src/styles/ProductDetails.module.css';
 import { cloneObj, determineBestImageInGroup, objAlphaSort } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { getLatestVersionsByType } from 'src/utils/dataQuery';
 import { getAlias, getPropFromProduct, groupProductsBy } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
 
 const BaseImageOption = (props) => {
+  const config = getConfig();
   const { value: product, data, getValue, setValue } = props;
 
   let isSelected = false;
@@ -49,6 +50,7 @@ class BaseImageSelector extends React.Component {
   }
 
   getBaseImages() {
+    const config = getConfig();
     const { groups, allowOverlays } = this.props;
     return groups.filter(
       (p) =>
@@ -80,10 +82,11 @@ class BaseImageSelector extends React.Component {
   }
 
   getESMappingForKey(key) {
-    return Object.values(config.es_mappings).find((mapping) => mapping.key === key) ?? null;
+    return Object.values(getConfig().es_mappings).find((mapping) => mapping.key === key) ?? null;
   }
 
   computeBaseImageSelectionFilters(activeProduct) {
+    const config = getConfig();
     const { allowAllSelectors } = this.props;
     // TODO could also do some "show more options" thing and only normally show Eye?
 
@@ -130,6 +133,7 @@ class BaseImageSelector extends React.Component {
   }
 
   handleFilterChange(value, key) {
+    const config = getConfig();
     const { setBaseLayer, activeProduct } = this.props;
     const baseImageSelectionFilters = this.computeBaseImageSelectionFilters(this.props.activeProduct);
 
@@ -183,6 +187,7 @@ class BaseImageSelector extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const { activeProduct, isCustomProduct, fetchingGroups } = this.props;
 
     // Check loading and active product states

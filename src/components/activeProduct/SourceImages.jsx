@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { components } from 'react-select';
@@ -26,6 +25,7 @@ import {
   openInNewTab,
   pluralizeByListLength,
 } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import {
   fetchDataForProduct,
   getAssociatedMosaicsForImage,
@@ -49,7 +49,7 @@ export class SourceImages extends React.Component {
       view: localStorage.getItem(this.LOCALSTORAGE_SOURCE_IMAGES_VIEW_OPTION_KEY) || 'image',
       imageResultTitleKey:
         localStorage.getItem(this.LOCALSTORAGE_SOURCE_IMAGES_TITLE_LABEL_OPTION_KEY) ||
-        config.search_config.time_search.default_thumbnail_title_key.value,
+        getConfig().search_config.time_search.default_thumbnail_title_key.value,
       filteredList: [],
       associatedMosaicsForCursor: [],
       loadingIDX: false,
@@ -66,6 +66,7 @@ export class SourceImages extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    const config = getConfig();
     const { cursor, sourceImages, showFootprints, selectedFootprint } = this.props;
     const { cursor: prevCursor, selectedFootprint: prevSelectedFootprint } = prevProps;
     const { showAssociatedMosaics } = this.state;
@@ -114,6 +115,7 @@ export class SourceImages extends React.Component {
   }
 
   async handleActiveCursor() {
+    const config = getConfig();
     const { cursor, groups, product, sourceImages, preferredImageForType } = this.props;
     const { showAssociatedMosaics } = this.state;
 
@@ -168,6 +170,7 @@ export class SourceImages extends React.Component {
   }
 
   async fetchAssociatedMosaics(product) {
+    const config = getConfig();
     // Fetch mosaics associated with image at cursor if we're looking at a mosaic
     if (isMosaic(this.props.product)) {
       try {
@@ -205,7 +208,7 @@ export class SourceImages extends React.Component {
           associatedMosaicsForCursor: results,
           loadingAssociatedImagesForSelection: false,
         });
-      } catch (err) {
+      } catch (_err) {
         this.setState({ associatedMosaicsForCursor: [], loadingAssociatedImagesForSelection: false });
       }
     }
@@ -229,6 +232,7 @@ export class SourceImages extends React.Component {
   }
 
   renderFilenameResult(item) {
+    const config = getConfig();
     const bboxAvailable = this.props.sourceImageFootprints.length > 0;
     const resultClass = classNames({
       [EDRListStyles.filenameResult]: true,
@@ -267,6 +271,7 @@ export class SourceImages extends React.Component {
   }
 
   renderImageResult(item) {
+    const config = getConfig();
     if (item._error) {
       item.instrument_id = item.ocs_name;
     }
@@ -303,6 +308,7 @@ export class SourceImages extends React.Component {
   }
 
   isIDXActive() {
+    const config = getConfig();
     const { overlays: activeOverlays } = this.props;
     return (
       typeof activeOverlays.find(
@@ -338,6 +344,7 @@ export class SourceImages extends React.Component {
   };
 
   setSourceImageFilterFn = () => {
+    const config = getConfig();
     const { instrumentsFilter, filterToStereoProducts } = this.state;
     const filterFn = (footprint) => {
       let matchesInstrumentsFilter = false;
@@ -380,7 +387,7 @@ export class SourceImages extends React.Component {
   };
 
   CustomOption = (props) => {
-    const { data, children, ...rest } = props;
+    const { data, children: _children, ...rest } = props;
     return (
       <components.Option {...rest}>
         {this.getMultiSelectResultLabel(data.value)}
@@ -394,7 +401,7 @@ export class SourceImages extends React.Component {
   }
 
   getIdForResult(item) {
-    return `${getPropFromProduct(item, config.es_mappings.filename)}_source_image`;
+    return `${getPropFromProduct(item, getConfig().es_mappings.filename)}_source_image`;
   }
 
   renderBboxToggle() {
@@ -437,6 +444,7 @@ export class SourceImages extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const {
       product,
       loading,

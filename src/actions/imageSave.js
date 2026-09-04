@@ -1,10 +1,10 @@
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
 
-import config from 'config.js';
 export const exportImage = (options) => {
   return (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     const osdRefs = state.imageViewer.osdRefs;
     const { osdWrapper } = osdRefs;
 

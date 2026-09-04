@@ -1,11 +1,10 @@
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import XMLViewer from 'react-xml-viewer';
 import Button from 'src/components/common/Button';
-import { USING_CSSO } from 'src/constants/api';
 import ProductDetailsStyles from 'src/styles/ProductDetails.module.css';
 import XMLLabelDetailsStyles from 'src/styles/XMLLabelDetails.module.css';
+import { getConfig } from 'src/utils/configRegistry';
 import { fetchESDataForProduct } from 'src/utils/dataQuery';
 import { pdsGetDownloadPathForProduct } from 'src/utils/endpoints';
 import { openInNewTab } from 'src/utils/index';
@@ -28,6 +27,7 @@ export class XMLLabelDetails extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    const config = getConfig();
     const { product } = this.props;
 
     const productChanged =
@@ -42,6 +42,7 @@ export class XMLLabelDetails extends React.Component {
   }
 
   async fetchXML() {
+    const config = getConfig();
     this.setState({ loading: true, xml: null, xmlURL: null });
     if (this.abortController) {
       this.abortController.abort();
@@ -52,7 +53,7 @@ export class XMLLabelDetails extends React.Component {
     try {
       const xmlProduct = await fetchESDataForProduct(xmlID, this.abortController.signal);
       const xmlURL = pdsGetDownloadPathForProduct(xmlProduct);
-      const data = await fetch(xmlURL, { ...(USING_CSSO ? { credentials: 'include' } : null) });
+      const data = await fetch(xmlURL, { ...(config.using_csso ? { credentials: 'include' } : null) });
       const xml = await data.text();
       this.setState({ loading: false, xml, xmlURL });
     } catch (error) {

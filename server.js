@@ -16,13 +16,21 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import proxy from 'express-http-proxy';
+import { readFileSync } from 'fs';
 import http from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import config from './configs/config.js';
-import { PERMISSIONS, PROD_MODE, USING_CSSO } from './src/constants/api.js';
+import { setConfig } from './src/utils/configRegistry.js';
+
+// Load config from built JSON file before importing utils that depend on it
+let configName = process.env.ASTRIA_MISSION_CONFIG_NAME || 'config';
+configName = configName.replace(/\.json$/i, '');
+const configPath = new URL(`./public/configs/${configName}.json`, import.meta.url);
+const config = JSON.parse(readFileSync(configPath, 'utf-8'));
+setConfig(config);
+
 import { csso } from './src/utils/csso.js';
-import { getMosaics, sleep } from './src/utils/sharedUtils.js';
+import { getCategoryImages, getMosaics, sleep } from './src/utils/sharedUtils.js';
 import { logError, mosaicsGathered } from './src/utils/telemetryUtils.js';
 
 // ============================================================================
@@ -57,13 +65,11 @@ const CATEGORY_GATHERING_WAIT_TIME = 5 * 60000; // 5 minute interval
 let cachedCategoryImages = [];
 
 // Load and validate permissions
-let permissions = {};
-try {
-  permissions = PERMISSIONS;
-} catch (err) {
-  console.log('Failed to load permissions file, exiting.');
-  throw err;
-}
+const permissions = {
+  users: config.users_list,
+  admins: config.admins_list,
+  port: config.port,
+};
 
 if (permissions.users === undefined) {
   throw new Error('Permissions has no users group');
@@ -178,7 +184,7 @@ app.get('/api/health', (req, res) => {
   res.status(200).json(healthCheck);
 });
 
-if (USING_CSSO) {
+if (config.using_csso) {
   // Apply CSSO authentication and authorization
   app.use(cssoHandler);
   app.use(ensureGroup);
@@ -342,7 +348,7 @@ const createProxy = ({ hostname = 'localhost', mode = 'http', port = 80, options
 };
 
 // In development mode, proxy to local HTTPS backend (allows self-signed certs)
-if (!PROD_MODE) {
+if (!config.prod_mode) {
   app.use(
     '/',
     createProxy({

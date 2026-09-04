@@ -2,10 +2,8 @@ import moment from 'moment';
 import React from 'react';
 import Modal from 'react-modal';
 import Button from 'src/components/common/Button';
-import { USING_CSSO } from 'src/constants/api';
 import alertStyles from 'src/styles/Alert.module.css';
-
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 class AuthAlerter extends React.Component {
   constructor(props) {
     super(props);
@@ -22,7 +20,8 @@ class AuthAlerter extends React.Component {
   }
 
   componentDidMount() {
-    if (USING_CSSO) {
+    const config = getConfig();
+    if (config.using_csso) {
       // If we're using CSSO, attempt to keep authentication fresh and
       // handle expired tokens
       const cssoPollPeriod = 60 * 1000; // 1 minute
@@ -103,7 +102,9 @@ class AuthAlerter extends React.Component {
       let pathname;
       try {
         pathname = popupWindow.location.pathname;
-      } catch (err) {}
+      } catch (_err) {
+        /* cross-origin access may throw */
+      }
       if (pathname === '/login_success' || popupWindow.closed) {
         popupWindow.close();
         clearInterval(timer);
@@ -116,6 +117,7 @@ class AuthAlerter extends React.Component {
   }
 
   checkForSessionTimeout(promptBeforeRedirect = true) {
+    const config = getConfig();
     const { open } = this.state;
 
     fetch(config.csso_endpoints.cssotokenstatus, {
@@ -183,6 +185,7 @@ class AuthAlerter extends React.Component {
 
   // Code from ASTTRO https://github.jpl.nasa.gov/OnSight/OnSight/blob/master/web/asttronsight/script/app/initializer/index.js
   keepAlive() {
+    const config = getConfig();
     fetch(config.csso_endpoints.refreshtimeout, { credentials: 'include' })
       .then((response) => {
         if (response.status !== 200) {

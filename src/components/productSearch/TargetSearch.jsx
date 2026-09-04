@@ -19,10 +19,7 @@ import TargetSearchStyles from 'src/styles/TargetSearch.module.css';
 import { cloneObj, performElasticSearchQuery } from 'src/utils';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
-import config from 'config.js';
-// clone because we will not be treating these as immutable
-const TARGET_SEARCH_CONFIG_1 = cloneObj(config.search_config.target_search_1 || {});
-const TARGET_SEARCH_CONFIG_2 = cloneObj(config.search_config.target_search_2 || {});
+import { getConfig } from 'src/utils/configRegistry';
 
 class TargetSearch extends Component {
   constructor(props) {
@@ -30,6 +27,10 @@ class TargetSearch extends Component {
 
     this.searchBaseRef = React.createRef();
     this.relatedNamesController = undefined;
+
+    const config = getConfig();
+    this.targetSearchConfig1 = cloneObj(config.search_config.target_search_1 || {});
+    this.targetSearchConfig2 = cloneObj(config.search_config.target_search_2 || {});
 
     this.state = {
       selectedTargetName: undefined,
@@ -46,7 +47,7 @@ class TargetSearch extends Component {
     this.abortRelatedSearch(false);
     if (prod) {
       // we have selected a target
-      const targetName = getPropFromProduct(prod, config.es_mappings.target_name_rtt);
+      const targetName = getPropFromProduct(prod, getConfig().es_mappings.target_name_rtt);
       this.setState({ selectedTargetName: targetName }, () => this.searchForRelatedTargets(targetName));
       setViewOption('imageResultTitleKey', {
         label: 'Instrument Category (default)',
@@ -80,7 +81,7 @@ class TargetSearch extends Component {
   }
 
   getRelatedTargetSearchConfig(targetName) {
-    const searchConfig = cloneObj(TARGET_SEARCH_CONFIG_2);
+    const searchConfig = cloneObj(getConfig().search_config.target_search_2 || {});
     searchConfig.query_options.base_queries[0].bool.must.query_string.query = targetName;
 
     // catch current facet queries from "parent" search base
@@ -95,12 +96,11 @@ class TargetSearch extends Component {
 
   getTargetSearchConfig(targetName) {
     if (targetName) {
-      // TODO - can we duplicate instead? Not duplicating seems dangerous
-      const searchConfig = TARGET_SEARCH_CONFIG_2; // don't duplicate so we don't force re-renders
-      searchConfig.query_options.base_queries[0].bool.must.query_string.query = targetName;
-      return searchConfig;
+      // don't duplicate so we don't force re-renders
+      this.targetSearchConfig2.query_options.base_queries[0].bool.must.query_string.query = targetName;
+      return this.targetSearchConfig2;
     }
-    return TARGET_SEARCH_CONFIG_1;
+    return this.targetSearchConfig1;
   }
 
   abortRelatedSearch(makeNew = true) {
@@ -120,7 +120,7 @@ class TargetSearch extends Component {
     // should we be using redux state instead? yes.
     // do with that information what you wish.
     if (this.searchBaseRef.current) {
-      const queryComponents = this.searchBaseRef.current.getQueryComponents();
+      const _queryComponents = this.searchBaseRef.current.getQueryComponents();
       const baseQueries = this.searchBaseRef.current.getBaseQueries();
       const relatedNames = await this.fetchRelatedTargetNames({
         targetName,
@@ -144,7 +144,7 @@ class TargetSearch extends Component {
 
   async fetchRelatedTargetNames(options) {
     const { targetName, queryComponents, baseQueries } = options;
-    const dataField = config.es_mappings.target_name_rtt.key;
+    const dataField = getConfig().es_mappings.target_name_rtt.key;
 
     const signal = this.abortRelatedSearch();
 

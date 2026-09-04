@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import { Field, Form, Formik } from 'formik';
 import React, { Component } from 'react';
 import PrismaZoom from 'react-prismazoom';
@@ -36,6 +35,7 @@ import {
   isTarget,
   round,
 } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { scaleDataSupported } from 'src/utils/dataQuery';
 import { datadriveGetOCSObjectDownloadPath } from 'src/utils/endpoints';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
@@ -92,6 +92,7 @@ class RenderedImagePane extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const config = getConfig();
     // TODO - restructure so that this is not called on zoom/pan
     let { rulersActive, scalebarActive, enableImageSmoothing, isFullscreen } = this.state;
     const { baseImage, groups, resetViewOnlyMode } = this.props;
@@ -325,6 +326,7 @@ class RenderedImagePane extends Component {
   }
 
   renderSettingsMenu() {
+    const config = getConfig();
     const { baseImage, groups } = this.props;
     const { enableImageSmoothing, scalebarActive, rulersActive, navigatorActive } = this.state;
 
@@ -491,6 +493,7 @@ class RenderedImagePane extends Component {
   }
 
   renderMobileMetadataDisplay() {
+    const config = getConfig();
     const { baseImage } = this.props;
     const productFilename = baseImage ? getPropFromProduct(baseImage, config.es_mappings.filename, null) : null;
     const isImageCustomProduct = isCustomProduct(baseImage);
@@ -550,6 +553,7 @@ class RenderedImagePane extends Component {
   }
 
   renderMousePosition() {
+    const config = getConfig();
     const { mouseAzEl } = this.state;
     const { baseImage, currentLine, currentSample } = this.props;
 
@@ -596,6 +600,7 @@ class RenderedImagePane extends Component {
   }
 
   renderLoadingIndicator() {
+    const config = getConfig();
     const { activeOverlays, layerLoadingStates } = this.props;
 
     // Separate out tile based layers
@@ -646,6 +651,7 @@ class RenderedImagePane extends Component {
   }
 
   render() {
+    const config = getConfig();
     const { toolbarOverflowLevel, navigatorActive, enableImageSmoothing, isFullscreen } = this.state;
     const { zoom, rotation, anyAnnotationsActive, baseImage, viewerLoading } = this.props;
 

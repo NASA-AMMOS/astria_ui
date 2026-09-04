@@ -2,9 +2,9 @@
 // Built CRA does not appear to correctly compile commonJS with ES6 (async, spread, etc).
 import moment from 'moment';
 import urljoin from 'url-join';
-import config from '../../configs/config.js';
 import { round } from '../utils/index.js';
 import { logError } from '../utils/telemetryUtils.js';
+import { getConfig } from './configRegistry.js';
 // let fetch = require('node-fetch');
 // const moment = require('moment');
 // const urlJoin = require('url-join');
@@ -22,7 +22,7 @@ const MOSAICS_QUERY_PAGE_SIZE = 2000;
  * @example getEsMappingsByKey()['gather.common.instrument'] -> { key: 'gather.common.instrument', label: 'Instrument ID', alias: true }
  */
 export function getEsMappingsByKey() {
-  return Object.values(config.es_mappings).reduce((accum, mapping) => {
+  return Object.values(getConfig().es_mappings).reduce((accum, mapping) => {
     accum[mapping.key] = mapping;
     return accum;
   }, {});
@@ -35,7 +35,8 @@ export function getEsMappingsByKey() {
  * @example getDescendantProp({ foo: { bar: 1 }}, 'foo.bar') -> 1
  * @example getDescendantProp({ foo: { bar: 1 }}, 'foo.no') -> undefined
  */
-export function getDescendantProp(obj, desc, defaultValue = config.missing_property_value) {
+export function getDescendantProp(obj, desc, defaultValue) {
+  if (defaultValue === undefined) defaultValue = getConfig().missing_property_value;
   if (!desc || !obj) {
     console.warn(`Unable to get descendent property ${desc} from ${obj}, using default value.`);
     return defaultValue;
@@ -103,6 +104,7 @@ export function setPropForProduct(obj, configItem, value) {
 }
 
 export function getAlias(key, value) {
+  const config = getConfig();
   // Ensure config has requested alias entry (e.g. config has 'instrument_id')
   if (!config.es_value_aliases.hasOwnProperty(key)) {
     // console.warn(
@@ -217,6 +219,7 @@ export function determineBestImageInGroup(images, criteria) {
   // except for the case where base image selection does not try to get best version
   if (bestMatches.length > 1) {
     // Investigate if the images are duplicates
+    const config = getConfig();
     const identicalS3Paths = new Set(bestMatches.map((x) => getPropFromProduct(x, config.es_mappings.id))).size === 1;
     if (identicalS3Paths) {
       console.warn('Images with the same S3 path found in the same image group', images);
@@ -289,7 +292,7 @@ export function processHighestStringValueCriteriaType(images, key) {
     if (typeof value !== 'string') {
       try {
         value = value.toString();
-      } catch (err) {
+      } catch (_err) {
         value = '';
       }
     }
@@ -309,7 +312,7 @@ export function processLowestStringValueCriteriaType(images, key) {
     if (typeof value !== 'string')
       try {
         value = value.toString();
-      } catch (err) {
+      } catch (_err) {
         value = '';
       }
     if (value < minValue) minValue = value;
@@ -321,6 +324,7 @@ export function processLowestStringValueCriteriaType(images, key) {
 }
 
 export function getMosaics(ssosession, minutesLimitFromNow = -1) {
+  const config = getConfig();
   return new Promise((resolve, reject) => {
     // Handle paginated results
     let page = 0;
@@ -413,6 +417,7 @@ export function fetchMosaicsWithAutoRetry(ssosession, minutesLimitFromNow, from,
 }
 
 export function fetchMosaics(ssosession, minutesLimitFromNow, from = 0, ocsCreatedAt = '') {
+  const config = getConfig();
   return new Promise((resolve, reject) => {
     // Fetch mosaics given ssosession, if no ssosession attempt to use cookies, implement auto retry for failed requests
     // should also automatically handle pagination of results to avoid request failures
@@ -592,7 +597,7 @@ export function fetchMosaics(ssosession, minutesLimitFromNow, from = 0, ocsCreat
 
               // Collect all the individual group members
               const allImages = [];
-              hits.hits.map((group, i) =>
+              hits.hits.map((group, _i) =>
                 group.inner_hits.group_members.hits.hits.forEach((x) => {
                   allImages.push(x._source);
                 })
@@ -689,7 +694,8 @@ export function getCategoryImages(ssosession, categoryConfig, minutesLimitFromNo
 }
 
 function fetchSingleCategoryImages(ssosession, categoryConfig, category, minutesLimitFromNow, disableRetries = false) {
-  return new Promise((resolve, reject) => {
+  const config = getConfig();
+  return new Promise((resolve, _reject) => {
     let page = 0;
     let from = page * MOSAICS_QUERY_PAGE_SIZE;
     let allImages = [];
@@ -868,6 +874,7 @@ export function fetchCategoryImages(
   from = 0,
   ocsCreatedAt = ''
 ) {
+  const config = getConfig();
   return new Promise((resolve, reject) => {
     if (!categoryConfig || !category || !category.es_query) {
       reject(new Error('Invalid category configuration'));

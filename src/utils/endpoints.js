@@ -1,17 +1,17 @@
 import Axios from 'axios';
-import config from 'config.js';
-import { IMAGE_TILER_SERVICE } from 'src/constants/api';
 import { isAnnotation, isMosaic, isSingleFrame } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import urlJoin from 'url-join';
 
 /* ASTRIA Backend */
 export function astriaGetProductDescriptions() {
-  return urlJoin(IMAGE_TILER_SERVICE, 'image_descriptions.xml');
+  return urlJoin(getConfig().tile_service_url, 'image_descriptions.xml');
 }
 
 /* Generic */
 export function getBrowseImagePathForProduct(product) {
+  const config = getConfig();
   if (config.data_provider_type === 'pds') {
     return getPropFromProduct(product, config.es_mappings.browse_url);
   } else {
@@ -38,6 +38,7 @@ export function getBrowseImagePathForProduct(product) {
 }
 
 export function getDownloadPath(path, product) {
+  const config = getConfig();
   if (config.data_provider_type === 'pds') {
     return pdsDownloadPathForURL(path, product);
   } else {
@@ -47,6 +48,7 @@ export function getDownloadPath(path, product) {
 
 /* DataDrive */
 export function datadriveGetOCSObjectDownloadPath(product) {
+  const config = getConfig();
   const baseURL = config.api_endpoints.datadrive.data;
   const ocsURL = getPropFromProduct(product, config.es_mappings.img_url);
   const realPath = ocsURL.split('s3://')[1];
@@ -54,18 +56,21 @@ export function datadriveGetOCSObjectDownloadPath(product) {
 }
 
 export function datadriveGetOCSObjectDownloadPathForOCSURL(ocsURL) {
+  const config = getConfig();
   const baseURL = config.api_endpoints.datadrive.data;
   const realPath = ocsURL.split('s3://')[1];
   return urlJoin(baseURL, realPath);
 }
 
 export function datadriveDeleteFile(packageId, datasetId) {
+  const config = getConfig();
   return Axios.delete(config.api_endpoints.datadrive.middleware + `/api/delete/` + packageId + `/` + datasetId, {
     withCredentials: true,
   });
 }
 
 export function datadriveGetOCSObjectDownloadPathForS3URL(s3URL = '') {
+  const config = getConfig();
   const baseURL = config.api_endpoints.datadrive.data;
   const splits = s3URL.split('s3://');
   if (splits.length > 0) {
@@ -76,6 +81,7 @@ export function datadriveGetOCSObjectDownloadPathForS3URL(s3URL = '') {
 }
 
 export function datadriveGetLink(product) {
+  const config = getConfig();
   const baseURL = config.api_endpoints.datadrive.client;
   const pkg = getPropFromProduct(product, config.es_mappings.package_name);
   const path = getPropFromProduct(product, config.es_mappings.path);
@@ -84,6 +90,7 @@ export function datadriveGetLink(product) {
 }
 
 export function datadriveGetThumbnail(product) {
+  const config = getConfig();
   const baseURL = config.api_endpoints.datadrive.data;
   const datadriveThumbnailPackage = config.api_endpoints.datadrive.thumbnailPackageName;
   const ocsURL = getPropFromProduct(product, config.es_mappings.img_url);
@@ -92,6 +99,7 @@ export function datadriveGetThumbnail(product) {
 }
 
 export function getThumbnail(product) {
+  const config = getConfig();
   if (config.data_provider_type === 'pds') {
     return pdsGetPreviewImage(product, 'sm');
   } else {
@@ -100,6 +108,7 @@ export function getThumbnail(product) {
 }
 
 export function getPreviewImageForProduct(product) {
+  const config = getConfig();
   if (isSingleFrame(product) || isMosaic(product)) {
     if (config.data_provider_type === 'ocs') {
       return datadriveGetOCSObjectDownloadPath(getBrowseImagePathForProduct(product));
@@ -117,6 +126,7 @@ export function getPreviewImageForProduct(product) {
 /* PDS */
 
 export function pdsDownloadPathForURL(productURL, product) {
+  const config = getConfig();
   const baseURL = config.api_endpoints.pds.data;
   const releaseIdNum = getPropFromProduct(product, config.es_mappings.release_id);
   const query = `${productURL}${typeof releaseIdNum === 'number' ? `::${releaseIdNum}` : ''}`;
@@ -124,6 +134,7 @@ export function pdsDownloadPathForURL(productURL, product) {
 }
 
 export function pdsGetPreviewImage(product, size = 'sm') {
+  const config = getConfig();
   const baseURL = config.api_endpoints.pds.data;
   const browseUrl = getPropFromProduct(product, config.es_mappings.browse_url);
   const releaseIdNum = getPropFromProduct(product, config.es_mappings.release_id);
@@ -132,6 +143,7 @@ export function pdsGetPreviewImage(product, size = 'sm') {
 }
 
 export function pdsGetLink(product) {
+  const config = getConfig();
   const baseURL = config.api_endpoints.pds.client;
   const uri = getPropFromProduct(product, config.es_mappings.uri);
   const query = `record?uri=${uri}`;
@@ -139,6 +151,7 @@ export function pdsGetLink(product) {
 }
 
 export function pdsGetDownloadPathForProduct(product, asJSON = false) {
+  const config = getConfig();
   const baseURL = config.api_endpoints.pds.data;
   const productURL = getPropFromProduct(product, config.es_mappings.id);
   const releaseIdNum = getPropFromProduct(product, config.es_mappings.release_id);
@@ -149,6 +162,7 @@ export function pdsGetDownloadPathForProduct(product, asJSON = false) {
 }
 
 export function pdsGetS3PathForImage(product) {
+  const config = getConfig();
   const uri = getPropFromProduct(product, config.es_mappings.uri);
   const imgPath = uri
     .split(':')
@@ -174,6 +188,7 @@ export async function pdsFetchDownloadPath(product, signal = null) {
 
 /* ASTTRO */
 export function ASTTROGetLink(product) {
+  const config = getConfig();
   const baseURL = config.api_endpoints.ASTTRO.client;
   const filename = getPropFromProduct(product, config.es_mappings.filename);
   try {
@@ -188,6 +203,7 @@ export function ASTTROGetLink(product) {
 }
 
 export function ASTTROGetLinkForTarget(target) {
+  const config = getConfig();
   const baseURL = config.api_endpoints.ASTTRO.client;
   try {
     // Get target's imageId (filename), site, and drive
@@ -204,23 +220,26 @@ export function ASTTROGetLinkForTarget(target) {
 
 /* Science Intent */
 export function scienceIntentGetProductMetadata(activityID) {
-  return urlJoin(config.api_endpoints.ScienceIntent.API, `/connections?foreign_key=activity_${activityID}`);
+  return urlJoin(getConfig().api_endpoints.ScienceIntent.API, `/connections?foreign_key=activity_${activityID}`);
 }
 
 export function scienceIntentGetConnectionsByCampaignID(campaignID) {
-  return urlJoin(config.api_endpoints.ScienceIntent.API, `/connections?foreign_key=campaign_${campaignID}`);
+  return urlJoin(getConfig().api_endpoints.ScienceIntent.API, `/connections?foreign_key=campaign_${campaignID}`);
 }
 
 /* CAMP */
 export function campGetAllCampaigns() {
-  return urlJoin(config.api_endpoints.CAMP.API, 'spatial/published/strategic_targets?query=campaign&verbose=false');
+  return urlJoin(
+    getConfig().api_endpoints.CAMP.API,
+    'spatial/published/strategic_targets?query=campaign&verbose=false'
+  );
 }
 
 export function CAMPGetLinkForTarget(target) {
   try {
     // Get target's imageId (filename), site, and drive
     const targetId = target.content.id;
-    return urlJoin(config.api_endpoints.CAMP.client, `&selected=Tactical Targets,data.uuid,${targetId},go`);
+    return urlJoin(getConfig().api_endpoints.CAMP.client, `&selected=Tactical Targets,data.uuid,${targetId},go`);
   } catch (err) {
     console.warn('Unable to get CAMP link for target', target, err);
     return '';
@@ -234,7 +253,7 @@ export function CAMPGetLinkForLatLon(options) {
 
     // Get target's imageId (filename), site, and drive
     return urlJoin(
-      config.api_endpoints.CAMP.client,
+      getConfig().api_endpoints.CAMP.client,
       `&mapLon=${latLon.longitude}&mapLat=${latLon.latitude}&mapZoom=${zoom}&centerPin=${hoverText}`
     );
   } catch (err) {
@@ -246,7 +265,7 @@ export function CAMPGetLinkForSiteDrive(product) {
   try {
     const site = product.site;
     const drive = product.drive;
-    return urlJoin(config.api_endpoints.CAMP.client, `&selected=Rover Position,RMC,${site}_${drive},go`);
+    return urlJoin(getConfig().api_endpoints.CAMP.client, `&selected=Rover Position,RMC,${site}_${drive},go`);
   } catch (err) {
     console.warn('Unable to get CAMP link for product', product, err);
     return '';

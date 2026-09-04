@@ -24,7 +24,7 @@ import * as telemetry from 'src/utils/telemetryUtils';
 import urljoin from 'url-join';
 import Tip from './common/Tip';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 class ImageFeatureEditor extends React.Component {
   constructor(props) {
     super(props);
@@ -96,6 +96,7 @@ class ImageFeatureEditor extends React.Component {
   };
 
   startMarkingArea = () => {
+    const config = getConfig();
     const { imageFeatureEditorOpen, interactionMode, setInteractionMode, activeAnnotation } = this.props;
 
     const activeFeatures = this.getActiveImageFeatures();
@@ -109,6 +110,7 @@ class ImageFeatureEditor extends React.Component {
   };
 
   renderDrawingTools() {
+    const config = getConfig();
     const { interactionMode, selectedShapes, osdWrapper, activeAnnotation } = this.props;
     const { selectedKeyword } = this.state;
 
@@ -396,6 +398,7 @@ class ImageFeatureEditor extends React.Component {
   }
 
   saveFeature(feature) {
+    const config = getConfig();
     const { osdWrapper } = this.props;
     const { selectedKeyword, confidenceLevel } = this.state;
     return new Promise(async (resolve, reject) => {
@@ -458,7 +461,7 @@ class ImageFeatureEditor extends React.Component {
         });
 
         resolve(response);
-      } catch (err) {
+      } catch (_err) {
         // TODO
         reject(`Unable to save feature: ${featureId}`);
       }
@@ -548,10 +551,11 @@ class ImageFeatureEditor extends React.Component {
   };
 
   getFeatureDir = () => {
-    return `${config.image_feature_upload.ocs_path}image_features`;
+    return `${getConfig().image_feature_upload.ocs_path}image_features`;
   };
 
   createFeaturesDir = (path) => {
+    const config = getConfig();
     const payload = {
       pkg_id: config.image_feature_upload.pkg_id,
       abs_path: path,
@@ -587,6 +591,7 @@ class ImageFeatureEditor extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const { osdWrapper, imageFeatureEditorOpen, keywords, activeAnnotation, updateFeature } = this.props;
     const { uploading, selectedKeyword, confidenceLevel } = this.state;
 

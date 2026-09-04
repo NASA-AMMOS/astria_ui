@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import yaml from 'js-yaml';
 import PropTypes from 'prop-types';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import NewWindow from 'react-new-window';
+import { getConfig } from 'src/utils/configRegistry';
 import helpStyles from '../styles/Help.module.css';
 import Button from './common/Button';
 import { ArrowLeftIcon } from './common/Icons';
@@ -20,11 +20,12 @@ class Help extends React.Component {
     this.helpTopics = [];
   }
 
-  fillAppName(text, searchStr = '{APPNAME}', replaceStr = config.app_title) {
-    return text.replaceAll(searchStr, replaceStr);
+  fillAppName(text, searchStr = '{APPNAME}', replaceStr) {
+    return text.replaceAll(searchStr, replaceStr !== undefined ? replaceStr : getConfig().app_title);
   }
 
   async componentDidMount() {
+    const config = getConfig();
     const { setHelpOpen } = this.props;
 
     // fetch help config
@@ -119,6 +120,7 @@ class Help extends React.Component {
   }
 
   renderHelpHome() {
+    const config = getConfig();
     return (
       <div>
         <div className={helpStyles.homeText}>
@@ -142,6 +144,7 @@ class Help extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const { open, activeArticleKey, setHelpOpen, setHelpArticle } = this.props;
     const { loading, loadingFailed } = this.state;
 

@@ -5,7 +5,7 @@ import Button from 'src/components/common/Button';
 import SearchBaseContainer from 'src/containers/SearchBaseContainer';
 import EDRListStyles from 'src/styles/EdrList.module.css';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 class SolSearch extends React.Component {
   renderContent = (params) => {
     const {
@@ -43,7 +43,7 @@ class SolSearch extends React.Component {
   render() {
     return (
       <SearchBaseContainer
-        searchConfig={config.search_config.time_search}
+        searchConfig={getConfig().search_config.time_search}
         renderContent={this.renderContent}
         {...this.props}
       />

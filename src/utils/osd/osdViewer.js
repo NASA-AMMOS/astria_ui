@@ -1,9 +1,8 @@
-import config from 'config.js';
 import debounce from 'lodash.debounce';
 import throttle from 'lodash.throttle';
 import OpenSeaDragon, { MouseTracker } from 'openseadragon';
-import { USING_CSSO } from 'src/constants/api';
 import { TileInfoFetchManager } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { pdsGetS3PathForImage } from 'src/utils/endpoints';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import { EventDispatcher } from '../events';
@@ -178,6 +177,7 @@ OpenSeaDragon.makeAjaxRequest = (...args) => new CustomMakeAjaxRequest(...args);
 export class OSDViewerManager extends EventDispatcher {
   constructor(options) {
     super(options);
+    const config = getConfig();
 
     const { debugMode, transformImage, imageSmoothingEnabled, ...overrides } = options;
     this.activeTileInfoRequests = activeTileInfoRequests;
@@ -223,7 +223,7 @@ export class OSDViewerManager extends EventDispatcher {
       visibilityRatio: 1,
       // constrainDuringPan: true,
       gestureSettingsMouse: { clickToZoom: false }, // Turn off zooms on click
-      ajaxWithCredentials: USING_CSSO,
+      ajaxWithCredentials: config.using_csso,
       loadTilesWithAjax: true, // Always use AJAX for tiles to enable retry logic
 
       // Set subpixel rounding strategies to fix issue with tile gaps in Chrome for Mac users with Apple Silicon
@@ -300,7 +300,7 @@ export class OSDViewerManager extends EventDispatcher {
 
     this.osdViewer.addHandler('tile-load-failed', (result) => {
       if (
-        USING_CSSO &&
+        config.using_csso &&
         result !== undefined &&
         result.tileRequest !== undefined &&
         result.tileRequest.status !== 'undefined' &&
@@ -359,6 +359,7 @@ export class OSDViewerManager extends EventDispatcher {
   }
 
   addLayer = async (options) => {
+    const config = getConfig();
     const {
       layer: appLayer,
       index,
@@ -393,7 +394,7 @@ export class OSDViewerManager extends EventDispatcher {
     }
     const tileInfoManager = new TileInfoFetchManager(
       buildTiledImageURL(appLayer, false, isDNStretch, stretchLow, stretchHigh, operatorControls),
-      (response) => {
+      (_response) => {
         delete activeTileInfoRequests[this.osdViewer.id][layerId];
 
         // only support tiled images and simple images
@@ -546,10 +547,10 @@ export class OSDViewerManager extends EventDispatcher {
   }
 
   // used for event overloading
-  handleDoubleClickEvent(event) {}
-  handleClickEvent(event) {}
-  handleKeydown(event) {}
-  handleKeyup(event) {}
+  handleDoubleClickEvent(_event) {}
+  handleClickEvent(_event) {}
+  handleKeydown(_event) {}
+  handleKeyup(_event) {}
   handleMouseMove(event) {
     if (this.osdViewer.world.getItemCount() > 0) {
       const webPoint = event.position;

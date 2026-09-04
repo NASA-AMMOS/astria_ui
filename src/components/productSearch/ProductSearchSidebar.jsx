@@ -12,7 +12,7 @@ import MosaicTimeline from './MosaicTimeline';
 import RDRSearch from './RDRSearch';
 import TargetSearch from './TargetSearch';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 export const PRODUCT_SEARCH_TAB_INDICES = {
   SOL: 0,
   FACET: 1,
@@ -53,6 +53,7 @@ class ProductSearchSidebar extends React.Component {
   };
 
   render() {
+    const config = getConfig();
     const { tabIndex } = this.props;
 
     const tabListClass = classNames({

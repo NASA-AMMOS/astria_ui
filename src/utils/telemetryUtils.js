@@ -1,18 +1,26 @@
 import moment from 'moment';
 import platform from 'platform';
 import { v4 as uuidv4 } from 'uuid';
-import config from '../../configs/config.js';
 import { csso } from '../utils/csso.js';
+import { getConfig } from './configRegistry.js';
 
-let appPassword = process.env.APP_ACCOUNT_PASS || null; // check for existence of app password from Docker, this should exist for all non-local deployments
-let appAccount = process.env.APP_ACCOUNT_USER || config?.mosaic_timeline?.app_account_user; // check for existence of app account from Docker, this should exist for all non-local deployments
+const isNode = typeof process === 'object' && typeof window === 'undefined';
+
+// Credentials are only needed server-side for authenticated telemetry/csso requests
+let appPassword = isNode ? process.env.APP_ACCOUNT_PASS || null : null;
+let appAccount = isNode ? process.env.APP_ACCOUNT_USER || null : null;
+
+function getAppAccount() {
+  if (!appAccount) {
+    appAccount = getConfig()?.mosaic_timeline?.app_account_user;
+  }
+  return appAccount;
+}
 
 let isometricFetch = fetch;
 if (typeof window !== 'undefined' && typeof window.fetch === 'function') {
   isometricFetch = window.fetch;
 }
-
-const isNode = typeof process === 'object' && typeof window === 'undefined';
 
 // Inspired by ASTTRO telemetry logging:
 // https://github.jpl.nasa.gov/OnSight/OnSight/blob/main/web/asttronsight/script/app/utils/telemetryHelpers.js
@@ -26,17 +34,24 @@ if (typeof localStorage === 'object' && localStorage.getItem('deviceId')) {
 
 if (typeof localStorage === 'object') localStorage.setItem('deviceId', deviceId);
 
-const baseTelemetryEvent = {
-  pid,
-  deviceId,
-  appVersion: process.env.ASTRIA_APP_VERSION,
-  origin: !isNode ? window.location.origin : 'server',
-  browser: platform.name,
-  os: platform.os.toString(),
-  ua: platform.ua,
-  level: 'info',
-  source: !isNode ? config.app_title : `${config.app_title}Server`,
-};
+let _baseTelemetryEvent = null;
+function getBaseTelemetryEvent() {
+  if (!_baseTelemetryEvent) {
+    const config = getConfig();
+    _baseTelemetryEvent = {
+      pid,
+      deviceId,
+      appVersion: process.env.ASTRIA_APP_VERSION,
+      origin: !isNode ? window.location.origin : 'server',
+      browser: platform.name,
+      os: platform.os.toString(),
+      ua: platform.ua,
+      level: 'info',
+      source: !isNode ? config.app_title : `${config.app_title}Server`,
+    };
+  }
+  return _baseTelemetryEvent;
+}
 
 export const timeSinceAwake = () => {
   return moment.now() - startTime;
@@ -44,6 +59,7 @@ export const timeSinceAwake = () => {
 
 export const send = (eventType, eventData) => {
   try {
+    const config = getConfig();
     if (!config.telemetry_url || !config.feature_flags.general.enable_telemetry_logging) {
       return null; // No telemetry service available
     }
@@ -56,7 +72,7 @@ export const send = (eventType, eventData) => {
     // Manually spread the eventData properties
     Object.keys(eventData).forEach((key) => (obj[key] = eventData[key]));
 
-    const e = Object.assign({}, baseTelemetryEvent, obj);
+    const e = Object.assign({}, getBaseTelemetryEvent(), obj);
 
     if (!isNode) e.url = window.location.href.toString();
 
@@ -85,7 +101,7 @@ export const send = (eventType, eventData) => {
     if (isNode) {
       const loginAndPost = () => {
         // Get ssosession and then post telemetry
-        csso({ user: appAccount, pass: appPassword })
+        csso({ user: getAppAccount(), pass: appPassword })
           .then((ssosession) => postTelemetry(ssosession))
           .catch((err) => {
             console.log(err);
@@ -121,14 +137,14 @@ export function logWarning(message) {
 }
 
 export function sendError(exception) {
-  const e = Object.assign({}, baseTelemetryEvent, { level: 'error' }, { exception });
+  const e = Object.assign({}, getBaseTelemetryEvent(), { level: 'error' }, { exception });
   send('error', e);
 }
 
 export function sendWarning(warning) {
   const e = Object.assign(
     {},
-    baseTelemetryEvent,
+    getBaseTelemetryEvent(),
     { level: 'error' }, // info and error are the only two options for this OCS service
     { warning }
   );
