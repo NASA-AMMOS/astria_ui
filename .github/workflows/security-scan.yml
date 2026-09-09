@@ -136,17 +136,22 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
-      # sonar.branch.name is deliberately NOT set for these first runs. Without
-      # it the scanner publishes to the project's main branch, so a manual
-      # dispatch from this feature branch is attributed to main rather than
-      # creating a second branch in SonarQube Cloud -- which is what we want
-      # while the branch carries the same code as main.
+      # sonar.branch.name is pinned to main on purpose while we validate the
+      # pipeline. This branch carries the same code as main, so the results
+      # belong on main's analysis -- and pinning guarantees a test run cannot
+      # create a second branch in SonarQube Cloud.
       #
-      # Once the results look right, add:
+      # Leaving it unset would probably do the same thing (an unset branch
+      # name published to the main analysis on MMGIS), but it depends on the
+      # scanner's CI branch auto-detection staying inactive. Setting it
+      # explicitly does not: the worst case is a failed step rather than a
+      # stray branch appearing.
+      #
+      # Once the results look right, change this to:
       #     -Dsonar.branch.name=${{ github.ref_name }}
-      # so future scans are attributed to the branch actually being analyzed.
-      # Note that any dispatch from a branch with real code changes will
-      # otherwise overwrite main's analysis.
+      # so scans are attributed to the branch actually being analyzed. Until
+      # then, be aware that a run from a branch with real code changes will
+      # publish those numbers onto main.
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2.1
         env:
@@ -156,3 +161,4 @@ jobs:
           args: >
             -Dsonar.sarifReportPaths=${{ env.SARIF_FILES }}
             -Dsonar.projectVersion=${{ env.VERSION }}
+            -Dsonar.branch.name=main
