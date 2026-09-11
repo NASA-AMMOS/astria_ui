@@ -16,29 +16,34 @@ name: Security-Scan
 # CodeQL keeps its real rule metadata -- and rebuilds tool.driver.rules as
 # id-only stubs, so every finding would otherwise import as MEDIUM regardless of
 # its true severity. fix_sarif_paths.py restores both from the pre-scrub report.
-# See .github/scripts/fix_sarif_paths.py for the measurements.
+# See .github/scripts/fix_sarif_paths.py for the measurements. The script is
+# shared verbatim with mis_rest_service and tile_service -- fix it in one, copy
+# to all.
 #
-# Manual-first: dispatch this workflow to validate a change to the scan
-# pipeline. workflow_dispatch checks out the ref you select, so it scans that
-# branch's code.
+# To validate a change to the scan pipeline, dispatch this workflow against the
+# ref you want; see the branch-attribution note on the SonarQube Scan step for
+# what that does to the published results.
+
+# One run per ref. A PR that gets new pushes supersedes its own in-progress
+# run; pushes to main are never cancelled, so main's analysis history stays
+# complete.
+concurrency:
+  group: security-scan-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 on:
   workflow_dispatch:
 
   push:
     branches:
-      # Bootstrap trigger. GitHub only offers a "Run workflow" button for
-      # workflow_dispatch once this file exists on the repository's default
-      # branch, and main currently has no workflows at all -- so until this
-      # merges, a dispatch cannot be started at all. Pushing this branch runs
-      # the workflow from the branch's own copy instead, which is how the
-      # first scan gets done before anything lands on main.
-      #
-      # Remove this entry once the workflow is on main.
-      - feature/sonarcloud-security-scan
+      - main
 
-      # Enable once the first runs look right, so merges to main are scanned.
-      # - main
+  # Any PR targeting main, whatever the source branch is called. SonarQube Cloud
+  # records these as pull request analyses, which expire with the PR and never
+  # become long-lived branches in the project.
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -48,6 +53,12 @@ jobs:
   sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
+    # A PR from a fork runs without repository secrets, so SONAR_TOKEN would be
+    # empty and the scan would fail red for a reason the contributor cannot fix.
+    # Skip instead; maintainers still get a scan when the change lands on main.
+    if: >-
+      github.event_name != 'pull_request' ||
+      github.event.pull_request.head.repo.full_name == github.repository
 
     steps:
       - name: Checkout repository
@@ -136,22 +147,25 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
-      # sonar.branch.name is pinned to main on purpose while we validate the
-      # pipeline. This branch carries the same code as main, so the results
-      # belong on main's analysis -- and pinning guarantees a test run cannot
-      # create a second branch in SonarQube Cloud.
-      #
-      # Leaving it unset would probably do the same thing (an unset branch
-      # name published to the main analysis on MMGIS), but it depends on the
-      # scanner's CI branch auto-detection staying inactive. Setting it
-      # explicitly does not: the worst case is a failed step rather than a
-      # stray branch appearing.
-      #
-      # Once the results look right, change this to:
-      #     -Dsonar.branch.name=${{ github.ref_name }}
-      # so scans are attributed to the branch actually being analyzed. Until
-      # then, be aware that a run from a branch with real code changes will
-      # publish those numbers onto main.
+      # Branch attribution. The scanner auto-detects this from the GitHub Actions
+      # environment in every case except a manual dispatch:
+      #   push to main      -> analyzed as main
+      #   pull_request      -> analyzed as a pull request; no branch is created
+      #   workflow_dispatch -> pinned to main below, so validating a change to
+      #                        the pipeline from a feature branch cannot leave a
+      #                        stray branch behind in the SonarQube project. The
+      #                        tradeoff: dispatching from a branch that carries
+      #                        real code changes publishes those numbers onto
+      #                        main. Dispatch from a branch that matches main, or
+      #                        open a PR instead.
+      - name: Determine SonarQube branch argument
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "SONAR_BRANCH_ARG=-Dsonar.branch.name=main" >> "$GITHUB_ENV"
+          else
+            echo "SONAR_BRANCH_ARG=" >> "$GITHUB_ENV"
+          fi
+
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@22918119ff8e1ca75a623e15c8296b6ea4fbe28f # v8.2.1
         env:
@@ -161,4 +175,4 @@ jobs:
           args: >
             -Dsonar.sarifReportPaths=${{ env.SARIF_FILES }}
             -Dsonar.projectVersion=${{ env.VERSION }}
-            -Dsonar.branch.name=main
+            ${{ env.SONAR_BRANCH_ARG }}
