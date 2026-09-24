@@ -2,7 +2,8 @@ name: astria
 
 services:
   astria:
-    image: ${ASTRIA_FRONTEND_DOCKER_IMAGE_NAME:-astria_ui}
+    image: ${ASTRIA_UI_DOCKER_IMAGE_NAME:-astria_ui}
+    platform: linux/amd64,linux/arm64
     build:
       context: ..
       dockerfile: docker/Dockerfile

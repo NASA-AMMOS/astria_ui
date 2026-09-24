@@ -308,7 +308,7 @@ ASTRIA_CONFIG_BUILD_SRC_PATHS="${ASTRIA_ENV_DIR}/config.base.json,${ASTRIA_ENV_D
 ASTRIA_EXTRA_DOCKER_COMPOSE="${ASTRIA_ENV_DIR}/docker-compose.backend.yml"
 
 # Docker image names (optional, defaults shown)
-ASTRIA_FRONTEND_DOCKER_IMAGE_NAME=astria_ui
+ASTRIA_UI_DOCKER_IMAGE_NAME=astria_ui
 ASTRIA_API_DOCKER_IMAGE_NAME=astria_api
 
 # Build-time configuration (baked into Docker images)

@@ -138,7 +138,7 @@ Environment variables control the build process and runtime behavior. They are t
 | Variable | Description | Default | Example |
 |----------|-------------|---------|---------|
 | `ASTRIA_PRODUCTION` | Enable production deployment mode | `false` | `true` |
-| `ASTRIA_FRONTEND_DOCKER_IMAGE_NAME` | Frontend Docker image name and tag | `astria_ui` | `astria_ui:v8.7.0` |
+| `ASTRIA_UI_DOCKER_IMAGE_NAME` | Frontend Docker image name and tag | `astria_ui` | `astria_ui:v8.7.0` |
 | `ASTRIA_API_DOCKER_IMAGE_NAME` | Backend API Docker image name and tag | `astria_api` | `astria_api:v8.7.0` |
 | `ASTRIA_UI_PORT` | **Build arg**: Frontend port baked into image | `3000` | `8080` |
 | `ASTRIA_PUBLIC_URL_PATH` | **Build arg**: Base URL path baked into image | `/` | `/astria/` |
@@ -285,7 +285,7 @@ ASTRIA_APP_VERSION=v2.1.0-m2020
 ASTRIA_CONFIG_BUILD_SRC_PATHS="${ASTRIA_ENV_DIR}/config.base.json,${ASTRIA_ENV_DIR}/config.ops.json"
 
 # Docker image names for deployment
-ASTRIA_FRONTEND_DOCKER_IMAGE_NAME="astria_m2020_ui:v2.1.0"
+ASTRIA_UI_DOCKER_IMAGE_NAME="astria_m2020_ui:v2.1.0"
 ASTRIA_API_DOCKER_IMAGE_NAME="astria_m2020_api:v2.1.0"
 
 # Build arguments (baked into Docker images)
