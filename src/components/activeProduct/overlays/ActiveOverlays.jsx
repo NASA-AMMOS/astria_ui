@@ -38,6 +38,7 @@ import {
   getConfidenceLevelLabel,
   getDescriptionsForProduct,
   getIDForLayer,
+  getImageConfigDescriptionForProduct,
   isAnnotatableProduct,
   isCustomProduct,
   isMosaic,
@@ -70,6 +71,7 @@ class ActiveOverlay extends React.Component {
       setOperatorControlsProduct,
       operatorControlsMap,
       productDescriptions,
+      imageConfigDescriptions,
     } = this.props;
     const opControlsActive =
       typeof operatorControlsMap[getPropFromProduct(overlay, config.es_mappings.product_type)] !== 'undefined';
@@ -122,6 +124,7 @@ class ActiveOverlay extends React.Component {
         dragging={dragging}
         product={overlay}
         productFamilyMetadata={getDescriptionsForProduct(overlay, productDescriptions)}
+        fallbackDescription={getImageConfigDescriptionForProduct(overlay, imageConfigDescriptions)}
         overlayActions={overlayActions}
         selectable
         opacityAdjustable
@@ -134,6 +137,10 @@ class ActiveOverlay extends React.Component {
     );
   }
 }
+
+ActiveOverlay.propTypes = {
+  imageConfigDescriptions: PropTypes.object,
+};
 
 class ActiveAnnotation extends React.Component {
   render() {
@@ -463,6 +470,7 @@ class ActiveOverlays extends React.Component {
       setOperatorControlsProduct,
       operatorControlsMap,
       productDescriptions,
+      imageConfigDescriptions,
       overlays: allActiveOverlays,
       fetchingInitialData,
       fetchingGroups,
@@ -537,6 +545,10 @@ class ActiveOverlays extends React.Component {
 
     if (isSingleFrame(activeProduct) || isMosaic(activeProduct)) {
       baseImageOptionalProps.productFamilyMetadata = getDescriptionsForProduct(activeProduct, productDescriptions);
+      baseImageOptionalProps.fallbackDescription = getImageConfigDescriptionForProduct(
+        activeProduct,
+        imageConfigDescriptions
+      );
     }
 
     const anythingActive = numActiveOverlays > 0 || matchingActiveAnnotations.length > 0 || targets.length > 0;
@@ -741,6 +753,7 @@ class ActiveOverlays extends React.Component {
                           >
                             <ActiveOverlay
                               productDescriptions={productDescriptions}
+                              imageConfigDescriptions={imageConfigDescriptions}
                               dragging={draggableSnapshot.isDragging}
                               overlay={overlay}
                               overlaysVisible={overlaysVisible}
@@ -780,6 +793,7 @@ ActiveOverlays.propTypes = {
   user: PropTypes.object.isRequired,
   annotations: PropTypes.array.isRequired,
   productDescriptions: PropTypes.object,
+  imageConfigDescriptions: PropTypes.object,
   handleRemoveAllAnnotations: PropTypes.func.isRequired,
   handleAnnotationAdd: PropTypes.func.isRequired,
   handleAnnotationEdit: PropTypes.func.isRequired,

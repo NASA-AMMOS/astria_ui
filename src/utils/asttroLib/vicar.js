@@ -1,7 +1,7 @@
-import { Vector3 } from 'src/utils/asttroLib/vector3';
-import { Quaternion } from 'src/utils/asttroLib/quaternion';
 import * as frameDefinition from 'src/utils/asttroLib/frameDefinition';
+import { Quaternion } from 'src/utils/asttroLib/quaternion';
 import * as units from 'src/utils/asttroLib/units';
+import { Vector3 } from 'src/utils/asttroLib/vector3';
 
 const LinearityMode = {
   Perspective: { id: 1, linearity: 1 },
@@ -118,8 +118,8 @@ const cameraModelFromVicarLabel = (vicarLabel = {}) => {
     }
   } else if (
     vicarLabel.SURFACE_MODEL_PARMS &&
-    vicarLabel.SURFACE_MODEL_PARMS.SURFACE_MODEL_TYPE === 'PLANE' &&
-    vicarLabel.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE === 'CYLINDRICAL'
+    vicarLabel.SURFACE_MODEL_PARMS.SURFACE_MODEL_TYPE.toLowerCase() === 'plane' &&
+    vicarLabel.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE.toLowerCase() === 'cylindrical'
   ) {
     const { SURFACE_MODEL_PARMS } = vicarLabel;
     cameraModel.type = 'CYLINDRICAL';

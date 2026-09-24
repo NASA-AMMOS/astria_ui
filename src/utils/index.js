@@ -1038,6 +1038,25 @@ export const getDescriptionsForProduct = (product, productDescriptions) => {
   return productDescriptions[typeKey];
 };
 
+export const getImageConfigDescriptionForProduct = (product, imageConfigDescriptions) => {
+  if (!product || !imageConfigDescriptions?.missions) return null;
+
+  const imageType = getPropFromProduct(product, config.es_mappings.image_type);
+  const productType = getPropFromProduct(product, config.es_mappings.product_type);
+  const mission = config.es_mappings.mission ? getPropFromProduct(product, config.es_mappings.mission) : null;
+  if (!imageType) return null;
+
+  const missionNamespace = config.product_description_mission_mappings?.[mission] || mission;
+  const missionDescriptions =
+    imageConfigDescriptions.missions[missionNamespace] || imageConfigDescriptions.missions.DEFAULT;
+  const imageDescription = missionDescriptions?.imageTypes?.[imageType];
+  if (!imageDescription) return null;
+
+  const productDescription = imageDescription.products?.[productType]?.description;
+  if (Array.isArray(productDescription)) return productDescription.join('; ');
+  return productDescription || imageDescription.description || null;
+};
+
 export const capitalize = (s) => {
   let capitalizedString = s;
   if (typeof s[0] === 'string') capitalizedString = s[0].toUpperCase() + s.substring(1);

@@ -17,6 +17,10 @@ export const setProductDescriptions = (productDescriptions) => {
   return { type: 'SET_PRODUCT_DESCRIPTIONS', productDescriptions };
 };
 
+export const setImageConfigDescriptions = (imageConfigDescriptions) => {
+  return { type: 'SET_IMAGE_CONFIG_DESCRIPTIONS', imageConfigDescriptions };
+};
+
 export const addStarredMetadataField = (field, isVicar = false) => {
   return (dispatch, getState) => {
     const fields = getState().app.starredMetadataFields;

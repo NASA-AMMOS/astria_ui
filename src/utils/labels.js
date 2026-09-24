@@ -305,9 +305,6 @@ export async function convertPDS4ToVICAR(imageProduct) {
         ?.getElementsByTagName('geom:Coordinate_Space_Indexed')[0]
         ?.getElementsByTagName('geom:Coordinate_Space_Index') || []
     )?.map((n) => n.getElementsByTagName('geom:index_value_number')[0]?.textContent);
-    label.SURFACE_MODEL_PARMS.MAP_PROJECTION_TYPE = localCartNode
-      ?.getElementsByTagName('cart:Map_Projection_Lander')[0]
-      ?.getElementsByTagName('cart:lander_map_projection_name')[0]?.textContent;
     label.SURFACE_MODEL_PARMS.SURFACE_GROUND_LOCATION = [
       localCartNode
         ?.getElementsByTagName('cart:Surface_Model_Parameters')[0]
@@ -342,20 +339,23 @@ export async function convertPDS4ToVICAR(imageProduct) {
         ?.getElementsByTagName('cart:Vector_Surface_Normal')[0]
         ?.getElementsByTagName('cart:z_unit')[0]?.textContent,
     ];
+    label.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE = localCartNode
+      ?.getElementsByTagName('cart:Map_Projection_Lander')[0]
+      ?.getElementsByTagName('cart:lander_map_projection_name')[0]?.textContent;
     label.SURFACE_PROJECTION_PARMS.PROJECTION_ORIGIN_VECTOR = [
       localCartNode
         ?.getElementsByTagName('cart:Map_Projection_Lander')[0]
-        ?.getElementsByTagName(`cart:${label.SURFACE_MODEL_PARMS.MAP_PROJECTION_TYPE}`)[0]
+        ?.getElementsByTagName(`cart:${label.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE}`)[0]
         ?.getElementsByTagName('cart:Vector_Projection_Origin')[0]
         ?.getElementsByTagName('cart:x_position')[0]?.textContent,
       localCartNode
         ?.getElementsByTagName('cart:Map_Projection_Lander')[0]
-        ?.getElementsByTagName(`cart:${label.SURFACE_MODEL_PARMS.MAP_PROJECTION_TYPE}`)[0]
+        ?.getElementsByTagName(`cart:${label.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE}`)[0]
         ?.getElementsByTagName('cart:Vector_Projection_Origin')[0]
         ?.getElementsByTagName('cart:y_position')[0]?.textContent,
       localCartNode
         ?.getElementsByTagName('cart:Map_Projection_Lander')[0]
-        ?.getElementsByTagName(`cart:${label.SURFACE_MODEL_PARMS.MAP_PROJECTION_TYPE}`)[0]
+        ?.getElementsByTagName(`cart:${label.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE}`)[0]
         ?.getElementsByTagName('cart:Vector_Projection_Origin')[0]
         ?.getElementsByTagName('cart:z_position')[0]?.textContent,
     ];
@@ -373,33 +373,33 @@ export async function convertPDS4ToVICAR(imageProduct) {
     )?.map((n) => n.getElementsByTagName('geom:index_value_number')[0]?.textContent);
     label.SURFACE_PROJECTION_PARMS.START_AZIMUTH = localCartNode
       ?.getElementsByTagName('cart:Map_Projection_Lander')[0]
-      ?.getElementsByTagName(`cart:${label.SURFACE_MODEL_PARMS.MAP_PROJECTION_TYPE}`)[0]
+      ?.getElementsByTagName(`cart:${label.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE}`)[0]
       ?.getElementsByTagName('cart:start_azimuth')[0]?.textContent;
     label.SURFACE_PROJECTION_PARMS.MAP_RESOLUTION = [
       localCartNode
         ?.getElementsByTagName('cart:Map_Projection_Lander')[0]
-        ?.getElementsByTagName(`cart:${label.SURFACE_MODEL_PARMS.MAP_PROJECTION_TYPE}`)[0]
+        ?.getElementsByTagName(`cart:${label.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE}`)[0]
         ?.getElementsByTagName('cart:pixel_scale_x')[0]?.textContent,
       localCartNode
         ?.getElementsByTagName('cart:Map_Projection_Lander')[0]
-        ?.getElementsByTagName(`cart:${label.SURFACE_MODEL_PARMS.MAP_PROJECTION_TYPE}`)[0]
+        ?.getElementsByTagName(`cart:${label.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE}`)[0]
         ?.getElementsByTagName('cart:pixel_scale_y')[0]?.textContent,
     ];
     label.SURFACE_PROJECTION_PARMS.MAP_RESOLUTION__UNIT = [
       localCartNode
         ?.getElementsByTagName('cart:Map_Projection_Lander')[0]
-        ?.getElementsByTagName(`cart:${label.SURFACE_MODEL_PARMS.MAP_PROJECTION_TYPE}`)[0]
+        ?.getElementsByTagName(`cart:${label.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE}`)[0]
         ?.getElementsByTagName('cart:pixel_scale_x')[0]
         ?.getAttribute('unit'),
     ];
     label.SURFACE_PROJECTION_PARMS.ZERO_ELEVATION_LINE = (
       localCartNode
         ?.getElementsByTagName('cart:Map_Projection_Lander')[0]
-        ?.getElementsByTagName(`cart:${label.SURFACE_MODEL_PARMS.MAP_PROJECTION_TYPE}`)[0]
+        ?.getElementsByTagName(`cart:${label.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE}`)[0]
         ?.getElementsByTagName('cart:zero_elevation_line')[0] ||
       localCartNode
         ?.getElementsByTagName('cart:Map_Projection_Lander')[0]
-        ?.getElementsByTagName(`cart:${label.SURFACE_MODEL_PARMS.MAP_PROJECTION_TYPE}`)[0]
+        ?.getElementsByTagName(`cart:${label.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE}`)[0]
         ?.getElementsByTagName('cart:projection_elevation_line')[0]
     )?.textContent;
 
