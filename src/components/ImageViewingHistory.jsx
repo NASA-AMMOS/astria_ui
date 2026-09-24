@@ -7,13 +7,13 @@ import EDRListStyles from 'src/styles/EdrList.module.css';
 import headerStyles from 'src/styles/Header.module.css';
 import ImageViewingHistoryStyles from 'src/styles/ImageViewingHistory.module.css';
 import { getURLForProductWithExistingParams, openInNewTab } from 'src/utils';
-import { getMetadataForProducts, searchBaseKeyInclusionSet } from 'src/utils/dataQuery';
+import { getMetadataForProducts, getSearchBaseKeyInclusionSet } from 'src/utils/dataQuery';
 import { logError } from 'src/utils/telemetryUtils';
 import { ChevronDownIcon, ExternalLink, HistoryOutlinedIcon } from './common/Icons';
 import ImageResult from './common/ImageResult';
 import MultiSelect from './common/MultiSelect';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 class ImageViewingHistory extends React.Component {
   constructor(props) {
@@ -49,6 +49,7 @@ class ImageViewingHistory extends React.Component {
   }
 
   getImageHistoryMetadata = async () => {
+    const config = getConfig();
     try {
       this.setState({
         fetchingImageHistoryMetadata: true,
@@ -67,7 +68,7 @@ class ImageViewingHistory extends React.Component {
           null,
           config.es_mappings.img_url.key, // lookup by full path
           false,
-          searchBaseKeyInclusionSet
+          getSearchBaseKeyInclusionSet()
         );
       }
 
@@ -136,7 +137,7 @@ class ImageViewingHistory extends React.Component {
           showAlt={false}
         />
         <div className={classNames(EDRListStyles.filenameText, ImageViewingHistoryStyles.filenameText)}>
-          {getPropFromProduct(product, config.es_mappings.filename)}
+          {getPropFromProduct(product, getConfig().es_mappings.filename)}
         </div>
       </div>
     );
@@ -227,7 +228,7 @@ class ImageViewingHistory extends React.Component {
                     {imageHistoryProducts.map((product) => {
                       return (
                         <div
-                          key={`${getPropFromProduct(product, config.es_mappings.id)}_history`}
+                          key={`${getPropFromProduct(product, getConfig().es_mappings.id)}_history`}
                           className={ImageViewingHistoryStyles.productButtonContainer}
                         >
                           <button

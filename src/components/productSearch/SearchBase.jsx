@@ -29,7 +29,7 @@ import {
   objAlphaSort,
   openInNewTab,
 } from 'src/utils';
-import { getBaseSearchQuery, performESImageSearch, searchBaseKeyInclusionSet } from 'src/utils/dataQuery';
+import { getBaseSearchQuery, getSearchBaseKeyInclusionSet, performESImageSearch } from 'src/utils/dataQuery';
 import {
   buildSearchOptions,
   determineFilenameDiffs,
@@ -46,7 +46,7 @@ import FilenameSearchResult from './searchResults/FilenameSearchResult';
 import ImageSearchResult from './searchResults/ImageSearchResult';
 import TextSearchResult from './searchResults/TextSearchResult';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 class SearchBase extends React.Component {
   constructor(props) {
     super(props);
@@ -472,6 +472,7 @@ class SearchBase extends React.Component {
   };
 
   onKeyUp = (event) => {
+    const config = getConfig();
     const { activeSearchProduct, isVisible } = this.props;
     const { results, numberOfResults } = this.state;
 
@@ -638,11 +639,12 @@ class SearchBase extends React.Component {
       searchConfig,
       page,
       viewOptions,
-      searchBaseKeyInclusionSet,
+      searchBaseKeyInclusionSet: getSearchBaseKeyInclusionSet(),
     });
   }
 
   async search() {
+    const config = getConfig();
     const { groupResults: stateGroupResults, page, results } = this.state;
     const { onResultsChange, viewOptions, processSearchResults } = this.props;
 
@@ -803,6 +805,7 @@ class SearchBase extends React.Component {
   }
 
   productIsActive = (item) => {
+    const config = getConfig();
     const { activeSearchProduct, productIsActive } = this.props;
 
     // if we are given a custom active checker
@@ -817,6 +820,7 @@ class SearchBase extends React.Component {
   };
 
   renderSearchResult(item, index) {
+    const config = getConfig();
     const { viewOptions, imageResultTitleOnly } = this.props;
     const { view: stateView, resultSize: stateResultSize } = this.state;
 
@@ -951,6 +955,7 @@ class SearchBase extends React.Component {
   };
 
   renderSearchControlComponents = () => {
+    const config = getConfig();
     const {
       sortByField: stateSortByField,
       sortDirection: stateSortDirection,
@@ -1223,6 +1228,7 @@ class SearchBase extends React.Component {
   }
 
   renderSearchResults() {
+    const config = getConfig();
     const { processResults, searchConfig, manualLoadMore, viewOptions, parentScroll } = this.props;
     const {
       results,

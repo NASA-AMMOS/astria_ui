@@ -1,9 +1,9 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import ImageResult from 'src/components/common/ImageResult';
 import Tooltip from 'src/components/common/Tooltip';
 import EDRListStyles from 'src/styles/EdrList.module.css';
 import { getDefined } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { formatFilenameLabel } from 'src/utils/searchUtils';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
@@ -15,6 +15,7 @@ const FilenameSearchResult = ({
   EDRGroupTooltipEnabled: stateEDRGroupTooltipEnabled,
   groupResults: stateGroupResults,
 }) => {
+  const config = getConfig();
   const resultSize = getDefined(viewOptions.resultSize, stateResultSize);
   const filenameDiffingEnabled = getDefined(viewOptions.filenameDiffingEnabled, stateFilenameDiffingEnabled);
   const EDRGroupTooltipEnabled = getDefined(viewOptions.EDRGroupTooltipEnabled, stateEDRGroupTooltipEnabled);
@@ -27,7 +28,7 @@ const FilenameSearchResult = ({
 
   const formatFilename = (string, indexDiffMap) => {
     const formatted = formatFilenameLabel(string, indexDiffMap, EDRListStyles.highlightedFilenameComponent);
-    return formatted.map((formattedItem, index) => {
+    return formatted.map((formattedItem, _index) => {
       if (typeof formattedItem === 'string') {
         return formattedItem;
       }

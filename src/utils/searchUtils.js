@@ -1,5 +1,5 @@
-import config from 'config.js';
 import { DeepDiffMapper, getDefined } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { getAlias, getPropFromProduct } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
 
@@ -170,6 +170,7 @@ export function shouldClearInversion(facet, values, defaultValues) {
  * @returns {string} Result label
  */
 export function getResultLabel(item, viewKey, keywordsMap = {}) {
+  const config = getConfig();
   if (viewKey === 'annotation') {
     return item[config.es_mappings.annotation.title.key] || 'Untitled Annotation';
   } else if (viewKey === 'image_feature') {
@@ -199,7 +200,7 @@ export function processFacetsFromSearchConfig(searchConfig, createRef) {
     facets.push(obj);
   });
 
-  const sortOrder = searchConfig.sort_order || config.search_config.facet_search.sort_order;
+  const sortOrder = searchConfig.sort_order || getConfig().search_config.facet_search.sort_order;
 
   facets.forEach((facet) => {
     facetsMap[facet.facetID] = facet;
@@ -259,7 +260,7 @@ export function buildSearchOptions({
   const sorts = [
     resolvedSortByField
       ? { [resolvedSortByField.value]: { order: resolvedSortDirection, unmapped_type: 'long' } }
-      : { [config.es_mappings.time1.key]: { order: 'desc', unmapped_type: 'long' } },
+      : { [getConfig().es_mappings.time1.key]: { order: 'desc', unmapped_type: 'long' } },
     { ocs_name: { order: 'asc', unmapped_type: 'long' } },
   ];
 

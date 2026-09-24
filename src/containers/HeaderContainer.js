@@ -14,8 +14,9 @@ import { populateSearchValues } from '../actions/activeSearchProduct';
 import { clearBrowseValues, clearFacetSearchValues } from '../actions/searchActions';
 import { getPropFromProduct } from '../utils/sharedUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 const mapStateToProps = (state) => {
+  const config = getConfig();
   return {
     activeSearchProductId: getPropFromProduct(state.activeSearchProduct.searchProduct, config.es_mappings.id),
     imageHistory: state.activeSearchProduct.imageHistory,

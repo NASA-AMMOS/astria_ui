@@ -8,6 +8,7 @@ services:
       ASTRIA_PROXY_HOSTNAME: 'host.docker.internal'
       ASTRIA_UI_PORT: ${ASTRIA_UI_PORT:-3000}
       ASTRIA_API_PORT: ${ASTRIA_API_PORT:-3001}
+      ASTRIA_MISSION_CONFIG_NAME: ${ASTRIA_MISSION_CONFIG_NAME:-config}
     volumes:
       - ..:/app:ro
     working_dir: /app

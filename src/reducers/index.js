@@ -1,5 +1,5 @@
-import config from 'config.js';
 import { combineReducers } from 'redux';
+import configReducer from 'src/reducers/config';
 import {
   ACTIVE_LAYERS,
   ACTIVE_SEARCH_PRODUCT,
@@ -23,7 +23,6 @@ import {
 } from 'src/reducers/constants';
 import { assign } from 'src/reducers/utils';
 import { getIDForLayer, isTarget } from 'src/utils';
-import { getPropFromProduct } from 'src/utils/sharedUtils';
 
 const dataCursor = (state = DEFAULT_DATA_CURSOR, action) => {
   switch (action.type) {
@@ -108,16 +107,18 @@ const activeSearchProduct = (state = ACTIVE_SEARCH_PRODUCT, action) => {
       let imageHistoryIDs = [];
       try {
         imageHistoryIDs = JSON.parse(localStorage.getItem('imageViewingHistory')) || [];
-      } catch (err) {}
+      } catch (_err) {
+        /* ignore */
+      }
 
       // Check if product exists in history
-      const index = imageHistoryIDs.findIndex((x) => x === getPropFromProduct(action.product, config.es_mappings.id));
+      const index = imageHistoryIDs.findIndex((x) => x === action.productId);
 
       // Remove old instance of product if found
       if (index > -1) imageHistoryIDs.splice(index, 1);
 
       // Add the s3Path of the product to the top of the list
-      imageHistoryIDs.unshift(getPropFromProduct(action.product, config.es_mappings.id));
+      imageHistoryIDs.unshift(action.productId);
 
       // Limit the list to 100 items
       imageHistoryIDs = imageHistoryIDs.slice(0, 100);
@@ -138,7 +139,7 @@ const activeSearchProduct = (state = ACTIVE_SEARCH_PRODUCT, action) => {
       // Also preserve any metadata from the old state
       const newImageHistory = imageHistoryIDs.map((id) => {
         let metadata = null;
-        if (id === getPropFromProduct(action.product, config.es_mappings.id)) metadata = action.product;
+        if (id === action.productId) metadata = action.product;
         else if (existingMetadata[id]) metadata = existingMetadata[id];
         return { [id]: metadata };
       });
@@ -836,7 +837,7 @@ const imageLayers = (state = ACTIVE_LAYERS, action) => {
       });
     case 'SET_OPERATOR_CONTROLS_PRODUCT':
       return assign(state, {
-        operatorControlsProduct: action.product ? getPropFromProduct(action.product, config.es_mappings.id) : null,
+        operatorControlsProduct: action.productId ?? null,
       });
     case 'SET_OPERATOR_CONTROLS_FOR_IMAGE_TYPE':
       return assign(state, {
@@ -863,7 +864,7 @@ const imageLayers = (state = ACTIVE_LAYERS, action) => {
       return assign(state, {
         preferredImageForType: {
           ...state.preferredImageForType,
-          [getPropFromProduct(action.product, config.es_mappings.product_type)]: action.product,
+          [action.productType]: action.product,
         },
       });
     case 'CLEAR_PREFERRED_IMAGES':
@@ -1004,6 +1005,7 @@ const help = (state = DEFAULT_HELP, action) => {
 };
 
 export default combineReducers({
+  config: configReducer,
   app,
   activeSearchProduct,
   dataCursor,

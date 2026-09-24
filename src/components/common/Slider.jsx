@@ -1,10 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import RCSlider from 'rc-slider';
 import classNames from 'classnames';
 import throttle from 'lodash.throttle';
-import Tooltip from './Tooltip';
+import PropTypes from 'prop-types';
+import RCSlider from 'rc-slider';
+import React from 'react';
 import sliderStyles from '../../styles/Slider.module.css';
+import Tooltip from './Tooltip';
 
 const Handle = RCSlider.Handle;
 
@@ -53,7 +53,16 @@ export class Slider extends React.Component {
   }
 
   render() {
-    const { minimal, onChange, type, showTooltip, className, wrapperClassName, disabled, ...restProps } = this.props;
+    const {
+      minimal,
+      onChange: _onChange,
+      type,
+      showTooltip,
+      className,
+      wrapperClassName,
+      disabled,
+      ...restProps
+    } = this.props;
     const wrapperClass = classNames({
       [sliderStyles.sliderWrapper]: true,
       [wrapperClassName]: typeof wrapperClassName !== 'undefined',

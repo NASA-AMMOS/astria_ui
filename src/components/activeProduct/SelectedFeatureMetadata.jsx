@@ -7,7 +7,7 @@ import InlineLabeledValue from 'src/components/common/InlineLabeledValue';
 import SelectedFeatureMetadataStyles from 'src/styles/SelectedFeatureMetadata.module.css';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 class SelectedFeatureMetadata extends React.Component {
   constructor(props) {
     super(props);
@@ -20,6 +20,7 @@ class SelectedFeatureMetadata extends React.Component {
   };
 
   render() {
+    const config = getConfig();
     const { selectedFeature, keywordsMap, zoomToFeature } = this.props;
 
     if (!selectedFeature) return null;

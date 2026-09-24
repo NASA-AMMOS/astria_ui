@@ -10,7 +10,7 @@ import ProductDetailsStyles from 'src/styles/ProductDetails.module.css';
 import tabsStyles from 'src/styles/Tabs.module.css';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 const LOCALSTORAGE_TAB_INDEX_KEY = 'relatedImagesTabIndex';
 
 export class RelatedImages extends React.Component {
@@ -31,6 +31,7 @@ export class RelatedImages extends React.Component {
   };
 
   render() {
+    const config = getConfig();
     const {
       product,
       fetchingInitialData,

@@ -301,7 +301,7 @@ export const OSDScalebarMixin = (base) =>
         scalebar.controller = new AbortController();
         getScaleData(baseImage, groups, iLocY, iLocX, preferredImageForType, scalebar.controller.signal)
           .then(renderScalebar)
-          .catch((err) => {
+          .catch((_err) => {
             renderScalebar({ pixelSize: -1, approximate: true });
             return;
           });

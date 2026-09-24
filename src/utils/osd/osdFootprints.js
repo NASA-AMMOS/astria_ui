@@ -1,7 +1,7 @@
 import { fabric } from 'fabric';
 import * as telemetry from 'src/utils/telemetryUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 import { getPropFromProduct } from '../sharedUtils';
 // NOTE: requires OSDFootprintsMixin(OSDFabricMixin(OSDViewer))
 
@@ -9,6 +9,7 @@ export const OSDFootprintsMixin = (base) =>
   class extends base {
     constructor(options) {
       super(options);
+      const config = getConfig();
 
       this._activeFootprints = [];
       this._allowInteractions = false;
@@ -116,6 +117,7 @@ export const OSDFootprintsMixin = (base) =>
     }
 
     getAllFootprintsForFilename(filename) {
+      const config = getConfig();
       return Object.values(this._footprints).filter((footprint) => {
         return getPropFromProduct(footprint, config.es_mappings.filename) === filename;
       });
@@ -167,6 +169,7 @@ export const OSDFootprintsMixin = (base) =>
     }
 
     zoomToFootprintByOCSName(ocs_name, footprints) {
+      const config = getConfig();
       const matchingFootprints = Object.values(footprints).filter((footprint) => {
         return getPropFromProduct(footprint, config.es_mappings.filename) === ocs_name;
       });

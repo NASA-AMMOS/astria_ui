@@ -30,7 +30,6 @@ import { getNormalizeImageLabel } from 'src/utils/labels';
 import * as telemetry from 'src/utils/telemetryUtils';
 import { getPropFromProduct } from '../utils/sharedUtils';
 
-import config from 'config.js';
 let metadataController = null;
 let animationTimeout = null;
 
@@ -45,6 +44,7 @@ export const setBaseLayer = (
   normalizeLabel = true
 ) => {
   return (dispatch, getState) => {
+    const { config } = getState();
     return new Promise(async (resolve) => {
       // pull relevant state
       let state = getState();
@@ -177,6 +177,7 @@ export const setBaseLayer = (
 export const addLayer = (newLayer, opacity = 1, index) => {
   return (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     // Check geometry of it vs base, if it is not the same throw error.
     const layers = state.imageLayers.layers;
     if (
@@ -212,6 +213,7 @@ export const addLayer = (newLayer, opacity = 1, index) => {
 export const appendLayer = (layer, opacity, index) => {
   return (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     const osdRefs = state.imageViewer.osdRefs;
     const { osdWrapper } = osdRefs;
 
@@ -244,6 +246,7 @@ export const appendLayer = (layer, opacity, index) => {
 export const replaceLayerAtIndex = (layer, index) => {
   return (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     const osdRefs = state.imageViewer.osdRefs;
     const { osdWrapper } = osdRefs;
 
@@ -509,6 +512,7 @@ export const toggleOverlaysVisible = (visible, setDisplay = false) => {
 };
 
 export const updateSourceImages = (baseImage) => (dispatch, getState) => {
+  const { config } = getState();
   if (!config.feature_flags.active_product.enable_related_images) return;
   return new Promise(async (resolve) => {
     const initDisplayCounter = getState().imageLayers.displayCounter;
@@ -531,6 +535,7 @@ export const clearSourceImages = () => {
 };
 
 export const updateSourceImageFootprints = (baseImage) => (dispatch, getState) => {
+  const { config } = getState();
   if (!config.feature_flags.active_product.enable_map) return;
   return new Promise(async (resolve) => {
     const initDisplayCounter = getState().imageLayers.displayCounter;
@@ -619,6 +624,7 @@ export const setSelectedSourceImageFootprint = (footprint) => {
 };
 
 export const updateAssociatedMosaics = (baseImage) => (dispatch, getState) => {
+  const { config } = getState();
   if (!config.feature_flags.active_product.enable_related_images) return;
   return new Promise(async (resolve) => {
     const initDisplayCounter = getState().imageLayers.displayCounter;
@@ -645,6 +651,7 @@ export const clearAssociatedMosaics = () => {
 };
 
 export const updateProductFreshness = (baseImage) => (dispatch, getState) => {
+  const { config } = getState();
   if (!config.feature_flags.active_product.enable_product_freshness) return;
   return new Promise(async (resolve) => {
     const initDisplayCounter = getState().imageLayers.displayCounter;
@@ -669,6 +676,7 @@ export const clearProductFreshness = () => {
 };
 
 export const updateTargetListing = (baseImage) => (dispatch, getState) => {
+  const { config } = getState();
   if (!config.feature_flags.active_product.enable_targets) return;
   return new Promise(async (resolve) => {
     const initDisplayCounter = getState().imageLayers.displayCounter;
@@ -695,8 +703,9 @@ export const updateTargetListing = (baseImage) => (dispatch, getState) => {
   });
 };
 
-export const clearTargetListing = () => {
-  return { type: 'CLEAR_ITEMS_FROM_GROUPS', key: config.es_mappings.object_type.key, value: 'm20-target' };
+export const clearTargetListing = () => (dispatch, getState) => {
+  const { config } = getState();
+  dispatch({ type: 'CLEAR_ITEMS_FROM_GROUPS', key: config.es_mappings.object_type.key, value: 'm20-target' });
 };
 
 export const addAllTargets = (layers, toggleVisible, opacity = 1) => {
@@ -883,6 +892,7 @@ export function updateLayer(layer) {
 
 export const setProductMetadataOpen = (product, fetchMetadata = true) => {
   return (dispatch, getState) => {
+    const { config } = getState();
     if (product && fetchMetadata) {
       // abort previous requests
       if (metadataController) {
@@ -945,6 +955,7 @@ export const toggleAutoAddRDRs = () => {
 export const preserveRDRs = (oldLayers, newBaseLayer) => {
   return (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     const groups = state.activeSearchProduct.groups;
 
     // get a list of appropriate overlays to preserve
@@ -990,6 +1001,7 @@ export const preserveRDRs = (oldLayers, newBaseLayer) => {
 export const preserveTargets = (oldLayers, newBaseLayer) => {
   return (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     const groups = state.activeSearchProduct.groups;
 
     // get a list of appropriate overlays to preserve
@@ -1022,6 +1034,7 @@ export const preserveTargets = (oldLayers, newBaseLayer) => {
 export const showAllImageFeatures = (newBaseLayer) => {
   return (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     const groups = state.activeSearchProduct.groups;
 
     // get a list of appropriate features to add
@@ -1048,12 +1061,18 @@ export const togglePreserveTargets = () => {
   };
 };
 
-export const setOperatorControlsProduct = (product) => {
-  return { type: 'SET_OPERATOR_CONTROLS_PRODUCT', product };
+export const setOperatorControlsProduct = (product) => (dispatch, getState) => {
+  const { config } = getState();
+  dispatch({
+    type: 'SET_OPERATOR_CONTROLS_PRODUCT',
+    product,
+    productId: product ? getPropFromProduct(product, config.es_mappings.id) : null,
+  });
 };
 
 export const setOperatorControlsForProduct = (product, controlOptions, queryStrings) => {
   return (dispatch, getState) => {
+    const { config } = getState();
     dispatch({
       type: 'SET_OPERATOR_CONTROLS_FOR_IMAGE_TYPE',
       imageType: getPropFromProduct(product, config.es_mappings.product_type),
@@ -1120,6 +1139,7 @@ export const setOperatorControlsForProduct = (product, controlOptions, queryStri
 
 export const resetOperatorControlsForProduct = (product) => {
   return (dispatch, getState) => {
+    const { config } = getState();
     dispatch({
       type: 'RESET_OPERATOR_CONTROLS_FOR_IMAGE_TYPE',
       imageType: getPropFromProduct(product, config.es_mappings.product_type),
@@ -1187,6 +1207,7 @@ export const clearOperatorControls = () => {
 
 export const selectNewRDRVersion = (oldProduct, newProduct) => {
   return (dispatch, getState) => {
+    const { config } = getState();
     dispatch(setPreferredImageForType(newProduct));
 
     const oldProductId = getPropFromProduct(oldProduct, config.es_mappings.id);
@@ -1199,8 +1220,13 @@ export const selectNewRDRVersion = (oldProduct, newProduct) => {
   };
 };
 
-export const setPreferredImageForType = (product) => {
-  return { type: 'SET_PREFERRED_IMAGE_FOR_TYPE', product };
+export const setPreferredImageForType = (product) => (dispatch, getState) => {
+  const { config } = getState();
+  dispatch({
+    type: 'SET_PREFERRED_IMAGE_FOR_TYPE',
+    product,
+    productType: getPropFromProduct(product, config.es_mappings.product_type),
+  });
 };
 
 export const clearPreferredImages = () => {
@@ -1277,6 +1303,7 @@ export const setSourceImageFootprintsFilter = (filter) => {
 
 export const setSelectedFootprint = (product, setInOSD = false) => {
   return (dispatch, getState) => {
+    const { config } = getState();
     if (setInOSD) {
       const state = getState();
       const osdRefs = state.imageViewer.osdRefs;
@@ -1303,6 +1330,7 @@ export const clearSelectedFootprint = () => {
 export const highlightFootprint = (product) => {
   return (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     const osdRefs = state.imageViewer.osdRefs;
     const { osdWrapper } = osdRefs;
 
@@ -1316,6 +1344,7 @@ export const highlightFootprint = (product) => {
 export const unhighlightFootprint = (product) => {
   return (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     const osdRefs = state.imageViewer.osdRefs;
     const { osdWrapper } = osdRefs;
     osdWrapper.setFootprintHighlightStyleByOCSName(
@@ -1328,6 +1357,7 @@ export const unhighlightFootprint = (product) => {
 export const zoomToFootprint = (product) => {
   return (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     const osdRefs = state.imageViewer.osdRefs;
     const { osdWrapper } = osdRefs;
 

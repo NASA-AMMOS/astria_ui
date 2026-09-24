@@ -14,7 +14,7 @@ import { Slider } from '../common/Slider';
 import Toggle from '../common/Toggle';
 import ImageHistogram from './ImageHistogram';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 const stretchModeOptions = [
   { value: 'percentStretch', label: 'Percent Stretch' },
@@ -271,6 +271,7 @@ class ImageStretch extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const { stretchMode } = this.state;
     const {
       resetStretch,

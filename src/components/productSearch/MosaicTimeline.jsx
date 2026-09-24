@@ -27,7 +27,7 @@ import { buildTiledImageURL } from 'src/utils/osd/osdUtils';
 import { getAlias, getDescendantProp, getMosaics, getPropFromProduct } from 'src/utils/sharedUtils';
 import { logError } from 'src/utils/telemetryUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 class MosaicTimeline extends React.Component {
   constructor(props) {
     super(props);
@@ -67,6 +67,7 @@ class MosaicTimeline extends React.Component {
   };
 
   onKeyUp = (event) => {
+    const config = getConfig();
     const { activeSearchProduct, activeMosaicBrowseCategory, isVisible } = this.props;
 
     let mosaics = [];
@@ -114,6 +115,7 @@ class MosaicTimeline extends React.Component {
   };
 
   async fetchMosaics() {
+    const config = getConfig();
     this.setState({ loading: true });
 
     try {
@@ -478,6 +480,7 @@ class MosaicTimeline extends React.Component {
   }
 
   renderMosaicList(mosaics) {
+    const config = getConfig();
     return (
       <div className={MosaicsTimelineStyles.mosaicsListContainer}>
         <div className={MosaicsTimelineStyles.mosaicsListPadding}>

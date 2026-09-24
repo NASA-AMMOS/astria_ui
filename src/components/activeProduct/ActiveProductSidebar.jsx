@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Tab, TabList, TabPanel, Tabs } from 'react-tabs';
@@ -28,6 +27,7 @@ import TabPanelContentContainer from 'src/containers/TabPanelContentContainer';
 import TargetOverlaysContainer from 'src/containers/TargetOverlaysContainer';
 import ProductDetailsStyles from 'src/styles/ProductDetails.module.css';
 import { isAnnotation, isFeature, isTarget } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { getLatestVersionsByType } from 'src/utils/dataQuery';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import ImageStretchContainer from '../../containers/ImageStretchContainer';
@@ -75,6 +75,7 @@ class ActiveProductSidebar extends React.Component {
   };
 
   render() {
+    const config = getConfig();
     const {
       tabIndex,
       fetchingGroups,

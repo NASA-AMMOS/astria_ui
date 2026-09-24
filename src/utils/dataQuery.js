@@ -4,14 +4,13 @@ import cleanCoords from '@turf/clean-coords';
 import distance from '@turf/distance';
 import { polygon } from '@turf/helpers';
 import transformRotate from '@turf/transform-rotate';
-import config from 'config.js';
 import Papa from 'papaparse';
-import { ES_BASE_QUERY_STRING, ES_TYPE, ES_URL, USING_CSSO } from 'src/constants/api';
 import { getOCSPackagesQuery } from 'src/reducers/utils';
 import {
   convertToMeters,
   deg2rad,
   determineBestImageInGroup,
+  getESBaseQueryString,
   isAnnotation,
   isCustomProduct,
   isFeature,
@@ -34,6 +33,7 @@ import { Target } from 'src/utils/asttroLib/target';
 import * as TargetType from 'src/utils/asttroLib/targetType';
 import { Vector3 as ASTTROVector3 } from 'src/utils/asttroLib/vector3';
 import { parseVicarLabel } from 'src/utils/asttroLib/vicar';
+import { getConfig } from 'src/utils/configRegistry';
 import { datadriveGetOCSObjectDownloadPathForOCSURL, pdsGetS3PathForImage } from 'src/utils/endpoints';
 import { getNormalizeImageLabel } from 'src/utils/labels';
 import { getDescendantProp, getPropFromProduct, groupProductsBy } from 'src/utils/sharedUtils';
@@ -43,10 +43,12 @@ import { Vector2, Vector3 } from 'three';
 const targetsControllers = [];
 const cachedPlacesOffsets = {};
 
-export const imageRankingCriteriaKeys = config.image_ranking_criteria.map((x) => x.key);
-export const searchBaseKeyInclusionSet = Array.from(
-  new Set(imageRankingCriteriaKeys.concat(config.search_config.search_base_includes))
-);
+export function getImageRankingCriteriaKeys() {
+  return getConfig().image_ranking_criteria.map((x) => x.key);
+}
+export function getSearchBaseKeyInclusionSet() {
+  return Array.from(new Set(getImageRankingCriteriaKeys().concat(getConfig().search_config.search_base_includes)));
+}
 
 export function abortRequestControllers() {
   // abort all the controllers
@@ -57,6 +59,7 @@ export function abortRequestControllers() {
 }
 
 export async function performESImageSearch(options) {
+  const config = getConfig();
   const {
     query,
     size = 1000,
@@ -209,6 +212,7 @@ export async function performESImageSearch(options) {
 }
 
 export const getBaseSearchQuery = (ocsPackages, packagesOnly = false) => {
+  const config = getConfig();
   const ocsPackagesQuery = getOCSPackagesQuery(ocsPackages);
   const baseQueries = ocsPackagesQuery ? [getOCSPackagesQuery(ocsPackages)] : [];
 
@@ -234,7 +238,8 @@ export const getBaseSearchQuery = (ocsPackages, packagesOnly = false) => {
 
 export const fetchSavedSearches = (username) => {
   return new Promise((resolve, reject) => {
-    const ES_QUERY_STRING = `${ES_URL}/${config.saved_search_upload.es_type}/_search?`;
+    const config = getConfig();
+    const ES_QUERY_STRING = `${config.es_url}/${config.saved_search_upload.es_type}/_search?`;
 
     const body = {
       query: {
@@ -265,7 +270,7 @@ export const fetchSavedSearches = (username) => {
     fetch(ES_QUERY_STRING, {
       method: 'POST',
       headers: { 'content-type': 'application/json', accept: 'application/json' },
-      ...(USING_CSSO ? { credentials: 'include' } : null),
+      ...(config.using_csso ? { credentials: 'include' } : null),
       body: JSON.stringify(body),
     })
       .then((response) => {
@@ -289,16 +294,17 @@ export const fetchSavedSearches = (username) => {
 
 export const fetchProductGroupItems = (product, signal, ocsPackages) => {
   return new Promise((resolve, reject) => {
+    const config = getConfig();
     const groupId = getDescendantProp(product, config.es_mappings.group_id.key);
 
     const fetchQuery = (body) => {
       return new Promise((res, rej) => {
-        fetch(ES_BASE_QUERY_STRING, {
+        fetch(getESBaseQueryString(), {
           method: 'POST',
           headers: { 'content-type': 'application/json', accept: 'application/json' },
           body: JSON.stringify(body),
           signal,
-          ...(USING_CSSO ? { credentials: 'include' } : null),
+          ...(config.using_csso ? { credentials: 'include' } : null),
         })
           .then((response) => {
             if (!response.ok) {
@@ -423,7 +429,8 @@ export const fetchProductGroupItems = (product, signal, ocsPackages) => {
 
 export const fetchESDataForProduct = (productId, signal, keyOverride = '', size = 1, includeType = true) => {
   return new Promise((resolve, reject) => {
-    const ES_QUERY_STRING = `${ES_URL}${includeType && ES_TYPE ? `/${ES_TYPE}` : ''}/_search?`;
+    const config = getConfig();
+    const ES_QUERY_STRING = `${config.es_url}${includeType && config.es_type ? `/${config.es_type}` : ''}/_search?`;
 
     const key = keyOverride || [config.es_mappings.id.key];
     const body = {
@@ -438,7 +445,7 @@ export const fetchESDataForProduct = (productId, signal, keyOverride = '', size 
     fetch(ES_QUERY_STRING, {
       method: 'POST',
       headers: { 'content-type': 'application/json', accept: 'application/json' },
-      ...(USING_CSSO ? { credentials: 'include' } : null),
+      ...(config.using_csso ? { credentials: 'include' } : null),
       body: JSON.stringify(body),
     })
       .then((response) => {
@@ -466,6 +473,7 @@ export const fetchESDataForProduct = (productId, signal, keyOverride = '', size 
 
 export const fetchDataForProduct = (product, line, sample, signal) => {
   return new Promise(async (resolve, reject) => {
+    const config = getConfig();
     let fileUrl = getPropFromProduct(product, config.es_mappings.img_url);
     if (config.data_provider_type === 'pds') {
       // fileUrl = await pdsFetchDownloadPath(product, signal);
@@ -496,6 +504,7 @@ export const fetchDataForProduct = (product, line, sample, signal) => {
  * -1: unknown
  */
 export const EDRType = (product) => {
+  const config = getConfig();
   if (config.label_key === 'vicar_label') {
     const vicar = product.vicar_label;
     // need a vicar label and no thumbnails
@@ -551,6 +560,7 @@ export const EDRType = (product) => {
 };
 
 export const matchingRdrExists = (baseImage, groups, rdrArr) => {
+  const config = getConfig();
   const latestMatchingProducts = getLatestVersionsForOverlayId(
     groups,
     getPropFromProduct(baseImage, config.es_mappings.overlay_id)
@@ -570,6 +580,7 @@ export const matchingRdrExists = (baseImage, groups, rdrArr) => {
 // like matchingRdrExists but it assumes the the rdrArr is prioritized and
 // will return type that was found (if any was)
 export const matchingRdrExistsPriority = (baseImage, groups, rdrArr) => {
+  const config = getConfig();
   const latestMatchingProducts = getLatestVersionsForOverlayId(
     groups,
     getPropFromProduct(baseImage, config.es_mappings.overlay_id)
@@ -593,6 +604,7 @@ export const matchingRdrExistsPriority = (baseImage, groups, rdrArr) => {
 };
 
 export const getMatchingRdr = (baseImage, groups, rdr, preferredImageForType) => {
+  const config = getConfig();
   const latestMatchingProducts = getLatestVersionsForOverlayId(
     groups,
     getPropFromProduct(baseImage, config.es_mappings.overlay_id),
@@ -609,6 +621,7 @@ export const getMatchingRdr = (baseImage, groups, rdr, preferredImageForType) =>
 // like getMatchingRdr but assumes the input is an array of rdr types
 // that include fallback types sorted in priority order
 export const getMatchingRdrPriority = (baseImage, groups, rdrArr, preferredImageForType) => {
+  const config = getConfig();
   const latestMatchingProducts = getLatestVersionsForOverlayId(
     groups,
     getPropFromProduct(baseImage, config.es_mappings.overlay_id),
@@ -638,6 +651,7 @@ export const measureSupported = (baseImage, groups) => {
 };
 
 export const scaleDataSupported = (baseImage, groups) => {
+  const config = getConfig();
   // TODO support scale data for PDS4 labels
   if (config.data_provider_type === 'pds' && !baseImage.vicar_label) {
     return false;
@@ -665,6 +679,7 @@ export const scaleDataSupported = (baseImage, groups) => {
 };
 
 export const getScaleData = (baseImage, groups, line, sample, preferredImageForType, signal) => {
+  const config = getConfig();
   // TODO support scale data for PDS4 labels
   if (config.data_provider_type === 'pds' && !baseImage.vicar_label) {
     return new Promise((resolve, reject) => {
@@ -701,6 +716,7 @@ export const getScaleData = (baseImage, groups, line, sample, preferredImageForT
 };
 
 function getScaleDataMosaic(baseImage, groups, line, sample, preferredImageForType, signal) {
+  const config = getConfig();
   const vicar = baseImage.vicar_label;
   return new Promise(async (resolve, reject) => {
     // calculate the iFOV from the map resolution
@@ -850,6 +866,7 @@ function getScaleDataMosaic(baseImage, groups, line, sample, preferredImageForTy
 }
 
 function getSingleFrameIFOV(baseImage, line, sample) {
+  const config = getConfig();
   // images line/sample start at (1,1) but camera model math starts at (0,0)
   // assume input line/sample is in image space
   const pixVec1 = new Vector2(sample - 1, line - 1); // target pixel, adjusted for camera model space
@@ -872,6 +889,7 @@ function getSingleFrameIFOV(baseImage, line, sample) {
 }
 
 function getScaleDataSimpleNonMosaic(baseImage, groups, line, sample, preferredImageForType, signal) {
+  const config = getConfig();
   return new Promise(async (resolve, reject) => {
     // calculate iFOV from camera model
     const iFOV = getSingleFrameIFOV(baseImage, line, sample);
@@ -1176,6 +1194,7 @@ export function getScaleForACI(options) {
 
 export function getScaleForRMI(options) {
   return new Promise((resolve, reject) => {
+    const config = getConfig();
     const { baseImage } = options;
     if (baseImage.vicar_label) {
       const focusDistance = parseFloat(baseImage.vicar_label.OBSERVATION_REQUEST_PARMS.INSTRUMENT_FOCUS_DISTANCE);
@@ -1235,6 +1254,7 @@ export function getDistanceMeasurement(baseImage, groups, lsPoint1, lsPoint2, si
  * @returns {Array} filtered list of products
  */
 export function getLatestVersionsForOverlayId(groups, overlayId, preferredImageForType, specialProcessingFlag) {
+  const config = getConfig();
   const matchingOverlayIdProducts = groups.filter(
     (item) => getPropFromProduct(item, config.es_mappings.overlay_id) === overlayId
   );
@@ -1248,6 +1268,7 @@ export function getLatestVersionsForOverlayId(groups, overlayId, preferredImageF
  * @returns {Array} filtered list of products
  */
 export function getLatestVersionsByType(products, preferredImageForType = {}, specialProcessingFlag = undefined) {
+  const config = getConfig();
   // Group products by type
   const groupedByProductType = groupProductsBy(products, config.es_mappings.product_type);
 
@@ -1298,6 +1319,7 @@ export function getLatestVersionsByType(products, preferredImageForType = {}, sp
  */
 export function getSourceProductsForImage(product) {
   return new Promise(async (resolve) => {
+    const config = getConfig();
     try {
       if (!isCustomProduct(product) && !!product[config.label_key]) {
         let sourceProductNames = [];
@@ -1372,6 +1394,7 @@ export function getSourceProductsForImage(product) {
  */
 export function getSourceImageFootprintsForImage(product) {
   return new Promise(async (resolve) => {
+    const config = getConfig();
     try {
       // If product is not a mosaic we will not look for footprints
       if (getPropFromProduct(product, config.es_mappings.object_type) !== 'm20-mosaic') {
@@ -1452,7 +1475,8 @@ export function getSourceImageFootprintsForImage(product) {
  * @returns {Array} list of mosaic products from ocs
  */
 export function getAssociatedMosaicsForImage(product, ocsPackages, signal1, signal2) {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve, _reject) => {
+    const config = getConfig();
     try {
       if (!isCustomProduct(product) && !!product.vicar_label && isSingleFrame(product)) {
         // Get filename without extension as this is what is listed in INPUT_PRODUCT_ID and TILE_PRODUCT_ID
@@ -1538,7 +1562,7 @@ export function getAssociatedMosaicsForImage(product, ocsPackages, signal1, sign
           size: 500,
           sort: [{ time1: { order: 'desc', unmapped_type: 'long' } }],
           groupResults: true,
-          includes: imageRankingCriteriaKeys.concat([
+          includes: getImageRankingCriteriaKeys().concat([
             'vicar_label.DERIVED_IMAGE_PARMS.INPUT_PRODUCT_ID',
             'vicar_label.INSTRUMENT_STATE_PARMS.TILE_PRODUCT_ID',
             'instrument_id',
@@ -1607,6 +1631,7 @@ export function getAssociatedMosaicsForImage(product, ocsPackages, signal1, sign
 export function getTargetsForImage(product) {
   // if anything fails we resolve an empty array so that other overlays are not blocked
   return new Promise(async (resolve) => {
+    const config = getConfig();
     // get site and drive for the target search
     const site = getPropFromProduct(product, config.es_mappings.site);
     const drive = getPropFromProduct(product, config.es_mappings.drive);
@@ -1646,6 +1671,7 @@ export function getTargetsForImage(product) {
 
 export function fetchTargetsFromDB(options) {
   return new Promise((resolve, reject) => {
+    const config = getConfig();
     // cancel previous request if there was one
     targetsControllers.forEach((controller) => controller.abort());
 
@@ -1668,7 +1694,7 @@ export function fetchTargetsFromDB(options) {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      ...(USING_CSSO ? { credentials: 'include' } : null),
+      ...(config.using_csso ? { credentials: 'include' } : null),
       body: JSON.stringify(body),
       signal,
     })
@@ -1701,6 +1727,7 @@ export function fetchTargetsFromDB(options) {
 }
 
 export function transformTargetToProductFrame(product, targets) {
+  const config = getConfig();
   return new Promise(async (resolve, reject) => {
     try {
       const edrType = EDRType(product);
@@ -1709,7 +1736,7 @@ export function transformTargetToProductFrame(product, targets) {
         const toFrame = vicarProduct.CameraModel.frame;
         await Promise.all(
           targets.map((target) => {
-            return new Promise(async (res, rej) => {
+            return new Promise(async (res, _rej) => {
               if (target.content.isShapeTarget()) {
                 console.warn('shape targets not supported');
                 res(true);
@@ -1784,7 +1811,7 @@ export function transformTargetToProductFrame(product, targets) {
                   target.pixelLocation = pixelLoc;
 
                   res(true);
-                } catch (err) {
+                } catch (_err) {
                   res(true);
                 }
               }
@@ -1822,6 +1849,7 @@ export function getXYZForLineSample(
   preferredType = ['XYZ', 'XYM', 'XOZ'],
   preferredImageForType
 ) {
+  const config = getConfig();
   return new Promise((resolve, reject) => {
     if (!Array.isArray(preferredType)) {
       preferredType = [preferredType];
@@ -1927,8 +1955,6 @@ export function padGeoJSONBoundingBox(geoJSON, meters = 0, range = [0, 360], ang
 
     if (closedAtFirstPoint) {
       // Move first point to last point if needed
-      if (newPoints[0] !== newPoints.at(-1)) {
-      }
       const firstPoint = newPoints.shift();
       newPoints.push(firstPoint);
 
@@ -1957,10 +1983,10 @@ export function padGeoJSONBoundingBox(geoJSON, meters = 0, range = [0, 360], ang
     try {
       const newPoly = cleanCoords(rotatedShape);
       return newPoly;
-    } catch (err) {
+    } catch (_err) {
       return newCircle;
     }
-  } catch (err) {
+  } catch (_err2) {
     return geoJSON;
   }
 }
@@ -2020,6 +2046,7 @@ export function getFootprintsForGeoJSON(
   aggregate = true
 ) {
   return new Promise((resolve, reject) => {
+    const config = getConfig();
     const queries = geoJSON
       ? [
           {
@@ -2123,10 +2150,10 @@ export function getFootprintsForGeoJSON(
       size: limit,
     };
 
-    const ES_QUERY_STRING = `${ES_URL}/${config.api_endpoints.SciLo.footprint_es_type}/_search?`;
+    const ES_QUERY_STRING = `${config.es_url}/${config.api_endpoints.SciLo.footprint_es_type}/_search?`;
     fetch(ES_QUERY_STRING, {
       method: 'POST',
-      ...(USING_CSSO ? { credentials: 'include' } : null),
+      ...(config.using_csso ? { credentials: 'include' } : null),
       body: JSON.stringify(body),
       signal,
     })
@@ -2163,6 +2190,7 @@ export function getFootprintsForGeoJSON(
 
 export function getFootprintForImage(product, ocsPackages) {
   return new Promise((resolve, reject) => {
+    const config = getConfig();
     // query all the matching footprint objects from OCS
     const body = {
       query: {
@@ -2207,11 +2235,11 @@ export function getFootprintForImage(product, ocsPackages) {
       size: 1,
     };
 
-    const ES_QUERY_STRING = `${ES_URL}/${config.api_endpoints.SciLo.footprint_es_type}/_search?`;
+    const ES_QUERY_STRING = `${config.es_url}/${config.api_endpoints.SciLo.footprint_es_type}/_search?`;
     fetch(ES_QUERY_STRING, {
       method: 'POST',
       headers: { 'content-type': 'application/x-ndjson', accept: 'application/json' },
-      ...(USING_CSSO ? { credentials: 'include' } : null),
+      ...(config.using_csso ? { credentials: 'include' } : null),
       body: JSON.stringify(body),
     })
       .then((response) => {
@@ -2236,6 +2264,7 @@ export function getFootprintForImage(product, ocsPackages) {
 
 export function getImagesForFootprints(footprints, ocsPackages, exclude = []) {
   return new Promise(async (resolve, reject) => {
+    const config = getConfig();
     const fNameKey = config.es_mappings.filename.key;
 
     // make sure we don't have duplicates and remove excluded products
@@ -2340,6 +2369,7 @@ export function getFootprintImagesForLineSample(
   preferredImageForType
 ) {
   return new Promise(async (resolve, reject) => {
+    const config = getConfig();
     try {
       const { xyz, xyzProductType } = await getXYZForLineSample(
         product,
@@ -2383,7 +2413,7 @@ export function getFootprintImagesForLineSample(
         // backproject pixel location for each image to get distance
         Promise.all(
           images.map((img) => {
-            return new Promise(async (resolve, reject) => {
+            return new Promise(async (resolve, _reject) => {
               try {
                 const pixelLoc = await backprojectLocationIntoImage(pos, img);
                 if (pixelLoc) {
@@ -2424,6 +2454,7 @@ export function getOrbitalCoordsForLineSample(
   preferredImageForType = {}
 ) {
   return new Promise(async (resolve, reject) => {
+    const config = getConfig();
     try {
       const { xyz } = await getXYZForLineSample(product, groups, lsPoint, preferredType, preferredImageForType);
       if (xyz.x !== 0 || xyz.y !== 0 || xyz.z !== 0) {
@@ -2483,6 +2514,7 @@ export async function backprojectLocationIntoImage(location, product, attemptAcc
 
 export function convertFrameWithPlaces(fromFrame, toFrame, useTelemetryFrame = false) {
   return new Promise((resolve, reject) => {
+    const config = getConfig();
     const baseUrl = config.api_endpoints.PLACES.API;
 
     // ignore pose in rover frames
@@ -2507,7 +2539,7 @@ export function convertFrameWithPlaces(fromFrame, toFrame, useTelemetryFrame = f
       let fetchProm = cached;
       if (!fetchProm) {
         fetchProm = new Promise((res, rej) => {
-          fetch(url, { ...(USING_CSSO ? { credentials: 'include' } : null) })
+          fetch(url, { ...(config.using_csso ? { credentials: 'include' } : null) })
             .then((response) => {
               if (!response.ok) {
                 throw Error(response.statusText);
@@ -2539,6 +2571,7 @@ export function convertFrameWithPlaces(fromFrame, toFrame, useTelemetryFrame = f
 
 export function convertPointWithPlaces(xyz, fromFrame, toFrame, useTelemetryFrame = false) {
   return new Promise((resolve, reject) => {
+    const config = getConfig();
     const baseUrl = config.api_endpoints.PLACES.API;
 
     // ignore pose in rover frames
@@ -2563,7 +2596,7 @@ export function convertPointWithPlaces(xyz, fromFrame, toFrame, useTelemetryFram
       let fetchProm = cached;
       if (!fetchProm) {
         fetchProm = new Promise((res, rej) => {
-          fetch(url, { ...(USING_CSSO ? { credentials: 'include' } : null) })
+          fetch(url, { ...(config.using_csso ? { credentials: 'include' } : null) })
             .then((response) => {
               if (!response.ok) {
                 throw Error(response.statusText);
@@ -2594,6 +2627,7 @@ export function convertPointWithPlaces(xyz, fromFrame, toFrame, useTelemetryFram
 }
 
 export async function projectLatLonIntoImage(latLon, product) {
+  const config = getConfig();
   // convert lat lon to orbital (northing/easting) xy
   const orbCoords = latLonToOrbitalCoords(latLon);
 
@@ -2642,6 +2676,7 @@ export async function getMetadataForProducts(
   signal = null
 ) {
   return new Promise(async (resolve, reject) => {
+    const config = getConfig();
     const ids = [...new Set(products.map((x) => x[idField]))]; // remove duplicates
 
     const searchQuery = [];
@@ -2697,11 +2732,11 @@ export function getOrientationForProduct(product) {
     const z = quat[3];
 
     const R00 = s ** 2 + x ** 2 - y ** 2 - z ** 2;
-    const R01 = 2 * x * y - 2 * s * z;
-    const R02 = 2 * x * z + 2 * s * y;
+    const _R01 = 2 * x * y - 2 * s * z;
+    const _R02 = 2 * x * z + 2 * s * y;
     const R10 = 2 * x * y + 2 * s * z;
-    const R11 = s ** 2 - x ** 2 + y ** 2 - z ** 2;
-    const R12 = 2 * y * z - 2 * s * x;
+    const _R11 = s ** 2 - x ** 2 + y ** 2 - z ** 2;
+    const _R12 = 2 * y * z - 2 * s * x;
     const R20 = 2 * x * z - 2 * s * y;
     const R21 = 2 * y * z + 2 * s * x;
     const R22 = s ** 2 - x ** 2 - y ** 2 + z ** 2;
@@ -2716,7 +2751,8 @@ export function getOrientationForProduct(product) {
 }
 
 export async function fetchFreshestProduct(product, ocsPackages, signal1, signal2) {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve, _reject) => {
+    const config = getConfig();
     try {
       if (!isCustomProduct(product) && !!product.vicar_label && isMosaic(product)) {
         const filename = getPropFromProduct(product, config.es_mappings.filename);
@@ -2781,7 +2817,7 @@ export async function fetchFreshestProduct(product, ocsPackages, signal1, signal
           size: 500,
           sort: [{ time1: { order: 'desc', unmapped_type: 'long' } }],
           groupResults: true,
-          includes: imageRankingCriteriaKeys.concat([
+          includes: getImageRankingCriteriaKeys().concat([
             // TODO use config properties here?
             'instrument_id',
             'ocs_name',

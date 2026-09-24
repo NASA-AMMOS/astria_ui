@@ -13,7 +13,7 @@ import { getShortTargetID } from 'src/utils/osd/osdUtils';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 class SelectedTargetMetadata extends React.Component {
   constructor(props) {
     super(props);
@@ -28,6 +28,7 @@ class SelectedTargetMetadata extends React.Component {
   };
 
   openTargetImage = async () => {
+    const config = getConfig();
     const { selectedTarget } = this.props;
     this.setState({ openingImage: true });
 

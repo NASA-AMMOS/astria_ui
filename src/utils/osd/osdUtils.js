@@ -1,9 +1,8 @@
-import config from 'config.js';
 import { DziTileSource } from 'openseadragon';
 import shortid from 'shortid';
+import { getConfig } from 'src/utils/configRegistry';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import urlJoin from 'url-join';
-import { IMAGE_TILER_SERVICE } from '../../constants/api';
 
 export function buildTiledImageURL(
   product,
@@ -13,11 +12,12 @@ export function buildTiledImageURL(
   stretchHigh = null,
   operatorControls = null
 ) {
+  const config = getConfig();
   const url = product._pdsURL ?? getPropFromProduct(product, config.es_mappings.img_url);
   if (url) {
     const imageType = getPropFromProduct(product, config.es_mappings.image_type);
     return urlJoin(
-      IMAGE_TILER_SERVICE,
+      config.tile_service_url,
       `?image=${url}&format=png${
         thumb ? `&thumb=true&proxy=${config.tile_service_proxy_thumb}` : `&proxy=${config.tile_service_proxy}`
       }${imageType ? `&rdr=${imageType}` : ''}${isDNStretch ? `&extremaStretch=true` : ''}${
@@ -29,10 +29,11 @@ export function buildTiledImageURL(
 }
 
 export function buildImageHistogramURL(product, thumb = false) {
+  const config = getConfig();
   const url = product._pdsURL ?? getPropFromProduct(product, config.es_mappings.img_url);
   const typeKey = getPropFromProduct(product, config.es_mappings.image_type, null);
   return urlJoin(
-    IMAGE_TILER_SERVICE,
+    config.tile_service_url,
     `?image=${url}&format=png${thumb ? '&thumb=true' : ''}${typeKey ? `&rdr=${typeKey}` : ''}&metadata=true&proxy=${
       config.tile_service_proxy
     }`
@@ -40,6 +41,7 @@ export function buildImageHistogramURL(product, thumb = false) {
 }
 
 export function buildTileSourceForOverlay(options) {
+  const config = getConfig();
   const {
     layer,
     index,
@@ -86,6 +88,7 @@ export function buildTileSourceForOverlay(options) {
 }
 
 export function buildSimpleImageSourceForOverlay(overlay, index) {
+  const config = getConfig();
   const { opacity, url } = overlay;
 
   return {

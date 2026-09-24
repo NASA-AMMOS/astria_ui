@@ -16,7 +16,7 @@ import ProductDetailsStyles from 'src/styles/ProductDetails.module.css';
 import { getURLForProductWithExistingParams, isTile, openInNewTab, pluralizeByListLength } from 'src/utils';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 export class AssociatedMosaics extends React.Component {
   constructor(props) {
     super(props);
@@ -34,6 +34,7 @@ export class AssociatedMosaics extends React.Component {
   }
 
   renderFilenameResult(item) {
+    const config = getConfig();
     const resultClass = classNames({
       [EDRListStyles.filenameResult]: true,
       [AssociatedMosaicsStyles.filenameResultError]: item._error,
@@ -106,6 +107,7 @@ export class AssociatedMosaics extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const { product, loading, associatedMosaics, openHelpArticle } = this.props;
     const { view } = this.state;
 

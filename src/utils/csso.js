@@ -1,6 +1,13 @@
-import config from '../../configs/config.js';
+import { getConfig } from './configRegistry.js';
 
-let cssoHost = process.env.CSSO_ENDPOINT_URL || config?.csso_endpoints?.host; // check for existence of CSSO host from Docker, this should exist for all non-local deployments
+let cssoHost = process.env.CSSO_ENDPOINT_URL || null;
+
+function getCssoHost() {
+  if (!cssoHost) {
+    cssoHost = getConfig()?.csso_endpoints?.host;
+  }
+  return cssoHost;
+}
 let session = null;
 let shouldRefreshAuth = true;
 let refreshAuthTimeout = null;
@@ -10,12 +17,12 @@ const refreshAuthAfter = 14400000;
 let endpointInfo = false;
 
 export function fetchEndpointInfo() {
-  if (!cssoHost) {
+  if (!getCssoHost()) {
     console.error('Error', 'Missing CSSO host!');
     return;
   }
 
-  return fetch(cssoHost, {
+  return fetch(getCssoHost(), {
     method: 'GET',
     headers: {
       'content-type': 'application/json',
@@ -64,7 +71,7 @@ export function login(creds) {
       console.error('Error', 'Missing credentials!');
       throw new Error('no-creds');
     }
-    if (!cssoHost.length) {
+    if (!getCssoHost()?.length) {
       console.error('Error', 'Missing CSSO host!');
       throw new Error('no-host');
     }

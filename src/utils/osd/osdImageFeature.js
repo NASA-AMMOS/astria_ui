@@ -2,7 +2,7 @@ import { fabric } from 'fabric';
 import inside from 'point-in-polygon-hao';
 import { angleBetween, calc2dDistance, deg2rad, parseWKTString } from 'src/utils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 // NOTE: requires OSDImageFeatureMixin(OSDExportMixin(OSDFabricMixin(OSDViewer)))
 
 const COLOR_LOW_CONFIDECE = '#FF5252';
@@ -14,6 +14,7 @@ export const OSDImageFeatureMixin = (base) =>
   class extends base {
     constructor(options) {
       super(options);
+      const config = getConfig();
 
       this._imageFeatures = {};
       this._activeFeatureLabel = DEFAULT_FEATURE_LABEL;
@@ -58,7 +59,7 @@ export const OSDImageFeatureMixin = (base) =>
 
     resetActiveFeatureConfidenceLevel() {
       this._activeFeatureConfidenceLevel = this._activeFeatureConfidenceLevel =
-        config.image_feature_confidence_levels.low;
+        getConfig().image_feature_confidence_levels.low;
     }
 
     setActiveFeatureLabel(label) {
@@ -70,6 +71,7 @@ export const OSDImageFeatureMixin = (base) =>
     }
 
     handleClickEvent(event) {
+      const config = getConfig();
       super.handleClickEvent(event);
 
       if (this._drawMode) {
@@ -89,11 +91,9 @@ export const OSDImageFeatureMixin = (base) =>
       }
     }
 
-    addImageFeatureAtPoint(
-      lsPoint,
-      label = 'Feature Type',
-      confidenceLevel = config.image_feature_confidence_levels.low
-    ) {
+    addImageFeatureAtPoint(lsPoint, label = 'Feature Type', confidenceLevel = null) {
+      const config = getConfig();
+      if (confidenceLevel === null) confidenceLevel = config.image_feature_confidence_levels.low;
       if (this._drawingShape) {
         const polygon = this._drawingShape; // polygon
         const lsPoints = polygon.get('lsPoints');
@@ -428,7 +428,9 @@ export const OSDImageFeatureMixin = (base) =>
       return { labelPosition, labelPositionLS, labelAngle: baseTheta };
     }
 
-    setFeatureConfidenceLevel(imageFeatureId, confidenceLevel = config.image_feature_confidence_levels.low) {
+    setFeatureConfidenceLevel(imageFeatureId, confidenceLevel = null) {
+      const config = getConfig();
+      if (confidenceLevel === null) confidenceLevel = config.image_feature_confidence_levels.low;
       const shapes = this._imageFeatures[imageFeatureId];
       if (shapes) {
         shapes.forEach((shape) => {

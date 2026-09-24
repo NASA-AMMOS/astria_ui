@@ -30,7 +30,7 @@ import { getFootprintImagesForLineSample, getMatchingRdr, matchingRdrExistsPrior
 import { CAMPGetLinkForLatLon } from 'src/utils/endpoints';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 const ALL_INST_OP = { label: 'All', value: '__ALL__' };
 
 const RESULTS_PER_PAGE = 15;
@@ -49,7 +49,7 @@ export class ImageFinder extends React.Component {
       view: localStorage.getItem(this.LOCALSTORAGE_VIEW_OPTIONS_KEY) || 'image',
       imageResultTitleKey:
         localStorage.getItem(this.LOCALSTORAGE_TITLE_LABEL_OPTION_KEY) ||
-        config.search_config.time_search.default_thumbnail_title_key.value,
+        getConfig().search_config.time_search.default_thumbnail_title_key.value,
       relatedImages: [],
       resolvedLatLon: {},
       resolvedXYZ: {},
@@ -70,7 +70,7 @@ export class ImageFinder extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, _prevState) {
     const { cursor: propCursor, onResultsChange, fetchingGroups: propFetchingGroups } = this.props;
     const { cursor: prevCursor, fetchingGroups: prevFetchingGroups } = prevProps;
 
@@ -127,7 +127,7 @@ export class ImageFinder extends React.Component {
     openInNewTab(
       CAMPGetLinkForLatLon({
         latLon: resolvedLatLon,
-        text: `point in ${getPropFromProduct(product, config.es_mappings.filename, null)}`,
+        text: `point in ${getPropFromProduct(product, getConfig().es_mappings.filename, null)}`,
       })
     );
   };
@@ -147,6 +147,7 @@ export class ImageFinder extends React.Component {
   };
 
   renderFilenameResult(item) {
+    const config = getConfig();
     const resultClass = classNames({
       [EDRListStyles.filenameResult]: true,
       [ImageFinderStyles.filenameResultError]: item._error,
@@ -222,6 +223,7 @@ export class ImageFinder extends React.Component {
   }
 
   isXYZActive(preferredType) {
+    const config = getConfig();
     const { overlays: activeOverlays } = this.props;
     preferredType = preferredType || this.getPreferredXYZType();
     return (
@@ -237,6 +239,7 @@ export class ImageFinder extends React.Component {
   };
 
   getBackprojectedPixelLocationForImage(image) {
+    const config = getConfig();
     const pixelLoc = image.backprojectPixelLoc;
     if (pixelLoc && !pixelLoc.approximate) {
       const projectedSample = pixelLoc.pixel.x;
@@ -256,6 +259,7 @@ export class ImageFinder extends React.Component {
   }
 
   onResultClicked(event, item) {
+    const config = getConfig();
     const { setActiveSearchProduct, addDataCursor, osdWrapper } = this.props;
 
     const optParams = {};
@@ -311,6 +315,7 @@ export class ImageFinder extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const { cursor: propCursor, openHelpArticle, loading: propLoading } = this.props;
     const {
       view,

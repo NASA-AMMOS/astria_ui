@@ -48,7 +48,9 @@ class TabPanelContent extends React.Component {
     if (this.ref.current) {
       try {
         this.ref.current.window.focus();
-      } catch (err) {}
+      } catch (_err) {
+        /* ignore */
+      }
     }
   };
 

@@ -1,4 +1,4 @@
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 export function assign(oldState, newState) {
   return Object.assign({}, oldState, newState);
 }
@@ -8,6 +8,7 @@ export function getOCSPackagesQuery(ocsPackages) {
   // { active: '<active_package>', base: Set<'package1','package2',...>}
 
   // janky and brittle workaround of packages
+  const config = getConfig();
   if (config.feature_flags.general.enable_package_selection) {
     return {
       terms: {

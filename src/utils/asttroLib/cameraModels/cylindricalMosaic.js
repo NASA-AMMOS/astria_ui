@@ -1,6 +1,6 @@
-import { Vector3 } from 'src/utils/asttroLib/vector3';
 import * as frameDefinition from 'src/utils/asttroLib/frameDefinition';
 import * as targetFrame from 'src/utils/asttroLib/targetFrame';
+import { Vector3 } from 'src/utils/asttroLib/vector3';
 
 /**
  * Get the modulus of two numbers even if one of them is negative.
@@ -63,7 +63,7 @@ export class CylindricalMosaicCameraModel {
   }
 
   // stub function
-  Backproject(pos) {}
+  Backproject(_pos) {}
 }
 
 export default CylindricalMosaicCameraModel;

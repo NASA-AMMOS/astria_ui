@@ -10,7 +10,7 @@ import FormsStyles from 'src/styles/Forms.module.css';
 import { performElasticSearchQuery } from 'src/utils';
 import * as telemetry from 'src/utils/telemetryUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 const ALL_IMAGES = 'Both';
 const NORMAL_IMAGES = 'Reconstructed / FDR';
 const IMAGE_TILES = 'ECAM Tiles';
@@ -52,6 +52,7 @@ class TileFacet extends React.Component {
   }
 
   async getQuery(values = []) {
+    const config = getConfig();
     const { inverted } = this.props;
 
     const mustOrMustNot = inverted ? 'must_not' : 'must';
@@ -83,6 +84,7 @@ class TileFacet extends React.Component {
   }
 
   async fetchValue(query) {
+    const config = getConfig();
     const { baseQueries, queryComponents, groupResults } = this.props;
 
     const searchQuery = { bool: { must: baseQueries.concat(queryComponents).concat(query) } }; // TODO get from above
@@ -172,12 +174,12 @@ class TileFacet extends React.Component {
   }
 
   CustomSingleValue = (props) => {
-    const { data, children, ...rest } = props;
+    const { data, children: _children, ...rest } = props;
     return <components.SingleValue {...rest}>{data.value}</components.SingleValue>;
   };
 
   CustomOption = (props) => {
-    const { data, children, ...rest } = props;
+    const { data, children: _children, ...rest } = props;
     return (
       <components.Option {...rest}>
         {data.value}

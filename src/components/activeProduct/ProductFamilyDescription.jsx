@@ -5,9 +5,10 @@ import ProductFamilyDescriptionStyles from 'src/styles/ProductFamilyDescription.
 import typographyStyles from 'src/styles/common/typography.module.css';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 export class ProductFamilyDescription extends React.Component {
   render() {
+    const config = getConfig();
     const { product, productDescriptions, loading } = this.props;
 
     if (!product || !getPropFromProduct(product, config.es_mappings.filename, null)) {

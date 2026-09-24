@@ -1,6 +1,5 @@
 import axios from 'axios';
 import classNames from 'classnames';
-import config from 'config.js';
 import { Field, Form, Formik } from 'formik';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -14,8 +13,9 @@ import alertStyles from 'src/styles/Alert.module.css';
 import formStyles from 'src/styles/Forms.module.css';
 import imageUploadStyles from 'src/styles/ImageUpload.module.css';
 import { performElasticSearchQuery } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 
-const initialState = {
+const getInitialState = () => ({
   selectedFile: null,
   uploadAttempted: false,
   uploadSuccess: false,
@@ -28,15 +28,15 @@ const initialState = {
     instrument: '',
     description: '',
     is_source_product: true,
-    size_type: config.image_upload.size_type,
+    size_type: getConfig().image_upload.size_type,
   },
-};
+});
 
 class ImageUpload extends React.Component {
   constructor(props) {
     super(props);
 
-    const { values, ...rest } = initialState;
+    const { values, ...rest } = getInitialState();
     this.state = { values: { ...values }, ...rest };
 
     this.onImageSelect = this.onImageSelect.bind(this);
@@ -63,7 +63,7 @@ class ImageUpload extends React.Component {
   }
 
   onClose() {
-    const { values, ...rest } = initialState;
+    const { values, ...rest } = getInitialState();
     const { onClose: propsOnClose } = this.props;
 
     this.setState({ values: { ...values }, ...rest });
@@ -84,6 +84,7 @@ class ImageUpload extends React.Component {
   }
 
   async fetchProduct(datasetId) {
+    const config = getConfig();
     try {
       // Right now we'll only check for a search product param
       // but in the future we'll want to manage a set of url params.
@@ -105,10 +106,10 @@ class ImageUpload extends React.Component {
         } else {
           return json.hits.hits[0]._source;
         }
-      } catch (err) {
+      } catch (_err) {
         return null;
       }
-    } catch (err) {
+    } catch (_err) {
       return null;
     }
   }
@@ -117,6 +118,7 @@ class ImageUpload extends React.Component {
    * Upload to DataDrive using the Manual Upload API.
    * */
   uploadHandler() {
+    const config = getConfig();
     // TODO this isn't working, request is silently not starting
     const { values, selectedFile } = this.state;
     this.setState({ uploading: true, uploadAttempted: true, uploadCanceled: false });
@@ -190,6 +192,7 @@ class ImageUpload extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const { open, setActiveSearchProduct } = this.props;
     const {
       values,

@@ -1,12 +1,13 @@
 import * as telemetry from 'src/utils/telemetryUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 // NOTE: requires OSDTargetMixin(OSDFabricMixin(OSDViewer))
 
 export const OSDTargetMixin = (base) =>
   class extends base {
     constructor(options) {
       super(options);
+      const config = getConfig();
 
       this._targetClickTarget = null;
       this._targetHoverTargetId = null;
@@ -40,6 +41,7 @@ export const OSDTargetMixin = (base) =>
     }
 
     addTarget(options) {
+      const config = getConfig();
       return new Promise((resolve, reject) => {
         const { line, sample, id, text, opacity /* accurate */ } = options;
 

@@ -78,7 +78,7 @@ class MultiValueInputFacet extends React.Component {
     const { kqvlMap } = this.state;
 
     const kqvlMapNew = { ...kqvlMap, [changeFacet.key]: [changeFacet.key, query, value, changeFacet.label] };
-    if (!!!value) {
+    if (!value) {
       kqvlMapNew[changeFacet.key] = null;
       delete kqvlMapNew[changeFacet.key];
     }
@@ -156,7 +156,7 @@ class MultiValueInputFacet extends React.Component {
           kqvlMap[key[i]] ? kqvlMap[key[i]][2] : [''],
         ]);
       });
-    } catch (err) {
+    } catch (_err) {
       console.warn('Error in MultiValueInputFacet: Arrays required');
       return null;
     }
