@@ -139,8 +139,15 @@ class ImageOverlays extends React.Component {
     const productsWithSameOverlayId = groups.filter(
       (item) => getPropFromProduct(item, config.es_mappings.overlay_id) === activeProductOverlayID
     );
+
+    const filterDrawings =
+      config.feature_flags.general.enable_image_upload ||
+      config.feature_flags.active_product.enable_annotations ||
+      config.feature_flags.active_product.enable_image_features;
     const rdrs = productsWithSameOverlayId.filter(
-      (p) => getPropFromProduct(p, config.es_mappings.overlayable) && (isSingleFrame(p) || isMosaic(p))
+      (p) =>
+        getPropFromProduct(p, config.es_mappings.overlayable) &&
+        (filterDrawings ? isSingleFrame(p) || isMosaic(p) : true)
     );
     const layers = getLatestVersionsByType(rdrs, preferredImageForType, activeProductSpecFlag);
 
