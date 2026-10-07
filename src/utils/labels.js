@@ -1,5 +1,6 @@
 import config from 'config.js';
 import { USING_CSSO } from 'src/constants/api';
+import { removeUndefined } from 'src/utils';
 import { fetchESDataForProduct } from 'src/utils/dataQuery';
 import { pdsGetDownloadPathForProduct } from 'src/utils/endpoints';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
@@ -432,6 +433,9 @@ export async function convertPDS4ToVICAR(imageProduct) {
       ?.getElementsByTagName('elements')[0]?.textContent;
 
     label.system.ORG = 'UNK'; // TODO - is the default BSQ?
+
+    // recursively remove undefined entries
+    removeUndefined(label);
 
     return label;
   } catch (error) {

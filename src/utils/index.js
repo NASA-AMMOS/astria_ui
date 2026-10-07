@@ -5,6 +5,19 @@ import config from '../../configs/config.js';
 import { ES_BASE_QUERY_STRING, USING_CSSO } from '../constants/api.js';
 import { getDescendantProp, getPropFromProduct } from './sharedUtils.js';
 
+export function removeUndefined(obj) {
+  Object.keys(obj).forEach((key) => {
+    if (obj[key] === undefined) {
+      delete obj[key];
+    } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+      removeUndefined(obj[key]);
+      if (Object.keys(obj[key]).length === 0) {
+        delete obj[key];
+      }
+    }
+  });
+}
+
 function defaultEquality(i1, i2) {
   return i1 === i2;
 }
