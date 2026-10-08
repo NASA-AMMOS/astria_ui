@@ -10,6 +10,10 @@ export function astriaGetProductDescriptions() {
   return urlJoin(IMAGE_TILER_SERVICE, 'image_descriptions.xml');
 }
 
+export function astriaGetImageConfigDescriptions() {
+  return config.product_descriptions_url;
+}
+
 /* Generic */
 export function getBrowseImagePathForProduct(product) {
   if (config.data_provider_type === 'pds') {
@@ -155,6 +159,13 @@ export function pdsGetS3PathForImage(product) {
     .pop()
     .replace(/^\/+|\/+$/g, '');
   let releaseId = getPropFromProduct(product, config.es_mappings.release_id, 'cumulative');
+
+  // special case for old data
+  if (`${releaseId}` === '0') {
+    releaseId = 'cumulative';
+  }
+
+  // implicit format
   if (releaseId !== 'cumulative') {
     releaseId = `r${releaseId}`;
   }

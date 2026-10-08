@@ -20,6 +20,7 @@ const mapStateToProps = (state) => {
     preserveRDRs: state.imageLayers.preserveRDRs,
     operatorControlsMap: state.imageLayers.operatorControlsMap,
     productDescriptions: state.app.productDescriptions,
+    imageConfigDescriptions: state.app.imageConfigDescriptions,
     layers: state.imageLayers.layers,
     groups: state.activeSearchProduct.groups,
     preferredImageForType: state.imageLayers.preferredImageForType,

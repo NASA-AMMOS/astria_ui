@@ -291,37 +291,40 @@ export const fetchProductGroupItems = (product, signal, ocsPackages) => {
   return new Promise((resolve, reject) => {
     const groupId = getDescendantProp(product, config.es_mappings.group_id.key);
 
-    const fetchQuery = (body) => {
-      return new Promise((res, rej) => {
-        fetch(ES_BASE_QUERY_STRING, {
+    const fetchQuery = async (body) => {
+      const maxResults = body.size ?? 1000;
+      const pageSize = Math.min(75, maxResults);
+      const data = [];
+
+      for (let from = 0; from < maxResults; from += pageSize) {
+        const size = Math.min(pageSize, maxResults - from);
+        const page = from / pageSize + 1;
+        const response = await fetch(ES_BASE_QUERY_STRING, {
           method: 'POST',
           headers: { 'content-type': 'application/json', accept: 'application/json' },
-          body: JSON.stringify(body),
+          body: JSON.stringify({ ...body, from, size }),
           signal,
           ...(USING_CSSO ? { credentials: 'include' } : null),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              rej(new Error(response.statusText));
-              return null;
-            }
-            return response.json();
-          })
-          .then((json) => {
-            if (!json.hits) {
-              rej(new Error('empty json response'));
-            } else {
-              let data = json.hits.hits;
-              if (data.length) data = data.map((x) => x._source);
-              res(data);
-            }
-          })
-          .catch((err) => {
-            if (err.name !== 'AbortError') {
-              rej(err);
-            }
-          });
-      });
+        });
+
+        if (!response.ok) {
+          const responseBody = (await response.text()).slice(0, 1000);
+          const status = `${response.status}${response.statusText ? ` ${response.statusText}` : ''}`;
+          throw new Error(`ES query page ${page} failed (${status})${responseBody ? `: ${responseBody}` : ''}`);
+        }
+
+        const json = await response.json();
+        if (!json.hits || !Array.isArray(json.hits.hits)) {
+          throw new Error(`Empty ES response for query page ${page}`);
+        }
+
+        const hits = json.hits.hits;
+        data.push(...hits.map((x) => x._source));
+        const total = typeof json.hits.total === 'number' ? json.hits.total : json.hits.total?.value;
+        if (hits.length < size || (typeof total === 'number' && data.length >= Math.min(total, maxResults))) break;
+      }
+
+      return data;
     };
 
     // fetch all overlays
@@ -499,12 +502,12 @@ export const EDRType = (product) => {
   if (config.label_key === 'vicar_label') {
     const vicar = product.vicar_label;
     // need a vicar label and no thumbnails
-    if (vicar && getPropFromProduct(product, config.es_mappings.size_type) === 'Full') {
+    if (vicar && getPropFromProduct(product, config.es_mappings.size_type).toLowerCase() === 'full') {
       // check for mosaic
       if (
         vicar.SURFACE_MODEL_PARMS &&
-        vicar.SURFACE_MODEL_PARMS.SURFACE_MODEL_TYPE === 'PLANE' &&
-        vicar.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE === 'CYLINDRICAL'
+        vicar.SURFACE_MODEL_PARMS.SURFACE_MODEL_TYPE?.toLowerCase() === 'plane' &&
+        vicar.SURFACE_PROJECTION_PARMS?.MAP_PROJECTION_TYPE?.toLowerCase() === 'cylindrical'
       ) {
         return 0;
       }
@@ -531,8 +534,8 @@ export const EDRType = (product) => {
           getPropFromProduct(product, config.es_mappings.projection).toLowerCase().indexOf('cylindrical') > -1) ||
         (product.vicar_label &&
           product.vicar_label.SURFACE_MODEL_PARMS &&
-          product.vicar_label.SURFACE_MODEL_PARMS.SURFACE_MODEL_TYPE === 'PLANE' &&
-          product.vicar_label.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE.indexOf('CYLINDRICAL') > -1)
+          product.vicar_label.SURFACE_MODEL_PARMS.SURFACE_MODEL_TYPE?.toLowerCase() === 'plane' &&
+          product.vicar_label.SURFACE_PROJECTION_PARMS?.MAP_PROJECTION_TYPE?.toLowerCase().indexOf('cylindrical') > -1)
       ) {
         return 0;
       }
@@ -2309,8 +2312,8 @@ export function getImagesForFootprints(footprints, ocsPackages, exclude = []) {
         'vicar_label.GEOMETRIC_CAMERA_MODEL*',
         'vicar_label.ROVER_COORDINATE_SYSTEM*',
         'vicar_label.SURFACE_MODEL_PARMS.SURFACE_MODEL_TYPE',
-        'vicar_label.SURFACE_MODEL_PARMS.MAP_PROJECTION_TYPE',
         'vicar_label.SURFACE_MODEL_PARMS.REFERENCE_COORD_SYSTEM_INDEX',
+        'vicar_label.SURFACE_PROJECTION_PARMS.MAP_PROJECTION_TYPE',
         'vicar_label.INSTRUMENT_STATE_PARMS.AZIMUTH_FOV',
         'vicar_label.INSTRUMENT_STATE_PARMS.AZIMUTH_FOV__UNIT',
         'vicar_label.IDENTIFICATION.SPACECRAFT_CLOCK_STOP_COUNT',

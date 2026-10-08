@@ -144,6 +144,7 @@ export class ImageOverlay extends React.Component {
       product,
       title: titleOverride,
       description: descriptionOverride,
+      fallbackDescription,
       productFamilyMetadata,
       tooltip: tooltipOverride,
       fallback,
@@ -171,7 +172,10 @@ export class ImageOverlay extends React.Component {
     const title =
       titleOverride || getPropFromProduct(product, config.es_mappings.product_type, null) || 'Unknown Title'; // fallback to product title default if none specified
     const description =
-      descriptionOverride || getPropFromProduct(product, config.es_mappings.description, null) || 'Unknown Description';
+      descriptionOverride ||
+      getPropFromProduct(product, config.es_mappings.description, null) ||
+      fallbackDescription ||
+      'Unknown Description';
     const tooltip = tooltipOverride || getPropFromProduct(product, config.es_mappings.supplemental_description, null);
     const image = (
       <ImageResult
@@ -282,6 +286,7 @@ ImageOverlay.defaultProps = {
   title: '',
   className: '',
   description: '',
+  fallbackDescription: '',
   tooltip: '',
   fallback: '',
   useFallback: false,
@@ -308,6 +313,7 @@ ImageOverlay.propTypes = {
   className: PropTypes.string,
   title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   description: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+  fallbackDescription: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   productFamilyMetadata: PropTypes.object, // Marsviewer Desktop image family description items as a map w/title -> text (General -> The XYZ describes..., Visualization, etc)
   tooltip: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
   fallback: PropTypes.string,

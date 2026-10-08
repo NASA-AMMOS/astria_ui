@@ -6,13 +6,14 @@ import MultiSelect from 'src/components/common/MultiSelect';
 import Select from 'src/components/common/Select';
 import BaseImageSelectorStyles from 'src/styles/BaseImageSelector.module.css';
 import ProductDetailsStyles from 'src/styles/ProductDetails.module.css';
-import { cloneObj, determineBestImageInGroup, objAlphaSort } from 'src/utils';
+import { cloneObj, determineBestImageInGroup, getImageConfigDescriptionForProduct, objAlphaSort } from 'src/utils';
 import { getLatestVersionsByType } from 'src/utils/dataQuery';
 import { getAlias, getPropFromProduct, groupProductsBy } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
 
 const BaseImageOption = (props) => {
-  const { value: product, data, getValue, setValue } = props;
+  const { value: product, data, getValue, setValue, label } = props;
+  const { subtitle } = data;
 
   let isSelected = false;
   const selectedValue = getValue();
@@ -31,8 +32,9 @@ const BaseImageOption = (props) => {
       raised={false}
       active={isSelected}
       customLabel={{
-        title: getPropFromProduct(product, config.es_mappings.product_type, null) || 'Unknown',
-        subtitle: getPropFromProduct(product, config.es_mappings.description, null) || 'Unknown Description',
+        title: label || getPropFromProduct(product, config.es_mappings.product_type, null) || 'Unknown',
+        subtitle:
+          subtitle || getPropFromProduct(product, config.es_mappings.description, null) || 'Unknown Description',
       }}
       onClick={() => setValue(data)}
     />
@@ -183,7 +185,7 @@ class BaseImageSelector extends React.Component {
   }
 
   render() {
-    const { activeProduct, isCustomProduct, fetchingGroups } = this.props;
+    const { activeProduct, isCustomProduct, fetchingGroups, imageConfigDescriptions } = this.props;
 
     // Check loading and active product states
     if (isCustomProduct) return <div />;
@@ -255,7 +257,8 @@ class BaseImageSelector extends React.Component {
       finalBaseImages.map((image) => {
         return {
           value: image,
-          label: getPropFromProduct(image, config.es_mappings.product_type),
+          label: getPropFromProduct(image, config.es_mappings.product_type, null),
+          subtitle: getImageConfigDescriptionForProduct(image, imageConfigDescriptions),
         };
       }),
       'label'
@@ -301,5 +304,6 @@ BaseImageSelector.propTypes = {
   fetchingGroups: PropTypes.bool.isRequired,
   isCustomProduct: PropTypes.bool.isRequired,
   setBaseLayer: PropTypes.func.isRequired,
+  imageConfigDescriptions: PropTypes.object,
 };
 export default BaseImageSelector;
