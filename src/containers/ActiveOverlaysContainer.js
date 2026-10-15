@@ -49,6 +49,7 @@ const mapStateToProps = (state) => {
     animationPlayerState: state.imageLayers.animationPlayerState,
     animationFrameGapMS: state.imageLayers.animationFrameGapMS,
     productDescriptions: state.app.productDescriptions,
+    imageConfigDescriptions: state.app.imageConfigDescriptions,
     keywordsMap: state.search.keywordsMap,
   };
 };

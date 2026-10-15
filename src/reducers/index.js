@@ -46,6 +46,10 @@ const app = (state = DEFAULT_APP, action) => {
       return assign(state, {
         productDescriptions: action.productDescriptions,
       });
+    case 'SET_IMAGE_CONFIG_DESCRIPTIONS':
+      return assign(state, {
+        imageConfigDescriptions: action.imageConfigDescriptions,
+      });
     case 'SET_STARRED_METADATA_FIELDS':
       localStorage.setItem('starredMetadataFields', JSON.stringify(action.fields));
       return assign(state, {

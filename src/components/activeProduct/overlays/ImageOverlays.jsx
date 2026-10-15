@@ -10,7 +10,14 @@ import Tooltip from 'src/components/common/Tooltip';
 import TypographyStyles from 'src/styles/common/typography.module.css';
 import ImageOverlayStyles from 'src/styles/ImageOverlay.module.css';
 import OverlaysPanelStyles from 'src/styles/OverlaysPanel.module.css';
-import { getDescriptionsForProduct, getIDForLayer, isMosaic, isSingleFrame, objAlphaSort } from 'src/utils';
+import {
+  getDescriptionsForProduct,
+  getIDForLayer,
+  getImageConfigDescriptionForProduct,
+  isMosaic,
+  isSingleFrame,
+  objAlphaSort,
+} from 'src/utils';
 import { getLatestVersionsByType } from 'src/utils/dataQuery';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
@@ -24,6 +31,7 @@ class ImageOverlays extends React.Component {
       operatorControlsMap,
       handleOverlayChangeOpacity,
       productDescriptions,
+      imageConfigDescriptions,
     } = this.props;
 
     const opControlsActive =
@@ -89,6 +97,7 @@ class ImageOverlays extends React.Component {
     return (
       <ImageOverlay
         productFamilyMetadata={getDescriptionsForProduct(overlayImage, productDescriptions)}
+        fallbackDescription={getImageConfigDescriptionForProduct(overlayImage, imageConfigDescriptions)}
         key={getIDForLayer(overlayImage)}
         overlayActions={overlayActions}
         product={overlayImage}
@@ -130,8 +139,15 @@ class ImageOverlays extends React.Component {
     const productsWithSameOverlayId = groups.filter(
       (item) => getPropFromProduct(item, config.es_mappings.overlay_id) === activeProductOverlayID
     );
+
+    const filterDrawings =
+      config.feature_flags.general.enable_image_upload ||
+      config.feature_flags.active_product.enable_annotations ||
+      config.feature_flags.active_product.enable_image_features;
     const rdrs = productsWithSameOverlayId.filter(
-      (p) => getPropFromProduct(p, config.es_mappings.overlayable) && (isSingleFrame(p) || isMosaic(p))
+      (p) =>
+        getPropFromProduct(p, config.es_mappings.overlayable) &&
+        (filterDrawings ? isSingleFrame(p) || isMosaic(p) : true)
     );
     const layers = getLatestVersionsByType(rdrs, preferredImageForType, activeProductSpecFlag);
 
@@ -182,5 +198,6 @@ ImageOverlays.propTypes = {
   operatorControlsMap: PropTypes.object.isRequired,
   handleOverlayChangeOpacity: PropTypes.func.isRequired,
   productDescriptions: PropTypes.object,
+  imageConfigDescriptions: PropTypes.object,
 };
 export default ImageOverlays;

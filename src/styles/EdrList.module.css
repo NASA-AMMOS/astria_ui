@@ -183,7 +183,7 @@
 
 .filenameTooltip {
   max-width: none;
-  pointer-events: none;
+  /* pointer-events: none; why was this disabled? */
 }
 
 .filenameTooltip :global(.rc-tooltip-inner) {
