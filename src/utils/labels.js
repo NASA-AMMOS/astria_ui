@@ -1,5 +1,4 @@
-import config from 'config.js';
-import { USING_CSSO } from 'src/constants/api';
+import { getConfig } from 'src/utils/configRegistry';
 import { fetchESDataForProduct } from 'src/utils/dataQuery';
 import { pdsGetDownloadPathForProduct } from 'src/utils/endpoints';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
@@ -12,6 +11,7 @@ const pds2vicarAliases = {
 };
 
 export async function getNormalizeImageLabel(imageProduct) {
+  const config = getConfig();
   console.time('Normalizing Label');
   // since it was the first, VICAR will be our standard and we will normalize to that
   let { [config.label_key]: label } = imageProduct;
@@ -29,6 +29,7 @@ export async function getNormalizeImageLabel(imageProduct) {
 }
 
 export async function convertPDS4ToVICAR(imageProduct) {
+  const config = getConfig();
   // https://pds-geosciences.wustl.edu/m2020/urn-nasa-pds-mars2020_mission/document_camera/Mars2020_Camera_SIS_Labels_sort_vicar.html is garbage, we're going for the XML parse
 
   const xmlID = getPropFromProduct(imageProduct, { key: config.label_xml_url_key });
@@ -57,7 +58,7 @@ export async function convertPDS4ToVICAR(imageProduct) {
     labelAbortController = new AbortController();
     const xmlProduct = await fetchESDataForProduct(xmlID, labelAbortController.signal);
     const xmlURL = pdsGetDownloadPathForProduct(xmlProduct);
-    const data = await fetch(xmlURL, { ...(USING_CSSO ? { credentials: 'include' } : null) });
+    const data = await fetch(xmlURL, { ...(config.using_csso ? { credentials: 'include' } : null) });
     const xmlText = await data.text();
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlText, 'text/xml');

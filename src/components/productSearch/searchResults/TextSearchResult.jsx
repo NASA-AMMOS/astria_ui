@@ -1,11 +1,12 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import ImageResult from 'src/components/common/ImageResult';
 import EDRListStyles from 'src/styles/EdrList.module.css';
 import { getDefined } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
 const TextSearchResult = ({ item, viewOptions, resultSize: stateResultSize, view: stateView }) => {
+  const config = getConfig();
   const resultSize = getDefined(viewOptions.resultSize, stateResultSize);
   const view = getDefined(viewOptions.view, stateView);
 

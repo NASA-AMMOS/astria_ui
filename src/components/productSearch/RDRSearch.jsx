@@ -18,12 +18,12 @@ import RDRSearchStyles from 'src/styles/RDRSearch.module.css';
 import SearchBaseStyles from 'src/styles/SearchBase.module.css';
 import TargetSearchStyles from 'src/styles/TargetSearch.module.css';
 import { getLocalStorageOption, getURLForProductWithExistingParams, isDefined } from 'src/utils';
-import { performESImageSearch, searchBaseKeyInclusionSet } from 'src/utils/dataQuery';
+import { getSearchBaseKeyInclusionSet, performESImageSearch } from 'src/utils/dataQuery';
 import { buildTiledImageURL } from 'src/utils/osd/osdUtils';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 class RDRSearch extends Component {
   constructor(props) {
     super(props);
@@ -54,6 +54,7 @@ class RDRSearch extends Component {
   };
 
   productIsActive = (item, activeSearchProduct) => {
+    const config = getConfig();
     const { layers } = this.props;
     const activeProdId = getPropFromProduct(activeSearchProduct, config.es_mappings.id);
     const itemId = getPropFromProduct(item, config.es_mappings.id);
@@ -79,10 +80,11 @@ class RDRSearch extends Component {
   };
 
   processResultsBatch = (searchOutput) => {
+    const config = getConfig();
     const { [this.LOCALSTORAGE_SEARCH_RESULT_THUMB_BG_RENDER_KEY]: renderThumbBG } = this.state;
     const { ocsPackages } = this.props;
     const { results: searchResults } = searchOutput;
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve, _reject) => {
       const overlayIds = Array.from(
         new Set(searchResults.map((prod) => getPropFromProduct(prod, config.es_mappings.overlay_id)))
       );
@@ -118,7 +120,7 @@ class RDRSearch extends Component {
         size: overlayIds.length,
         groupResults: true,
         groupByKey: config.es_mappings.overlay_id.key,
-        includes: searchBaseKeyInclusionSet,
+        includes: getSearchBaseKeyInclusionSet(),
       });
 
       // match with the base image and add the thumbnail url for later reference
@@ -143,6 +145,7 @@ class RDRSearch extends Component {
   };
 
   getNewTabUrlForProduct = (item) => {
+    const config = getConfig();
     const opts = {
       [config.url_keys.overlays]: [
         getPropFromProduct(item._baseProduct, config.es_mappings.filename),
@@ -228,7 +231,7 @@ class RDRSearch extends Component {
         {...this.props}
         ref={this.searchBaseRef}
         packageOnlyBaseQueries
-        searchConfig={config.search_config.rdr_search}
+        searchConfig={getConfig().search_config.rdr_search}
         renderContent={this.renderMainTargetContent}
         setViewOption={this.props.setViewOption}
         processSearchResults={this.processResultsBatch}
@@ -287,6 +290,7 @@ const matchDispatchToProps = (dispatch) => {
       return dispatch(setActiveSearchProduct(item, true, true, true, true));
     },
     handleOverlayAdd(item) {
+      const config = getConfig();
       dispatch(addLayer(item));
       const filename = getPropFromProduct(item, config.es_mappings.filename);
       const instrument = getPropFromProduct(item, config.es_mappings.instrument_id);

@@ -11,8 +11,9 @@ import ImageOverlays from 'src/components/activeProduct/overlays/ImageOverlays';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 const mapStateToProps = (state) => {
+  const config = getConfig();
   return {
     activeProductOverlayID: getPropFromProduct(state.imageLayers.layers[0], config.es_mappings.overlay_id, null),
     activeProductSpecFlag: getPropFromProduct(state.imageLayers.layers[0], config.es_mappings.spec_flag, null),
@@ -29,6 +30,7 @@ const mapStateToProps = (state) => {
 const matchDispatchToProps = (dispatch) => {
   return {
     handleOverlayAdd(item) {
+      const config = getConfig();
       dispatch(addLayer(item, item.opacity));
       const filename = getPropFromProduct(item, config.es_mappings.filename);
       const instrument = getPropFromProduct(item, config.es_mappings.instrument_id);

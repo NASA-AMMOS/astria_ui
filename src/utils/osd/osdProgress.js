@@ -1,4 +1,4 @@
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 // NOTE: requires OSDProgressMixin(OSDViewer)
 
@@ -6,6 +6,7 @@ export const OSDProgressMixin = (base) =>
   class extends base {
     constructor(options) {
       super(options);
+      const config = getConfig();
 
       // trackers for both individual tiles and images as a whole
       this._tileProgressTracker = {};
@@ -54,7 +55,7 @@ export const OSDProgressMixin = (base) =>
       });
 
       // listen for remove of all layers
-      this.on('alllayersremoved', (layerId) => {
+      this.on('alllayersremoved', (_layerId) => {
         this._tiledImageLoadedTracker = {};
         this.checkStatus();
       });

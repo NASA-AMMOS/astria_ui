@@ -1,4 +1,3 @@
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { ImageOverlay } from 'src/components/activeProduct/ImageOverlay';
@@ -11,11 +10,13 @@ import TypographyStyles from 'src/styles/common/typography.module.css';
 import ImageOverlayStyles from 'src/styles/ImageOverlay.module.css';
 import OverlaysPanelStyles from 'src/styles/OverlaysPanel.module.css';
 import { getDescriptionsForProduct, getIDForLayer, isMosaic, isSingleFrame, objAlphaSort } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { getLatestVersionsByType } from 'src/utils/dataQuery';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
 class ImageOverlays extends React.Component {
   renderAvailableOverlayResult = (overlayImage, overlayActive) => {
+    const config = getConfig();
     const {
       handleOverlayAdd,
       handleOverlayRemove,
@@ -112,6 +113,7 @@ class ImageOverlays extends React.Component {
   };
 
   render() {
+    const config = getConfig();
     const {
       layers: activeImages,
       preserveRDRs,

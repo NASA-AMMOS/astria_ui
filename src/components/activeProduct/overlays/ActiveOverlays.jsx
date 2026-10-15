@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { DragDropContext, Draggable } from 'react-beautiful-dnd';
@@ -44,6 +43,7 @@ import {
   isSingleFrame,
   isTarget,
 } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { datadriveGetOCSObjectDownloadPathForS3URL } from 'src/utils/endpoints';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
@@ -59,6 +59,7 @@ const animationSpeeds = [
 
 class ActiveOverlay extends React.Component {
   render() {
+    const config = getConfig();
     const {
       dragging,
       overlay,
@@ -149,6 +150,7 @@ class ActiveAnnotation extends React.Component {
       productDescriptions,
     } = this.props;
 
+    const config = getConfig();
     const annotationOwner = getPropFromProduct(annotation, config.es_mappings.created_by);
     let description = '';
     if (annotation.isLocal) {
@@ -245,6 +247,7 @@ class ActiveAnnotation extends React.Component {
 
 class ActiveImageFeature extends React.Component {
   render() {
+    const config = getConfig();
     const {
       feature,
       user,
@@ -443,6 +446,7 @@ class ActiveOverlays extends React.Component {
   };
 
   render() {
+    const config = getConfig();
     const {
       user,
       annotations,
@@ -721,7 +725,7 @@ class ActiveOverlays extends React.Component {
           {imagesAndNonImagesActive && <div className={OverlaysPanelStyles.overlaySectionDivider} />}
           <DragDropContext onDragEnd={this.handleReorder}>
             <StrictModeDroppable droppableId="overlay-droppable">
-              {(droppableProvided, droppableSnapshot) => (
+              {(droppableProvided, _droppableSnapshot) => (
                 <div {...droppableProvided.droppableProps} ref={droppableProvided.innerRef}>
                   {currActiveOverlays.map((overlay, i) => {
                     const id = getIDForLayer(overlay);

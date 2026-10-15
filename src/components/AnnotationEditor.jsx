@@ -35,89 +35,88 @@ import * as telemetry from 'src/utils/telemetryUtils';
 import urlJoin from 'url-join';
 import Toggle from './common/Toggle';
 
-import config from 'config.js';
-const SELECT_TOOLS = [
-  {
-    label: 'Select',
-    value: config.interaction_modes.edit,
-    category: 'select',
-    icon: <CursorDefaultIcon />,
-  },
-];
-
-const LINE_TOOLS = [
-  {
-    label: 'Line',
-    value: config.interaction_modes.draw_line,
-    category: 'line',
-    icon: <LineIcon />,
-  },
-  {
-    label: 'Arrow',
-    value: config.interaction_modes.draw_arrow,
-    category: 'line',
-    icon: <ArrowLineIcon />,
-  },
-  {
-    label: 'Polyline',
-    value: config.interaction_modes.draw_polyline,
-    category: 'line',
-    icon: <PolylineIcon />,
-  },
-];
-
-const POLYGON_TOOLS = [
-  {
-    label: 'Polygon',
-    value: config.interaction_modes.draw_polygon,
-    category: 'polygon',
-    icon: <PolygonIcon />,
-  },
-  {
-    label: 'Rectangle',
-    value: config.interaction_modes.draw_rect,
-    category: 'polygon',
-    icon: <RectangleIcon />,
-  },
-  {
-    label: 'Ellipse',
-    value: config.interaction_modes.draw_ellipse,
-    category: 'polygon',
-    icon: <EllipseIcon />,
-  },
-];
-
-const SPECIAL_TOOLS = [
-  {
-    label: 'Pen',
-    value: config.interaction_modes.draw_pen,
-    category: 'special',
-    icon: <PencilIcon />,
-  },
-];
-
-const TEXT_TOOLS = [
-  {
-    label: 'Text',
-    value: config.interaction_modes.draw_text,
-    category: 'text',
-    icon: <TextIcon />,
-  },
-];
+import { getConfig } from 'src/utils/configRegistry';
+import { getPropFromProduct } from 'src/utils/sharedUtils';
 
 const LOCALSTORAGE_BROWSE_GENERATION_KEY = 'enableAnnotationBrowseImageGeneration';
 class AnnotationEditor extends React.Component {
   constructor(props) {
     super(props);
 
+    const config = getConfig();
+    this.selectTools = [
+      {
+        label: 'Select',
+        value: config.interaction_modes.edit,
+        category: 'select',
+        icon: <CursorDefaultIcon />,
+      },
+    ];
+    this.lineTools = [
+      {
+        label: 'Line',
+        value: config.interaction_modes.draw_line,
+        category: 'line',
+        icon: <LineIcon />,
+      },
+      {
+        label: 'Arrow',
+        value: config.interaction_modes.draw_arrow,
+        category: 'line',
+        icon: <ArrowLineIcon />,
+      },
+      {
+        label: 'Polyline',
+        value: config.interaction_modes.draw_polyline,
+        category: 'line',
+        icon: <PolylineIcon />,
+      },
+    ];
+    this.polygonTools = [
+      {
+        label: 'Polygon',
+        value: config.interaction_modes.draw_polygon,
+        category: 'polygon',
+        icon: <PolygonIcon />,
+      },
+      {
+        label: 'Rectangle',
+        value: config.interaction_modes.draw_rect,
+        category: 'polygon',
+        icon: <RectangleIcon />,
+      },
+      {
+        label: 'Ellipse',
+        value: config.interaction_modes.draw_ellipse,
+        category: 'polygon',
+        icon: <EllipseIcon />,
+      },
+    ];
+    this.specialTools = [
+      {
+        label: 'Pen',
+        value: config.interaction_modes.draw_pen,
+        category: 'special',
+        icon: <PencilIcon />,
+      },
+    ];
+    this.textTools = [
+      {
+        label: 'Text',
+        value: config.interaction_modes.draw_text,
+        category: 'text',
+        icon: <TextIcon />,
+      },
+    ];
+
     this.state = {
       enableBrowseImageGeneration: localStorage.getItem(LOCALSTORAGE_BROWSE_GENERATION_KEY) === 'true' || false,
       currTools: {
-        select: SELECT_TOOLS[0],
-        line: LINE_TOOLS[0],
-        polygon: POLYGON_TOOLS[0],
-        special: SPECIAL_TOOLS[0],
-        text: TEXT_TOOLS[0],
+        select: this.selectTools[0],
+        line: this.lineTools[0],
+        polygon: this.polygonTools[0],
+        special: this.specialTools[0],
+        text: this.textTools[0],
       },
       uploading: false,
       uploadingSuccess: false,
@@ -193,6 +192,7 @@ class AnnotationEditor extends React.Component {
   }
 
   renderDrawingTools() {
+    const config = getConfig();
     const { select, line, polygon, special, text } = this.state.currTools;
     const { interactionMode, selectedShapes } = this.props;
 
@@ -242,20 +242,20 @@ class AnnotationEditor extends React.Component {
             menuTooltip={'Line Tools'}
             className={AnnotationEditorStyles.toolbarBtn}
             icon={line.icon}
-            active={LINE_TOOLS.map((tool) => tool.value).indexOf(interactionMode) !== -1}
+            active={this.lineTools.map((tool) => tool.value).indexOf(interactionMode) !== -1}
             onClick={() => this.handleActivateTool(line, 'line')}
           >
-            {this.renderToolList(LINE_TOOLS)}
+            {this.renderToolList(this.lineTools)}
           </IconDropDown>
           <IconDropDown
             buttonTooltip={polygon.label}
             menuTooltip={'Shape Tools'}
             className={AnnotationEditorStyles.toolbarBtn}
             icon={polygon.icon}
-            active={POLYGON_TOOLS.map((tool) => tool.value).indexOf(interactionMode) !== -1}
+            active={this.polygonTools.map((tool) => tool.value).indexOf(interactionMode) !== -1}
             onClick={() => this.handleActivateTool(polygon, 'polygon')}
           >
-            {this.renderToolList(POLYGON_TOOLS)}
+            {this.renderToolList(this.polygonTools)}
           </IconDropDown>
           <IconDropDown
             buttonTooltip={special.label}
@@ -412,6 +412,7 @@ class AnnotationEditor extends React.Component {
   }
 
   async generateBrowseImage() {
+    const config = getConfig();
     const { layers, osdWrapper, activeAnnotation } = this.props;
     if (layers.length < 1) return { image: null, width: 0, height: 0, error: 'Unable to generate browse image' };
 
@@ -453,6 +454,7 @@ class AnnotationEditor extends React.Component {
   }
 
   async generateThumbnail() {
+    const config = getConfig();
     const { osdWrapper, layers, activeAnnotation } = this.props;
 
     // Get base layer
@@ -490,7 +492,7 @@ class AnnotationEditor extends React.Component {
     let imageFetchResponse;
     try {
       imageFetchResponse = await fetch(request, options);
-    } catch (err) {
+    } catch (_err) {
       return { thumbnail: null, width: 0, height: 0, error: 'Base image fetch failed during thumbnail generation' };
     }
 
@@ -546,6 +548,7 @@ class AnnotationEditor extends React.Component {
   }
 
   uploadImageToOCS = (file, filename, width, height) => {
+    const config = getConfig();
     const metadata = {
       width: width,
       height: height,
@@ -572,6 +575,7 @@ class AnnotationEditor extends React.Component {
   };
 
   handleSave = async () => {
+    const config = getConfig();
     const { activeAnnotation } = this.props;
     const { enableBrowseImageGeneration } = this.state;
 
@@ -685,6 +689,7 @@ class AnnotationEditor extends React.Component {
   };
 
   uploadJsonToOCS = async (title, description, annotationJSON, thumbnailFilename, browseImageFilename) => {
+    const config = getConfig();
     const { layers, activeAnnotation, osdWrapper } = this.props;
     const baseImage = layers[0];
     const dirPath = this.getAnnotationDir();
@@ -720,41 +725,33 @@ class AnnotationEditor extends React.Component {
         dest_name: filename,
       };
 
-      try {
-        await axios.post(config.api_endpoints.datadrive.middleware + `/api/move/item`, renameData, {
-          withCredentials: true,
-        });
-      } catch (err) {
-        throw err;
-      }
+      await axios.post(config.api_endpoints.datadrive.middleware + `/api/move/item`, renameData, {
+        withCredentials: true,
+      });
     }
 
     const annotationJSONString = JSON.stringify(annotationJSON);
     const fileToUpload = new File([annotationJSONString], filename);
 
-    try {
-      const keyPath = `${dirPath}/${filename}`.replace(/^\/+/g, ''); // remove leading slash
+    const keyPath = `${dirPath}/${filename}`.replace(/^\/+/g, ''); // remove leading slash
 
-      const fileData = new FormData();
-      fileData.append('pkg_id', config.annotation_upload.pkg_id);
-      fileData.append('ocs_path', dirPath);
-      fileData.append('ocs_name', filename);
-      fileData.append('overwrite', true);
-      fileData.append('metadata', JSON.stringify(metadata));
-      fileData.append('object_type_name', config.annotation_upload.object_type);
-      fileData.append('s3_key', keyPath);
-      fileData.append('s3_bucket', config.annotation_upload.s3_bucket);
-      fileData.append('file', fileToUpload);
+    const fileData = new FormData();
+    fileData.append('pkg_id', config.annotation_upload.pkg_id);
+    fileData.append('ocs_path', dirPath);
+    fileData.append('ocs_name', filename);
+    fileData.append('overwrite', true);
+    fileData.append('metadata', JSON.stringify(metadata));
+    fileData.append('object_type_name', config.annotation_upload.object_type);
+    fileData.append('s3_key', keyPath);
+    fileData.append('s3_bucket', config.annotation_upload.s3_bucket);
+    fileData.append('file', fileToUpload);
 
-      return axios.post(config.api_endpoints.datadrive.middleware + `/api/UploadManual`, fileData, {
-        withCredentials: true,
-        // onUploadProgress: progressEvent => {
-        //   this.setState({ uploadProgress: Math.round((progressEvent.loaded * 100) / progressEvent.total) });
-        // },
-      });
-    } catch (err) {
-      throw err;
-    }
+    return axios.post(config.api_endpoints.datadrive.middleware + `/api/UploadManual`, fileData, {
+      withCredentials: true,
+      // onUploadProgress: progressEvent => {
+      //   this.setState({ uploadProgress: Math.round((progressEvent.loaded * 100) / progressEvent.total) });
+      // },
+    });
   };
 
   getSanitizedAnnotationId = (id = '') => {
@@ -764,10 +761,11 @@ class AnnotationEditor extends React.Component {
 
   getAnnotationDir = () => {
     const { activeAnnotation } = this.props;
-    return `${config.annotation_upload.ocs_path}${this.getSanitizedAnnotationId(activeAnnotation.annotation_id)}`;
+    return `${getConfig().annotation_upload.ocs_path}${this.getSanitizedAnnotationId(activeAnnotation.annotation_id)}`;
   };
 
   createAnnotationDir = (path) => {
+    const config = getConfig();
     const payload = {
       pkg_id: config.annotation_upload.pkg_id,
       abs_path: path,
@@ -780,6 +778,7 @@ class AnnotationEditor extends React.Component {
   };
 
   render() {
+    const config = getConfig();
     const { osdWrapper, selectedShapes, activeAnnotation, annotationEditorOpen } = this.props;
     const { uploading, enableBrowseImageGeneration } = this.state;
     const title = activeAnnotation.title || '';

@@ -4,7 +4,7 @@ import { CAHVORE } from 'src/utils/asttroLib/cameraModels/CAHVORE.js';
 import { CylindricalMosaicCameraModel } from 'src/utils/asttroLib/cameraModels/cylindricalMosaic.js';
 import { Vector3 } from 'three';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 const LinearityMode = {
   Perspective: { id: 1, linearity: 1 },
@@ -13,6 +13,7 @@ const LinearityMode = {
 };
 
 export function getModelForProduct(product) {
+  const config = getConfig();
   const { vicar_label } = product;
   const { GEOMETRIC_CAMERA_MODEL } = vicar_label;
   const type = GEOMETRIC_CAMERA_MODEL ? GEOMETRIC_CAMERA_MODEL.MODEL_TYPE : null;

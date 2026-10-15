@@ -20,13 +20,14 @@ import { formatDate } from 'src/utils';
 import { datadriveGetOCSObjectDownloadPathForS3URL } from 'src/utils/endpoints';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 class AnnotationOverlays extends React.Component {
   handleDeleteButtonClick = (annotation) => {
     this.props.handleAnnotationDelete(annotation);
   };
 
   renderAvailableAnnotationResult = (annotation, annotationActive, loading) => {
+    const config = getConfig();
     const {
       user,
       handleAnnotationAdd,
@@ -172,6 +173,7 @@ class AnnotationOverlays extends React.Component {
   };
 
   render() {
+    const config = getConfig();
     const { newAnnotation, groups, activeProduct, allActiveAnnotations } = this.props;
     const productsWithSameOverlayId = groups.filter(
       (item) =>

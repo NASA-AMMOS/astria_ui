@@ -395,7 +395,7 @@ class AnnotationShapeEditor extends React.Component {
                   <Form noValidate autoComplete="off">
                     <Field name="lineStyle">
                       {({ field }) => {
-                        const { value, onChange, ...otherFieldProps } = field;
+                        const { value: _value, onChange, ...otherFieldProps } = field;
                         const lineStyles = [
                           { value: 'Solid', label: 'Solid' },
                           { value: 'Dashed', label: 'Dashed' },
@@ -549,7 +549,7 @@ class AnnotationShapeEditor extends React.Component {
                   <Form noValidate autoComplete="off">
                     <Field name="fontWeight">
                       {({ field }) => {
-                        const { value, onChange, ...otherFieldProps } = field;
+                        const { value: _value, onChange, ...otherFieldProps } = field;
                         const fontWeights = [
                           { value: '800', label: 'Heavy' },
                           { value: '600', label: 'Bold' },

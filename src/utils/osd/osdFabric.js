@@ -1607,7 +1607,7 @@ export const OSDFabricMixin = (base) =>
       return { zoom, ppp, imageZoom };
     }
 
-    recreateInternalShapeTrackers(objects) {
+    recreateInternalShapeTrackers(_objects) {
       // Recreate shape map and shapeID state from the loaded shapes
       this._fabricCanvas.getObjects().forEach((shape) => {
         this._shapes[shape.shapeId] = shape;

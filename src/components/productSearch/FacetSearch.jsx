@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import React from 'react';
 import { DragDropContext, Draggable } from 'react-beautiful-dnd';
 import ReactDOM from 'react-dom';
@@ -19,6 +18,7 @@ import TypographyStyles from 'src/styles/common/typography.module.css';
 import EDRListStyles from 'src/styles/EdrList.module.css';
 import FacetSearchStyles from 'src/styles/FacetSearch.module.css';
 import FormsStyles from 'src/styles/Forms.module.css';
+import { getConfig } from 'src/utils/configRegistry';
 
 const LOCALSTORAGE_FACET_ORDER_KEY = 'facetSearchOrder';
 const LOCALSTORAGE_FACET_VISIBILITY_KEY = 'facetSearchVisibility';
@@ -98,6 +98,7 @@ class FacetSearch extends React.Component {
   };
 
   renderContent = (params) => {
+    const config = getConfig();
     const {
       resultsComponent,
       facetsComponents,
@@ -348,7 +349,7 @@ class FacetSearch extends React.Component {
   render() {
     // Force a re-render of the search base component render function when this component re-renders
     // due to state change
-    const searchConfig = { ...config.search_config.facet_search };
+    const searchConfig = { ...getConfig().search_config.facet_search };
     return (
       <SearchBaseContainer
         ignoreSearchConfigChanges
