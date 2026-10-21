@@ -27,5 +27,6 @@ yarn-error.log*
 # External configs
 /src/constants/config.json
 /configs/*
+!/configs/config.js
 !/configs/config.common.json
 !/configs/default.env

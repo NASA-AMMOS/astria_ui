@@ -87,10 +87,15 @@ jobs:
           build-mode: none
           config-file: ./.github/codeql/codeql-config.yml
 
+      # Results go to SonarQube Cloud only, as the merged CodeQL + SonarQube
+      # report. Not uploading to GitHub code scanning keeps each finding from
+      # also appearing as a github-advanced-security alert and PR comment. The
+      # SARIF is still written to ../results for the steps below.
       - name: CodeQL Scan
         uses: github/codeql-action/analyze@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4.38.0
         with:
           category: /language:javascript-typescript
+          upload: never
 
       - name: Post-Process Output
         run: |
