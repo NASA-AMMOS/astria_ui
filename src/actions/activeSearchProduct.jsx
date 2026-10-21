@@ -89,12 +89,16 @@ import {
   fetchProductGroupItems,
   getLatestVersionsByType,
 } from 'src/utils/dataQuery';
-import { astriaGetProductDescriptions, campGetAllCampaigns } from 'src/utils/endpoints';
+import {
+  astriaGetImageConfigDescriptions,
+  astriaGetProductDescriptions,
+  campGetAllCampaigns,
+} from 'src/utils/endpoints';
 import { getShortTargetID } from 'src/utils/osd/osdUtils';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
 import urlJoin from 'url-join';
-import { setProductDescriptions } from './appActions';
+import { setImageConfigDescriptions, setProductDescriptions } from './appActions';
 
 import config from 'config.js';
 import { ACTIVE_PRODUCT_TAB_INDICES } from 'src/components/activeProduct/ActiveProductSidebar';
@@ -743,6 +747,25 @@ export const loadProductDescriptions = () => {
   };
 };
 
+export const loadImageConfigDescriptions = () => {
+  return async (dispatch) => {
+    if (!config.product_descriptions_url) return;
+
+    try {
+      const response = await fetch(astriaGetImageConfigDescriptions(), {
+        credentials: 'include',
+      });
+      if (!response.ok) {
+        throw new Error(`Unable to fetch image config descriptions: ${response.status}`);
+      }
+      const data = await response.json();
+      dispatch(setImageConfigDescriptions(data));
+    } catch (error) {
+      telemetry.logError('Unable to fetch image config descriptions', error);
+    }
+  };
+};
+
 export const loadInitialData = () => {
   return async (dispatch, getState) => {
     // Get url from window location
@@ -768,6 +791,7 @@ export const loadInitialData = () => {
 
     // Fetch RDR descriptions
     await dispatch(loadProductDescriptions());
+    await dispatch(loadImageConfigDescriptions());
 
     dispatch(populateSearchValues(parsed));
 

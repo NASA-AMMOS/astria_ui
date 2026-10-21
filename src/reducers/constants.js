@@ -238,5 +238,6 @@ export const DEFAULT_HELP = {
 export const DEFAULT_APP = {
   user: {},
   productDescriptions: {},
+  imageConfigDescriptions: {},
   starredMetadataFields: getStarredMetadataFields(),
 };
