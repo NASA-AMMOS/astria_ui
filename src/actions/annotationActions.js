@@ -1,7 +1,6 @@
 import moment from 'moment';
 import { ACTIVE_PRODUCT_TAB_INDICES } from 'src/components/activeProduct/ActiveProductSidebar';
 import * as telemetry from 'src/utils/telemetryUtils';
-import { USING_CSSO } from '../constants/api';
 import { DeepDiffMapper, openSupportEmail } from '../utils';
 import { datadriveGetOCSObjectDownloadPath } from '../utils/endpoints';
 import { generateAnnotationId } from '../utils/osd/osdUtils';
@@ -12,7 +11,6 @@ import { toggleOverlaysVisible } from './imageLayers';
 import { resetRotation } from './imageViewer';
 import { setImageTab, setProductDetailsSidebarOpen } from './sidebarState';
 
-import config from 'config.js';
 export const setInteractionMode = (interactionMode) => (dispatch, getState) => {
   const state = getState();
   const osdRefs = state.imageViewer.osdRefs;
@@ -121,7 +119,8 @@ export const addInitialScalebar = (point, pinToScreen) => {
   };
 };
 
-export const shapeSelected = (shape) => (dispatch) => {
+export const shapeSelected = (shape) => (dispatch, getState) => {
+  const { config } = getState();
   // Avoid setting interaction mode back to edit for pen tool. Can't use state's interactionMode for this check
   // because if you select another drawing shape before hitting escape pen is no longer the mode.
   if (shape.length === 1 && shape[0].shapeType !== 'pen') {
@@ -143,6 +142,7 @@ export const shapeDeselected = (shape) => {
 
 export const detectUnsavedChanges = (keySet) => (dispatch, getState) => {
   const state = getState();
+  const { config } = state;
   const activeAnnotation = state.annotationState.activeAnnotation;
   const savedAnnotationRef = state.annotationState.savedAnnotationRef;
 
@@ -219,6 +219,7 @@ export const editAnnotation = (annotation) => (dispatch, getState) => {
 };
 
 export const setAnnotationEditorOpen = (open) => (dispatch, getState) => {
+  const { config } = getState();
   // If we're closing the editor, check for unsaved changes
   if (!open) dispatch(detectUnsavedChanges());
   else dispatch(setProductDetailsSidebarOpen(true)); // otherwise ensure sidebar is open
@@ -279,6 +280,7 @@ export const addAnnotationToDisplay =
   (annotation, interactable = false) =>
   async (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     const baseImage = state.imageLayers.layers[0];
     if (
       getPropFromProduct(baseImage, config.es_mappings.overlay_id) !==
@@ -323,7 +325,10 @@ export const addAnnotationToDisplay =
       try {
         // Download annotation
         const url = datadriveGetOCSObjectDownloadPath(annotation);
-        const response = await fetch(url, { ...(USING_CSSO ? { credentials: 'include' } : null), cache: 'no-store' });
+        const response = await fetch(url, {
+          ...(config.using_csso ? { credentials: 'include' } : null),
+          cache: 'no-store',
+        });
         const annotationJSON = await response.json();
         await state.imageViewer.osdRefs.osdWrapper.addAnnotation(
           annotationJSON,
@@ -576,6 +581,7 @@ export const setSavedAnnotationRef = (annotationData) => {
 export const startImageFeatureAnnotation = () => (dispatch, getState) => {
   // Start tracking a new annotation object in state
   const state = getState();
+  const { config } = state;
   const baseImage = state.imageLayers.layers[0];
   let activeAnnotation = state.annotationState.activeAnnotation;
   const annoId = generateAnnotationId(
@@ -635,6 +641,7 @@ export const editImageFeatureAnnotation = (annotation) => (dispatch, getState) =
 };
 
 export const setImageFeatureEditorOpen = (open) => (dispatch, getState) => {
+  const { config } = getState();
   // If we're closing the editor, check for unsaved changes
   if (!open) {
     dispatch(detectUnsavedChanges());
@@ -673,6 +680,7 @@ export const addImageFeatureAnnotationToDisplay =
   (annotation, interactable = false) =>
   async (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     const baseImage = state.imageLayers.layers[0];
     if (
       getPropFromProduct(baseImage, config.es_mappings.overlay_id) !==
@@ -784,6 +792,7 @@ export const toggleAutoShowImageFeatures = () => {
 export const showFeatureOutline = (feature) => {
   return (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     const osdRefs = state.imageViewer.osdRefs;
     const { osdWrapper } = osdRefs;
 
@@ -796,6 +805,7 @@ export const showFeatureOutline = (feature) => {
 export const hideFeatureOutline = (feature) => {
   return (dispatch, getState) => {
     const state = getState();
+    const { config } = state;
     const osdRefs = state.imageViewer.osdRefs;
     const { osdWrapper } = osdRefs;
 

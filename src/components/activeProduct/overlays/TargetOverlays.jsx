@@ -29,7 +29,7 @@ import { ASTTROGetLinkForTarget } from 'src/utils/endpoints';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 class TargetOverlays extends React.Component {
   constructor(props) {
     super(props);
@@ -60,7 +60,7 @@ class TargetOverlays extends React.Component {
 
   getActiveImagesMap() {
     return this.props.layers.reduce((overlayMap, overlay) => {
-      overlayMap[getPropFromProduct(overlay, config.es_mappings.id)] = overlay;
+      overlayMap[getPropFromProduct(overlay, getConfig().es_mappings.id)] = overlay;
       return overlayMap;
     }, {});
   }
@@ -91,11 +91,12 @@ class TargetOverlays extends React.Component {
     const { activeProduct } = this.props;
 
     // Send telemetry that a target has been added and include the object type of the product it was added on top of
-    const objectType = getPropFromProduct(activeProduct, config.es_mappings.object_type);
+    const objectType = getPropFromProduct(activeProduct, getConfig().es_mappings.object_type);
     telemetry.targetAdded(objectType);
   }
 
   renderTargetRow(layer, activeImagesMap) {
+    const config = getConfig();
     const { handleRemoveTarget, zoomToTarget, setTargetMetadataOpen, highlightTarget, unhighlightTarget } = this.props;
 
     const targetId = layer.target.content.id;
@@ -202,6 +203,7 @@ class TargetOverlays extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const {
       activeProduct,
       groups,

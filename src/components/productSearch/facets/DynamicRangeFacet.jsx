@@ -37,7 +37,7 @@ class DynamicRangeFacet extends React.Component {
   }
 
   async componentDidUpdate(prevProps) {
-    const { values, dataRange, registering, queryID, queryComponents, inverted, onChange } = this.props;
+    const { values, registering, queryID, queryComponents, inverted } = this.props;
 
     // TODO component is re-rendering a lot more than it needs to during searches,
     // may want to add a shouldComponentUpdate

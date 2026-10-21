@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Autosuggest from 'react-autosuggest';
 import Checkbox from 'src/components/common/Checkbox';
-import { USING_CSSO } from 'src/constants/api';
 import CampaignFacetStyles from 'src/styles/CampaignFacet.module.css';
 import FacetSearchStyles from 'src/styles/FacetSearch.module.css';
 import FormsStyles from 'src/styles/Forms.module.css';
+import { getConfig } from 'src/utils/configRegistry';
 import { scienceIntentGetConnectionsByCampaignID } from 'src/utils/endpoints';
 import * as telemetry from 'src/utils/telemetryUtils';
 
@@ -105,7 +105,7 @@ class CampaignFacet extends React.Component {
   async getActivityIDsForCampaign(campaignID) {
     if (!campaignID) return [];
     const url = scienceIntentGetConnectionsByCampaignID(campaignID);
-    const response = await fetch(url, { ...(USING_CSSO ? { credentials: 'include' } : null) });
+    const response = await fetch(url, { ...(getConfig().using_csso ? { credentials: 'include' } : null) });
 
     if (!response || !response.ok) return ['Err'];
     try {
@@ -147,7 +147,7 @@ class CampaignFacet extends React.Component {
     }
   }
 
-  onInputChange = async (event, { newValue, method }) => {
+  onInputChange = async (_event, { newValue, method: _method }) => {
     this.setState({
       searchValue: newValue,
     });
@@ -218,7 +218,7 @@ class CampaignFacet extends React.Component {
             suggestions={suggestions}
             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-            onSuggestionSelected={(event, { suggestion, suggestionValue, suggestionIndex, sectionIndex, method }) => {
+            onSuggestionSelected={(_event, { suggestionValue }) => {
               this.onSuggestionSelected(suggestionValue);
             }}
             getSuggestionValue={this.getSuggestionValue}

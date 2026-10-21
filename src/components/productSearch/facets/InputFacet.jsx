@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import debounce from 'lodash.debounce';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -10,6 +9,7 @@ import Tooltip from 'src/components/common/Tooltip';
 import FacetSearchStyles from 'src/styles/FacetSearch.module.css';
 import FormsStyles from 'src/styles/Forms.module.css';
 import { objAlphaSort, performElasticSearchQuery } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { getDescendantProp } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
 
@@ -230,6 +230,7 @@ class InputFacet extends React.Component {
   };
 
   async fetchValues(searchType, value, size = 5) {
+    const config = getConfig();
     // Where searchType is a namespace string to differentiate between topHits and suggestions
     const {
       groupResults,
@@ -400,7 +401,7 @@ class InputFacet extends React.Component {
     });
   };
 
-  handleInputClear = (setQuery) => {
+  handleInputClear = (_setQuery) => {
     this.setState(
       {
         suggestions: [],

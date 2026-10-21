@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import debounce from 'lodash.debounce';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -12,6 +11,7 @@ import LayoutStyles from 'src/styles/common/layout.module.css';
 import FacetSearchStyles from 'src/styles/FacetSearch.module.css';
 import FormsStyles from 'src/styles/Forms.module.css';
 import { DeepDiffMapper, performElasticSearchQuery } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { descendentPropertyToObject, getPropFromProduct } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
 
@@ -94,6 +94,7 @@ class RadioMultiListFacet extends React.Component {
   }
 
   async fetchValues() {
+    const config = getConfig();
     const {
       baseQueries,
       facet: { dataField },
@@ -330,7 +331,7 @@ class RadioMultiListFacet extends React.Component {
   };
 
   CustomOption = (props) => {
-    const { data, children, ...rest } = props;
+    const { data, children: _children, ...rest } = props;
     return (
       <components.Option {...rest}>
         {this.getResultLabel(data.value)}

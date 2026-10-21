@@ -11,7 +11,7 @@ import { fetchESDataForProduct } from 'src/utils/dataQuery';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import { CheckIcon, CloseIcon, WarningIcon } from './common/Icons';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 class CustomLayerModal extends React.Component {
   constructor(props) {
     super(props);
@@ -63,6 +63,7 @@ class CustomLayerModal extends React.Component {
   };
 
   fetchOverlay = (path) => {
+    const config = getConfig();
     return new Promise(async (resolve, reject) => {
       try {
         let filename = '';
@@ -145,6 +146,7 @@ class CustomLayerModal extends React.Component {
   };
 
   render() {
+    const config = getConfig();
     const { overlayPaths, error, overlaysAddSuccess, checkingOverlays } = this.state;
     const { customLayerModalOpen } = this.props;
 

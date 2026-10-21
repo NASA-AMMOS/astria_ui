@@ -1,8 +1,8 @@
 import FileSaver from 'file-saver';
 import OpenSeaDragon, { DziTileSource, Rect } from 'openseadragon';
 import shortid from 'shortid';
-import { USING_CSSO } from 'src/constants/api';
 import { genWKTString } from 'src/utils'; // who likes circular dependencies?
+import { getConfig } from 'src/utils/configRegistry';
 import { OSDWrapperNoExport } from 'src/utils/osd/osdWrapper'; // who likes circular dependencies?
 
 // NOTE: requires OSDExportMixin(OSDAnnotateMixin(OSDFabricMixin(OSDViewer)))
@@ -178,6 +178,7 @@ export const OSDExportMixin = (base) =>
     }
 
     generateViewImage(targetWidth, targetHeight, imageBounds, azElRulers, layerFilter) {
+      const config = getConfig();
       return new Promise((resolve, reject) => {
         // built a DOM mount point for the shadow canvas
         const osdShadowDiv = document.createElement('div');
@@ -210,7 +211,7 @@ export const OSDExportMixin = (base) =>
 
           visibilityRatio: 1,
           gestureSettingsMouse: { clickToZoom: false }, // Turn off zooms on click
-          ajaxWithCredentials: USING_CSSO,
+          ajaxWithCredentials: config.using_csso,
           loadTilesWithAjax: true, // Always use AJAX for tiles to enable retry logic
 
           transformImage: this.transformImage,

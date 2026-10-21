@@ -1,6 +1,5 @@
 import axios from 'axios';
 import classNames from 'classnames';
-import config from 'config.js';
 import React from 'react';
 import Button from 'src/components/common/Button';
 import ControlsOverlay from 'src/components/common/ControlsOverlay';
@@ -22,13 +21,13 @@ import {
 import Tooltip from 'src/components/common/Tooltip';
 import ImageExport from 'src/components/ImageExport';
 import KeyboardShortcuts from 'src/components/KeyboardShortcuts';
-import { USING_CSSO } from 'src/constants/api';
 import ImageUploadContainer from 'src/containers/ImageUploadContainer';
 import ImageViewingHistoryContainer from 'src/containers/ImageViewingHistoryContainer';
 import layoutStyles from 'src/styles/common/layout.module.css';
 import typographyStyles from 'src/styles/common/typography.module.css';
 import headerStyles from 'src/styles/Header.module.css';
 import { openSupportEmail } from 'src/utils';
+import { getConfig } from 'src/utils/configRegistry';
 import { measureSupported } from 'src/utils/dataQuery';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import { isOSDViewableFileType } from '../utils';
@@ -74,6 +73,7 @@ class Header extends React.Component {
   }
 
   handleKeydown = (event) => {
+    const config = getConfig();
     const { interactionMode, setInteractionMode, baseImage, groups } = this.props;
 
     if (event.target.nodeName !== 'INPUT') {
@@ -113,6 +113,7 @@ class Header extends React.Component {
   }
 
   handleMeasure(force = false) {
+    const config = getConfig();
     const { interactionMode } = this.props;
     this.props.setAnnotationEditorOpen(false);
     if (!force && interactionMode === config.interaction_modes.measure) {
@@ -123,6 +124,7 @@ class Header extends React.Component {
   }
 
   handleClearMeasurements = () => {
+    const config = getConfig();
     this.setInteractionMode(config.interaction_modes.view_only);
     this.props.clearMeasurements();
   };
@@ -136,6 +138,7 @@ class Header extends React.Component {
   }
 
   getPackages() {
+    const config = getConfig();
     if (!config.feature_flags.general.enable_package_selection) return;
     axios
       .get(config.api_endpoints.datadrive.middleware + '/api/ocs/all_pkgs', { withCredentials: true })
@@ -148,10 +151,10 @@ class Header extends React.Component {
             return option;
           })
           .sort((a, b) => (a.value > b.value ? 1 : -1))
-          .sort((a, b) => (a.value === config.search_config.default_package ? -1 : 1));
+          .sort((a, _b) => (a.value === config.search_config.default_package ? -1 : 1));
         this.setState({ packageOptions: package_names, fetchingPackages: false, fetchingPackagesSuccess: true });
       })
-      .catch((err) => {
+      .catch((_err) => {
         this.setState({
           fetchingPackages: false,
           fetchingPackagesSuccess: false,
@@ -164,6 +167,7 @@ class Header extends React.Component {
   }
 
   renderHelpMenu() {
+    const config = getConfig();
     const { setHelpOpen } = this.props;
     return (
       <ControlsOverlay
@@ -221,6 +225,7 @@ class Header extends React.Component {
   }
 
   renderUserMenu() {
+    const config = getConfig();
     const { user } = this.props;
 
     const userClass = classNames({
@@ -257,7 +262,7 @@ class Header extends React.Component {
               window.location.reload();
             }}
           />
-          {USING_CSSO && (
+          {config.using_csso && (
             <a className={userClass} href="/ssologoutredirect" target="_self">
               <Button full text="Log out" variant="menuItem" onClick={() => {}} />
             </a>
@@ -268,6 +273,7 @@ class Header extends React.Component {
   }
 
   renderPackageMenu() {
+    const config = getConfig();
     const { ocsPackages } = this.props;
     const { compactHeaderMode, packageOptions, fetchingPackages, fetchingPackagesSuccess } = this.state;
     const packageOptionsWithoutBase = packageOptions.filter((pkg) => ocsPackages.base.indexOf(pkg.value) < 0);
@@ -336,6 +342,7 @@ class Header extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const {
       interactionMode,
       annotationEditorOpen,
@@ -381,7 +388,7 @@ class Header extends React.Component {
     return (
       <div ref={this.headerRef} className={headerClass}>
         <div className={headerStyles.headerContentLeft}>
-          <a href={process.env.ASTRIA_PUBLIC_URL_PATH ?? '/'} className={brandClass}>
+          <a href={import.meta.env.BASE_URL} className={brandClass}>
             <AstriaLogoLowEffort className={headerStyles.logo} />
             <span className={layoutStyles.padding}>{config.app_title}</span>
           </a>

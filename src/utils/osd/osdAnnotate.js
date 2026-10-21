@@ -1,5 +1,5 @@
-import config from 'config.js';
 import { fabric } from 'fabric';
+import { getConfig } from 'src/utils/configRegistry';
 import * as telemetry from 'src/utils/telemetryUtils';
 import { calc2dDistance } from '..';
 
@@ -9,6 +9,7 @@ export const OSDAnnotateMixin = (base) =>
   class extends base {
     constructor(options) {
       super(options);
+      const config = getConfig();
 
       this._annotationShapes = {};
       this._drawMode = null;
@@ -58,6 +59,7 @@ export const OSDAnnotateMixin = (base) =>
     }
 
     startAnnotating(drawMode, annotationId, opacity = 1) {
+      const config = getConfig();
       this.stopAnnotating();
 
       this._drawMode = drawMode;
@@ -75,6 +77,7 @@ export const OSDAnnotateMixin = (base) =>
     }
 
     stopAnnotating() {
+      const config = getConfig();
       if (this._drawMode === config.interaction_modes.draw_pen) {
         this.turnOffPenTool();
       }
@@ -95,6 +98,7 @@ export const OSDAnnotateMixin = (base) =>
     }
 
     handleClickEvent(event) {
+      const config = getConfig();
       super.handleClickEvent(event);
 
       if (this._drawMode) {

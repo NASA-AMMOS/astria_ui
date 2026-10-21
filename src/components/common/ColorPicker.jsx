@@ -6,7 +6,7 @@ import ColorPickerStyles from '../../styles/ColorPicker.module.css';
 import { hexToRgb, rgbStringToObject, rgbToHex } from '../../utils';
 import Button from './Button';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 const getHexAndRGB = (color) => {
   let rgb = color;
   let hex = color;
@@ -21,6 +21,7 @@ const getHexAndRGB = (color) => {
 };
 
 const ColorPicker = ({ className = '', defaultColor = '#ff0000', onChange = () => {}, ...props }) => {
+  const config = getConfig();
   const { asDot, preferHex, compact } = props;
 
   const defColor = getHexAndRGB(defaultColor);

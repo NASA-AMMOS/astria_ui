@@ -71,7 +71,7 @@ class DatetimeFacet extends React.Component {
 
     // update values with the dirty input value on blur
     if (this.startPickerRef.current) {
-      this.startPickerRef.current.flatpickr.input.addEventListener('blur', (evt) => {
+      this.startPickerRef.current.flatpickr.input.addEventListener('blur', (_evt) => {
         const val = this.dirtyStartTime;
         if (this.dirtyInput && val !== this.state.values[0]) {
           if (val) {
@@ -84,7 +84,7 @@ class DatetimeFacet extends React.Component {
       });
     }
     if (this.endPickerRef.current) {
-      this.endPickerRef.current.flatpickr.input.addEventListener('blur', (evt) => {
+      this.endPickerRef.current.flatpickr.input.addEventListener('blur', (_evt) => {
         const val = this.dirtyEndTime;
         if (this.dirtyInput && val !== this.state.values[1]) {
           if (val) {

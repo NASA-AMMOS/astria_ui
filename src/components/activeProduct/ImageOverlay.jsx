@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Button from 'src/components/common/Button';
@@ -10,6 +9,7 @@ import { Slider } from 'src/components/common/Slider';
 import Tooltip from 'src/components/common/Tooltip';
 import ImageOverlayStyles from 'src/styles/ImageOverlay.module.css';
 import typographyStyles from 'src/styles/common/typography.module.css';
+import { getConfig } from 'src/utils/configRegistry';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
 export const OverlayProductFamilyDescription = (props) => {
@@ -140,6 +140,7 @@ export class ImageOverlay extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const {
       product,
       title: titleOverride,

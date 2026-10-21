@@ -1,16 +1,20 @@
-import config from 'config.js';
 import throttle from 'lodash.throttle';
 import { constructFullURLWithParams, isTarget } from 'src/utils';
 import { getShortTargetID } from 'src/utils/osd/osdUtils';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
+const CONFIG_PARAM = new URLSearchParams(window.location.search).get('config');
+
 const updateUrl = (store) => {
   const state = store.getState();
+  const config = state.config;
 
   // If we're loading initial data, skip updating URL
   if (state.loading.fetchingInitialData) return;
 
   const parsed = {};
+
+  if (CONFIG_PARAM) parsed['config'] = CONFIG_PARAM;
 
   const searchProductKey = config.url_keys.searchProduct;
   const overlaysKey = config.url_keys.overlays;

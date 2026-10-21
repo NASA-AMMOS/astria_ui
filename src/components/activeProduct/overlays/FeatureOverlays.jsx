@@ -16,7 +16,7 @@ import { getConfidenceLevelLabel, objAlphaSort } from 'src/utils';
 import { datadriveGetOCSObjectDownloadPathForS3URL } from 'src/utils/endpoints';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 class FeatureOverlays extends React.Component {
   constructor(props) {
     super(props);
@@ -27,6 +27,7 @@ class FeatureOverlays extends React.Component {
   }
 
   renderAvailableFeatureResult = (feature, featureActive, loading) => {
+    const config = getConfig();
     const {
       user,
       handleFeatureAdd,
@@ -161,6 +162,7 @@ class FeatureOverlays extends React.Component {
   };
 
   render() {
+    const config = getConfig();
     const {
       groups,
       activeProduct,
@@ -277,8 +279,8 @@ class FeatureOverlays extends React.Component {
                   const activeFeature = activeFeaturesMap[feature.annotation_id || feature.feature_id];
                   const loading = activeFeature ? activeFeature.loading : false;
                   return this.renderAvailableFeatureResult(
-                    !!activeFeature ? activeFeature : feature,
-                    !!activeFeature,
+                    activeFeature ? activeFeature : feature,
+                    Boolean(activeFeature),
                     loading
                   );
                 })

@@ -1,6 +1,6 @@
 // import OpenSeaDragon from '../../externals/openseadragon/openseadragon-custom';
-import config from 'config.js';
 import OpenSeaDragon from 'openseadragon';
+import { getConfig } from 'src/utils/configRegistry';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 // NOTE: requires OSDAzElRulersMixin(OSDViewer)
 
@@ -43,6 +43,7 @@ export const OSDAzElRulersMixin = (base) =>
     }
 
     renderRulers = () => {
+      const config = getConfig();
       const baseImage = this.baseImage;
 
       // Check that there is a source before drawing rulers

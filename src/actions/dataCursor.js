@@ -8,7 +8,7 @@ export const updateLineSample = (currentLine, currentSample) => {
   };
 };
 
-export const setDataCursor = (options) => async (dispatch, getState) => {
+export const setDataCursor = (options) => async (dispatch, _getState) => {
   dispatch(clearSelectedFootprint());
   dispatch({ type: 'SET_DATA_CURSOR', options });
 };

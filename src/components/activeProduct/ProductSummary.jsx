@@ -11,8 +11,7 @@ import ProductSummaryStyles from 'src/styles/ProductSummary.module.css';
 import { flattenObjectKeys, objAlphaSort } from 'src/utils';
 import { getEsMappingsByKey, getPropFromProduct } from 'src/utils/sharedUtils';
 
-import config from 'config.js';
-
+import { getConfig } from 'src/utils/configRegistry';
 export class ProductSummary extends React.Component {
   constructor(props) {
     super(props);
@@ -57,6 +56,7 @@ export class ProductSummary extends React.Component {
   }
 
   renderStarButton(key) {
+    const config = getConfig();
     const starredVICAR = this.props.starredMetadataFields[config.label_key].indexOf(key) > -1;
     const starredOCS = this.props.starredMetadataFields.ocs.indexOf(key) > -1;
     const starred = starredOCS || starredVICAR;
@@ -85,6 +85,7 @@ export class ProductSummary extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const { showMore, metadataFilter } = this.state;
     const { product, loading, starredMetadataFields } = this.props;
 

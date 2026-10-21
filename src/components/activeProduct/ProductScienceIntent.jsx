@@ -1,10 +1,10 @@
 import classNames from 'classnames';
-import config from 'config.js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import EmptyState from 'src/components/common/EmptyState';
 import { InfoIcon } from 'src/components/common/Icons';
 import ProductScienceIntentStyles from 'src/styles/ProductScienceIntent.module.css';
+import { getConfig } from 'src/utils/configRegistry';
 import { scienceIntentGetProductMetadata } from 'src/utils/endpoints';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 import * as telemetry from 'src/utils/telemetryUtils';
@@ -27,6 +27,7 @@ export class ProductScienceIntent extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    const config = getConfig();
     const { product } = this.props;
     const productID = getPropFromProduct(product, config.es_mappings.id, null);
     const prevProductID = getPropFromProduct(prevProps.product, config.es_mappings.id, null);
@@ -34,6 +35,7 @@ export class ProductScienceIntent extends React.Component {
   }
 
   fetchScienceIntent() {
+    const config = getConfig();
     const { product, campaigns } = this.props;
 
     this.setState({ loading: true, goals: [], campaign: '' });
@@ -165,6 +167,7 @@ export class ProductScienceIntent extends React.Component {
   }
 
   render() {
+    const config = getConfig();
     const { goals, campaign, sciIntentFetchSucceeded, loading } = this.state;
     const { product } = this.props;
 

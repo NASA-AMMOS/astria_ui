@@ -6,7 +6,7 @@ import { openSupportEmail } from 'src/utils';
 import { OSDWrapper } from 'src/utils/osd/osdWrapper';
 import { getPropFromProduct } from 'src/utils/sharedUtils';
 
-import config from 'config.js';
+import { getConfig } from 'src/utils/configRegistry';
 export const INVALID_POINT = -1;
 
 class OpenSeaDragonWrapper extends Component {
@@ -69,6 +69,7 @@ class OpenSeaDragonWrapper extends Component {
   }
 
   onLayerError(layer) {
+    const config = getConfig();
     this.props.showAlert({
       title: 'Error',
       message:
